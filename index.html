@@ -73,6 +73,27 @@ td.n,th.n{text-align:right}
 .dhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
 .printonly{display:none}
 @media (max-width:860px){.jkrow{grid-template-columns:48px 1fr}.jkrow .c{grid-column:2}}
+/*LAP*/
+.lapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px}
+.lapbtn{text-align:left;padding:14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
+.lapbtn b{display:block;font-size:14px}.lapbtn span{font-size:12px;color:var(--mut)}.lapbtn.on{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac) inset}.lapbtn:disabled{opacity:.55;cursor:default}
+#rpt{background:#fff;color:#000;border:1px solid var(--bd);border-radius:12px;padding:22px;font-family:"Times New Roman",serif}
+#rpt h2.rt{text-align:center;font-size:17px;margin:0 0 2px;font-weight:700;letter-spacing:.3px}
+#rpt .rs{text-align:center;font-size:12px;margin-bottom:12px}
+#rpt h3.ri{text-align:center;font-size:13.5px;text-decoration:underline;margin:16px 0 6px}
+#rpt .jb{border:1px solid #000;margin-bottom:10px;break-inside:avoid}
+#rpt .jb .jh{background:#1f2430;color:#fff;font-weight:700;font-size:13px;padding:3px 8px}
+#rpt table{width:100%;border-collapse:collapse;font-size:11.5px;font-family:inherit}
+#rpt .jb td{border:0;padding:1.5px 8px}#rpt .jb td.b{width:30px;text-align:right}#rpt .jb td.j{width:32%;text-align:center}
+#rpt .kos{font-style:italic;color:#8a5a00}
+#rpt table.rg th,#rpt table.rg td{border:1px solid #000;padding:3px 4px;font-size:10.5px;text-align:center;vertical-align:middle}
+#rpt table.rg td.l,#rpt table.rg th.l{text-align:left}#rpt table.rg thead th{background:#e8e8e8}
+#rpt table.rg tr.gh td{background:#f1f1f1;font-weight:700;text-align:left}
+#rpt .rv th{writing-mode:vertical-rl;transform:rotate(180deg);height:120px;white-space:nowrap;font-weight:600}
+#rpt .sb{border:1px solid #000;margin-bottom:10px;break-inside:avoid}#rpt .sb .sh{background:#e8e8e8;font-weight:700;padding:3px 8px;font-size:12.5px;display:flex;justify-content:space-between}
+#rpt .sb td{border-top:1px solid #ccc;padding:2px 8px;font-size:11.5px}
+@media print{#pLap .noprint{display:none!important}#rpt{border:0;padding:0}@page{margin:12mm}}
+
 @media print{
   body{background:#fff;color:#000;padding:0}
   .side,.toast,.noprint,#pDash,#pUsers,#jkList{display:none!important}
@@ -132,6 +153,7 @@ td.n,th.n{text-align:right}
       <a data-v="dash" class="on">Dashboard</a>
       <a data-v="users" id="mUsers" class="hide">Pengguna</a>
       <a data-v="jk">Senarai JK</a>
+      <a data-v="lap">Laporan</a>
       <a class="soon">Lantikan <i>akan datang</i></a>
       <a class="soon">Surat Lantikan <i>akan datang</i></a>
     </nav>
@@ -190,6 +212,28 @@ td.n,th.n{text-align:right}
       </div>
     </section>
 
+
+    <!-- LAPORAN -->
+    <section id="pLap" class="hide">
+      <div class="noprint">
+        <div class="ttl"><div><h1>Laporan</h1><p class="small">Pilih laporan untuk dilihat. Tekan Cetak untuk cetak atau simpan sebagai PDF.</p></div><button class="btn2" id="bLapRefresh">Muat Semula Data</button></div>
+        <div class="lapgrid">
+          <button class="lapbtn" data-r="induk"><b>Jawatankuasa Induk Guru</b><span>Buku JK penuh ikut bahagian</span></button>
+          <button class="lapbtn" data-r="wajaran"><b>Ringkasan Wajaran Guru</b><span>Pemberat staf ikut jabatan</span></button>
+          <button class="lapbtn" data-r="wnama"><b>Ringkasan Wajaran Mengikut Nama</b><span>Pemberat staf ikut nama A-Z</span></button>
+          <button class="lapbtn" data-r="kerja"><b>Ringkasan Jawatankuasa Kerja Guru</b><span>Senarai JK setiap staf</span></button>
+          <button class="lapbtn" disabled><b>Surat Perlantikan</b><span>Menunggu format DDMS</span></button>
+        </div>
+        <div class="tools" id="lapTools" style="display:none">
+          <select id="lapInduk" aria-label="Bahagian"><option value="">Semua bahagian</option></select>
+          <select id="lapStaf" aria-label="Staf"><option value="">Semua staf</option></select>
+          <button class="btn2" id="bLapPrint">Cetak</button>
+        </div>
+      </div>
+      <div id="rptLoad" class="load hide">Memuatkan data laporan...</div>
+      <div id="rpt" class="hide"></div>
+    </section>
+
     <!-- PENGGUNA -->
     <section id="pUsers" class="hide">
       <div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small">Hanya Pentadbir boleh tambah, ubah dan reset kata laluan pengguna.</p></div></div>
@@ -223,7 +267,7 @@ td.n,th.n{text-align:right}
 var API_URL="https://script.google.com/macros/s/AKfycbz6Pj4j-dYiJ0AEclDvwMqm4PuJK4N-QlmzsoH0d1MQ7EaYpkxNkJzheQGjRI_nwut1Iw/exec";
 
 var $=function(i){return document.getElementById(i)};
-var TOKEN="",USER=null,DASH=null,JKL=null,sortMode="hi",showAll=false,UDATA=null,editId=null,pwForced=false;
+var TOKEN="",USER=null,DASH=null,JKL=null,LAP=null,RPT="",sortMode="hi",showAll=false,UDATA=null,editId=null,pwForced=false;
 try{TOKEN=sessionStorage.getItem("jk_tok")||"";USER=JSON.parse(sessionStorage.getItem("jk_usr")||"null")}catch(e){}
 var ROLE={PENTADBIR:"Pentadbir Sistem",PENYELARAS:"Penyelaras JK",PEMBANTU:"Pembantu Penyelaras"};
 
@@ -246,7 +290,7 @@ function hashPw(id,pw){return sha("mrsm-jk:"+id.toLowerCase()+":"+pw)}
 /* ===== Paparan ===== */
 function show(v){["vLogin","vPw","vApp"].forEach(function(k){$(k).classList.toggle("hide",k!==v)})}
 function simpanSesi(){try{sessionStorage.setItem("jk_tok",TOKEN);sessionStorage.setItem("jk_usr",JSON.stringify(USER))}catch(e){}}
-function buangSesi(){TOKEN="";USER=null;DASH=null;JKL=null;UDATA=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
+function buangSesi(){TOKEN="";USER=null;DASH=null;JKL=null;LAP=null;RPT="";UDATA=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
 function sesiTamat(){buangSesi();show("vLogin");$("lerr").textContent="Sesi tamat. Sila log masuk semula."}
 
 function masuk(){
@@ -257,8 +301,8 @@ function masuk(){
 }
 function page(p){
   document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.classList.toggle("on",a.dataset.v===p)});
-  $("pDash").classList.toggle("hide",p!=="dash");$("pUsers").classList.toggle("hide",p!=="users");$("pJk").classList.toggle("hide",p!=="jk");
-  if(p==="dash")muatDash(!DASH);if(p==="users")muatUsers();if(p==="jk"){tutupJk();muatJk(!JKL)}
+  $("pDash").classList.toggle("hide",p!=="dash");$("pUsers").classList.toggle("hide",p!=="users");$("pJk").classList.toggle("hide",p!=="jk");$("pLap").classList.toggle("hide",p!=="lap");
+  if(p==="dash")muatDash(!DASH);if(p==="users")muatUsers();if(p==="jk"){tutupJk();muatJk(!JKL)}if(p==="lap")bukaLap();
   window.scrollTo(0,0);
 }
 document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.onclick=function(){page(a.dataset.v)}});
@@ -369,6 +413,63 @@ async function bukaJk(kod){
     $("tAhli").innerHTML=A.map(function(a,i){return'<tr class="'+(a.kosong?"kos":"")+'"><td>'+(i+1)+"</td><td>"+esc(a.jawatan)+'</td><td class="nm">'+esc(a.kosong?a.nama:(a.gelaran?a.gelaran+" ":"")+a.nama)+'</td><td class="small noprint">'+(a.kosong?"Perlu diisi":esc(a.jabatan||"-")+(a.jawatanStaf?"<br>"+esc(a.jawatanStaf):""))+"</td></tr>"}).join("")||'<tr><td colspan="4" class="small">Belum ada ahli.</td></tr>';
     $("dNota").textContent=kos?"Baris berwarna ialah jawatan yang belum diisi.":"";
   }catch(x){if(x.message!=="auth")$("dNama").textContent="Gagal memuatkan ("+x.message+")."}
+}
+
+
+/* ===== Laporan ===== */
+var KATS=["PENYELARAS","PEN. PENYELARAS","SETIAUSAHA","PEN. SETIAUSAHA","BENDAHARI","PEN. BENDAHARI","AJK/ JK/ JAWATANKUASA","GURU KANAN","WARDEN ASRAMA","KETUA JURU AUDIT","JURU AUDIT","ELEMEN 1/2/3/","GURU PENASIHAT","URUSETIA","PENGERUSI/ TIMB. PENGERUSI"];
+var KLBL=["PENYELARAS","PEN. PENYELARAS","SETIAUSAHA","PEN. SETIAUSAHA","BENDAHARI","PEN. BENDAHARI","AJK / JK","GURU KANAN","WARDEN ASRAMA","KETUA JURU AUDIT","JURU AUDIT","ELEMEN 1/2/3","GURU PENASIHAT","URUSETIA","PENGERUSI / TIMB."];
+function bukaLap(){if(RPT)lukisLap()}
+$("bLapRefresh").onclick=function(){LAP=null;if(RPT)lukisLap()};
+document.querySelectorAll(".lapbtn[data-r]").forEach(function(b){b.onclick=function(){RPT=b.dataset.r;document.querySelectorAll(".lapbtn").forEach(function(x){x.classList.toggle("on",x===b)});lukisLap()}});
+$("lapInduk").onchange=function(){lukisLap()};$("lapStaf").onchange=function(){lukisLap()};
+$("bLapPrint").onclick=function(){window.print()};
+async function dataLap(){
+  if(LAP)return LAP;
+  var j=await api({action:"laporan",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");
+  var S={};j.staf.forEach(function(s){s.bil=0;s.pemberat=0;s.k={};s.jk=[];S[s.id]=s});
+  var J={};j.jk.forEach(function(x){x.ahli=[];J[x.kod]=x});
+  j.lantikan.forEach(function(l){var x=J[l.kod];if(x)x.ahli.push(l);var s=S[l.id];if(s){s.bil++;s.pemberat+=j.nilai[l.kategori]||0;s.k[l.kategori]=(s.k[l.kategori]||0)+1;s.jk.push(l)}});
+  var JI={};j.jk.forEach(function(x,i){JI[x.kod]=i});j.staf.forEach(function(s){s.jk.sort(function(a,b){return JI[a.kod]-JI[b.kod]})});j.S=S;j.J=J;LAP=j;
+  var ind=[];j.jk.forEach(function(x){if(ind.indexOf(x.induk)<0)ind.push(x.induk)});
+  $("lapInduk").innerHTML='<option value="">Semua bahagian</option>'+ind.map(function(i){return"<option>"+esc(i)+"</option>"}).join("");
+  $("lapStaf").innerHTML='<option value="">Semua staf</option>'+j.staf.slice().sort(function(a,b){return a.susunan-b.susunan}).map(function(s){return'<option value="'+esc(s.id)+'">'+esc(s.nama)+"</option>"}).join("");
+  return j;
+}
+function nmStaf(s){return(s.gelaran?s.gelaran+" ":"")+s.nama+(s.jawatan?" ( "+s.jawatan+" )":"")}
+async function lukisLap(){
+  var r=$("rpt");$("lapTools").style.display="flex";
+  $("lapInduk").style.display=RPT==="induk"?"":"none";$("lapStaf").style.display=RPT==="kerja"?"":"none";
+  if(!LAP){$("rptLoad").classList.remove("hide");r.classList.add("hide")}
+  try{var d=await dataLap()}catch(x){$("rptLoad").textContent=x.message==="auth"?"":"Gagal memuatkan data ("+x.message+").";return}
+  $("rptLoad").classList.add("hide");r.classList.remove("hide");
+  var thn=d.tahun,html="";
+  if(RPT==="induk"){
+    var ind=$("lapInduk").value,cur="";
+    html='<h2 class="rt">JAWATANKUASA KERJA MRSM ARAU, PERLIS '+esc(thn)+"</h2>";
+    d.jk.forEach(function(x){if(ind&&x.induk!==ind)return;
+      if(x.induk!==cur){cur=x.induk;html+='<h3 class="ri">'+esc(cur)+"</h3>"}
+      html+='<div class="jb"><div class="jh">'+esc(x.kod)+" : "+esc(x.nama)+"</div><table>"+x.ahli.map(function(a,i){var s=d.S[a.id];
+        return'<tr><td class="b">'+(i+1)+"</td><td"+(s?"":' class="kos"')+">"+esc(s?nmStaf(s):a.nama)+'</td><td class="j">'+esc(a.jawatan)+"</td></tr>"}).join("")+(x.ahli.length?"":'<tr><td colspan="3" style="padding:4px 8px">Belum ada ahli.</td></tr>')+"</table></div>"});
+  }else if(RPT==="wajaran"||RPT==="wnama"){
+    var L=d.staf.slice(),byJ=RPT==="wajaran";
+    L.sort(byJ?function(a,b){return a.susunan-b.susunan}:function(a,b){return a.nama.localeCompare(b.nama)});
+    var tot=new Array(KATS.length).fill(0),tp=0,tb=0,cur=null,n=0;
+    html='<h2 class="rt">RINGKASAN WAJARAN JAWATANKUASA '+esc(thn)+'</h2><div class="rs">MRSM Arau, Perlis · '+(byJ?"Disusun ikut jabatan":"Disusun ikut nama")+"</div>";
+    html+='<table class="rg"><thead><tr class="rv"><th style="writing-mode:horizontal-tb;transform:none;height:auto">Bil.</th><th class="l" style="writing-mode:horizontal-tb;transform:none;height:auto">Nama Guru / Staf</th>'+KLBL.map(function(k){return"<th>"+k+"</th>"}).join("")+'<th>BIL. JAWATAN</th><th>PEMBERAT</th></tr><tr><th></th><th class="l">Nilai pemberat</th>'+KATS.map(function(k){return"<th>"+(d.nilai[k]||0)+"</th>"}).join("")+"<th></th><th></th></tr></thead><tbody>";
+    L.forEach(function(s){
+      if(byJ){var g=s.jawatan==="PENGETUA"||s.jawatan==="TIMBALAN PENGETUA"?"PENGURUSAN":(s.jabatan==="PENGURUSAN"?"PENGURUSAN":s.jabatan||"LAIN-LAIN");if(g!==cur){cur=g;html+='<tr class="gh"><td colspan="'+(KATS.length+4)+'">'+esc(g)+"</td></tr>"}}
+      n++;tp+=s.pemberat;tb+=s.bil;
+      html+="<tr><td>"+n+'</td><td class="l">'+esc(s.nama)+"</td>"+KATS.map(function(k,i){var c=s.k[k]||0;tot[i]+=c;return"<td>"+(c||"")+"</td>"}).join("")+"<td>"+s.bil+"</td><td><b>"+s.pemberat+"</b></td></tr>"});
+    html+='<tr class="gh"><td></td><td class="l">JUMLAH</td>'+tot.map(function(t){return'<td style="text-align:center">'+t+"</td>"}).join("")+'<td style="text-align:center">'+tb+'</td><td style="text-align:center">'+tp+"</td></tr></tbody></table>";
+    html+='<div class="rs" style="text-align:left;margin-top:6px">Pemberat = bilangan jawatan × nilai pemberat jawatan. Jawatan KOSONG tidak dikira.</div>';
+  }else if(RPT==="kerja"){
+    var only=$("lapStaf").value,L=d.staf.slice().sort(function(a,b){return a.susunan-b.susunan});
+    html='<h2 class="rt">RINGKASAN JAWATANKUASA KERJA GURU '+esc(thn)+'</h2><div class="rs">MRSM Arau, Perlis</div>';
+    L.forEach(function(s){if(only&&s.id!==only)return;
+      html+='<div class="sb"><div class="sh"><span>'+esc(nmStaf(s))+"</span><span>"+s.bil+" jawatan · pemberat "+s.pemberat+"</span></div><table>"+(s.jk.length?s.jk.map(function(l,i){var x=d.J[l.kod];return"<tr><td style=\"width:26px;text-align:right\">"+(i+1)+'</td><td style="width:44px">'+esc(l.kod)+"</td><td>"+esc(x?x.nama:"")+'</td><td style="width:32%">'+esc(l.jawatan)+"</td></tr>"}).join(""):'<tr><td style="padding:4px 8px">Tiada jawatan.</td></tr>')+"</table></div>"});
+  }
+  r.innerHTML=html;
 }
 
 /* ===== Pengguna ===== */
