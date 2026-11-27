@@ -504,7 +504,7 @@ PAGES.staf=function(){var f=ST.staf;
 function sRank(){var A=analisis();return{r:A.rk,n:A.L.length}}
 function sFil(){var f=ST.staf,q=f.q.trim().toUpperCase();var L=D.staf.filter(function(s){return(!f.st||s.status===f.st)&&(!f.kat||s.kat===f.kat)&&(!q||(s.nama+" "+s.noGaji+" "+s.jabatan+" "+s.id).toUpperCase().indexOf(q)>=0)});
   var k=f.sort,d=f.dir;L.sort(function(a,b){var x=k==="susunan"?a.susunan:a[k],y=k==="susunan"?b.susunan:b[k];return(x<y?-1:x>y?1:0)*d||a.susunan-b.susunan});return L}
-function sRows(){var L=sFil(),R=sRank(),f=ST.staf,ex=D.staf.filter(function(s){return s.status==="AKTIF"&&(s.kat==="PENGURUSAN"||s.peg)}).length;
+function sRows(){var L=sFil(),R=sRank(),f=ST.staf,ex=D.staf.filter(function(s){return s.status==="AKTIF"&&(s.exo||s.peg)}).length;
   $("sCount").textContent=L.length+" rekod. Pengurusan dan pemegang tempat ("+ex+") diasingkan daripada analisis merit. Klik baris untuk butiran.";
   document.querySelectorAll("th.sort").forEach(function(th){th.textContent=th.textContent.replace(/ [▲▼]$/,"")+(th.dataset.s===f.sort?(f.dir>0?" ▲":" ▼"):"")});
   var P=pgSlice("staf",L,25);$("spg").innerHTML=P.html;pgBind($("spg"),sRows);
@@ -601,7 +601,7 @@ function susunJkDlg(){var G=[],M={};D.jk.forEach(function(j){var k=j.induk;if(!M
 
 /* ===== ANALISIS BEBAN ===== */
 function analisis(){var hi=Number(D.tetapan.AMBANG_TINGGI||1.3),lo=Number(D.tetapan.AMBANG_RENDAH||0.5);
-  var L=orang().filter(function(s){return s.kat!=="PENGURUSAN"}),pk={};
+  var L=orang().filter(function(s){return!s.exo}),pk={};
   L.forEach(function(s){var o=pk[s.kat]||(pk[s.kat]={n:0,t:0});o.n++;o.t+=s.merit});
   Object.keys(pk).forEach(function(k){pk[k].pur=pk[k].n?pk[k].t/pk[k].n:0});
   L.forEach(function(s){var p=pk[s.kat].pur;s.tahap=s.bil===0?"TIADA":s.merit>p*hi?"TINGGI":s.merit<p*lo?"RENDAH":"SEDERHANA"});
