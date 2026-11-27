@@ -175,7 +175,7 @@ table.tkb{border-collapse:collapse;width:100%;table-layout:fixed;font-size:10.5p
 <section id="vLogin" class="auth hide">
   <div class="card">
     <div class="top" style="position:static;border:0;display:block;text-align:center"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau · Sila log masuk untuk teruskan</p></div>
-    <label for="lid">ID Pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false">
+    <label for="lid">Emel / ID pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false">
     <label for="lpw">Kata Laluan</label><div class="pw"><input id="lpw" type="password" autocomplete="current-password"><button type="button" data-eye="lpw">Lihat</button></div>
     <button class="btn full" id="bLogin">Log Masuk</button>
     <div class="msg" id="lerr"></div>
@@ -264,7 +264,7 @@ $("lid").addEventListener("keydown",function(e){if(e.key==="Enter")$("lpw").focu
 $("bLogin").onclick=async function(){
   var id=$("lid").value.trim().toLowerCase(),pw=$("lpw").value,e=$("lerr"),b=this;e.textContent="";
   if(!id||!pw){e.textContent="Sila isi ID dan kata laluan.";return}
-  if(!/^[a-z0-9._-]{1,30}$/.test(id)){e.textContent="ID atau kata laluan salah.";return}
+  if(!/^[a-z0-9._@+-]{1,80}$/.test(id)){e.textContent="ID atau kata laluan salah.";return}
   b.disabled=true;b.textContent="Menyemak...";
   try{var j=await api({action:"login",id:id,h:await hashPw(id,pw)});
     if(j&&j.ok){TOKEN=j.token;USER=j.user;simpanSesi();$("lpw").value="";masuk()}
@@ -939,21 +939,34 @@ function salinTahunDlg(){go("impeks");setTimeout(function(){var b=$("cyB");if(b)
 /* ===== PENGGUNA ===== */
 var UD=null,editU=null;
 PAGES.users=function(){
-  $("main").innerHTML='<div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small"><b>Pentadbir</b>: semua modul. <b>Editor</b>: urus semua JK, lantikan, takwim dan surat. <b>Penyelaras/Pembantu</b>: urus JK yang ditetapkan sahaja. <b>Pemerhati</b>: lihat sahaja.</p></div></div><div class="grid g2"><div class="card"><h2 id="uHead">Tambah Pengguna</h2><div class="row2"><div><label>ID Pengguna</label><input id="fId" autocapitalize="off" placeholder="cth: hakimi"></div><div><label>Peranan</label><select id="fRole"><option value="PENYELARAS">Penyelaras (JK tertentu)</option><option value="PEMBANTU">Pembantu Penyelaras (JK tertentu)</option><option value="EDITOR">Editor (semua JK, takwim & surat)</option><option value="PEMERHATI">Pemerhati (baca sahaja)</option><option value="PENTADBIR">Pentadbir (semua modul)</option></select></div></div><label>Staf</label><select id="fStaf"><option value="">- pilih staf -</option>'+stafOpts("")+'</select><label>Jawatankuasa dijaga (kod dipisah koma)</label><input id="fJk" placeholder="cth: B02, C11" autocapitalize="characters"><div class="small" id="fJkName" style="margin-top:4px"></div><div class="row2"><div><label>Status</label><select id="fStatus"><option>AKTIF</option><option>TIDAK AKTIF</option></select></div><div id="fPwBox"><label>Kata laluan sementara</label><input id="fPw" autocomplete="off"></div></div><button class="btn full" id="bSave">Tambah Pengguna</button><button class="btn2 hide" id="bCancel" style="width:100%;margin-top:8px">Batal</button><div class="msg" id="umsg"></div></div><div class="card"><h2>Senarai Pengguna</h2><div class="wrap"><table class="t"><thead><tr><th>ID</th><th>Nama / Peranan</th><th>JK</th><th></th></tr></thead><tbody id="tUsers"><tr><td colspan="4" class="small">Memuatkan...</td></tr></tbody></table></div></div></div>';
-  $("fJk").oninput=function(){var ks=this.value.toUpperCase().split(/[,\s]+/).filter(Boolean);$("fJkName").innerHTML=ks.map(function(k){return JM[k]?esc(k)+": "+esc(JM[k].nama):'<span style="color:var(--red)">'+esc(k)+": kod tidak wujud</span>"}).join("<br>")};
-  $("bCancel").onclick=uReset;$("bSave").onclick=uSave;muatUsers()};
+  $("main").innerHTML='<div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small"><b>Pentadbir</b>: semua modul · <b>Editor</b>: urus jawatankuasa, takwim dan surat · <b>Viewer</b>: baca sahaja</p></div><button class="btn" id="bUNew">+ Pengguna Baharu</button></div><div class="card"><div class="wrap"><table class="t"><thead><tr><th>Emel / ID</th><th>Nama</th><th>Peranan</th><th>Log masuk akhir</th><th>Status</th><th></th></tr></thead><tbody id="tUsers"><tr><td colspan="6" class="small">Memuatkan...</td></tr></tbody></table></div></div>';
+  $("bUNew").onclick=function(){uDlg(null)};muatUsers()};
+var RLBL={PENTADBIR:"Pentadbir (semua modul)",EDITOR:"Editor (urus jawatankuasa dan surat)",PEMERHATI:"Viewer (baca sahaja)",PENYELARAS:"Penyelaras (JK tertentu)",PEMBANTU:"Pembantu Penyelaras (JK tertentu)"};
 async function muatUsers(){try{var j=await api({action:"users",token:TOKEN});if(!j.ok)throw new Error(j.error);UD=j;
-  $("tUsers").innerHTML=j.users.map(function(u){return"<tr><td><b>"+esc(u.id)+"</b>"+(u.status!=="AKTIF"?'<br><span class="tag t-hi">Tidak aktif</span>':"")+"</td><td>"+esc(u.nama)+'<br><span class="small">'+esc(ROLE[u.peranan]||u.peranan)+(u.akhir?" · log masuk "+new Date(u.akhir).toLocaleDateString("ms-MY"):"")+'</span></td><td><div class="chips">'+(u.kodJk.length?u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join(""):'<span class="small">Semua</span>')+'</div></td><td style="white-space:nowrap"><button class="btn2" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2" data-rs="'+esc(u.id)+'">Reset</button></td></tr>'}).join("");
-  $("tUsers").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){uEdit(b.dataset.ed)}});
+  $("tUsers").innerHTML=j.users.map(function(u){return"<tr><td><b>"+esc(u.id)+"</b></td><td>"+esc(u.nama||"")+'</td><td class="small">'+esc((RLBL[u.peranan]||u.peranan).replace(/ \(.*\)$/,""))+(u.kodJk.length?'<div class="chips">'+u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join("")+"</div>":"")+'</td><td class="small">'+(u.akhir?new Date(u.akhir).toLocaleString("ms-MY",{dateStyle:"medium",timeStyle:"short"}):"—")+"</td><td>"+(u.status==="AKTIF"?'<span class="tag t-lo">Aktif</span>':'<span class="tag t-gr">Tidak aktif</span>')+'</td><td style="white-space:nowrap;text-align:right"><button class="btn2 sm" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2 sm" data-rs="'+esc(u.id)+'">Reset kata laluan</button></td></tr>'}).join("");
+  $("tUsers").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){uDlg(b.dataset.ed)}});
   $("tUsers").querySelectorAll("[data-rs]").forEach(function(b){b.onclick=function(){uReset2(b.dataset.rs)}})}
-  catch(x){if(x.message!=="auth")$("tUsers").innerHTML='<tr><td colspan="4" class="msg">Gagal memuatkan.</td></tr>'}}
-function uReset(){editU=null;$("fId").value="";$("fId").disabled=false;$("fRole").value="PENYELARAS";$("fStaf").value="";$("fJk").value="";$("fStatus").value="AKTIF";$("fPw").value="";$("fPwBox").classList.remove("hide");$("bSave").textContent="Tambah Pengguna";$("uHead").textContent="Tambah Pengguna";$("bCancel").classList.add("hide");$("fJkName").textContent="";$("umsg").textContent=""}
-function uEdit(id){var u=UD.users.filter(function(x){return x.id===id})[0];editU=id;$("fId").value=u.id;$("fId").disabled=true;$("fRole").value=u.peranan;$("fStaf").value=u.idStaf||"";$("fJk").value=u.kodJk.join(", ");$("fStatus").value=u.status||"AKTIF";$("fPwBox").classList.add("hide");$("bSave").textContent="Simpan Perubahan";$("uHead").textContent="Ubah Pengguna: "+id;$("bCancel").classList.remove("hide");$("fJk").oninput();window.scrollTo(0,0)}
-async function uSave(){var m=$("umsg");m.className="msg";m.textContent="";var id=$("fId").value.trim().toLowerCase(),sid=$("fStaf").value;
-  if(!/^[a-z0-9._-]{1,30}$/.test(id)){m.textContent="ID hanya huruf kecil, nombor, titik, _ atau -.";return}if(!sid){m.textContent="Sila pilih staf.";return}
-  var data={id:id,nama:SM[sid]?SM[sid].nama:"",idStaf:sid,peranan:$("fRole").value,kodJk:$("fJk").value,status:$("fStatus").value};
-  if(!editU){var pw=$("fPw").value;if(pw.length<8){m.textContent="Kata laluan sementara sekurang-kurangnya 8 aksara.";return}data.h=await hashPw(id,pw)}
-  $("bSave").disabled=true;try{var j=await api({action:"saveuser",token:TOKEN,baru:!editU,data:data});if(j.ok){var t=editU?"Perubahan disimpan.":"Pengguna "+id+" ditambah. Beri ID dan kata laluan sementara kepada pengguna.";uReset();m.className="msg ok";m.textContent=t;muatUsers()}else m.textContent=j.error||"Gagal"}catch(x){}$("bSave").disabled=false}
+  catch(x){if(x.message!=="auth")$("tUsers").innerHTML='<tr><td colspan="6" class="msg">Gagal memuatkan.</td></tr>'}}
+function uDlg(id){var u=id?UD.users.filter(function(x){return x.id===id})[0]:null,ro=["PENTADBIR","EDITOR","PEMERHATI"];if(u&&ro.indexOf(u.peranan)<0)ro.push(u.peranan);
+  modal('<h2><span>'+(u?"Ubah Pengguna":"Pengguna Baharu")+'</span><button class="x">×</button></h2>'+
+   (u?"":'<label for="uG">No. gaji</label><input id="uG" inputmode="numeric" placeholder="Taip no. gaji, maklumat staf keluar sendiri"><div class="small" id="uGi" style="margin-top:4px"></div>')+
+   '<label for="uE">Emel *</label><input id="uE" type="email" autocapitalize="off" spellcheck="false" value="'+esc(u?u.id:"")+'"'+(u?" disabled":"")+' placeholder="nama@mara.gov.my">'+
+   '<label for="uN">Nama</label><input id="uN" value="'+esc(u?u.nama:"")+'">'+
+   '<label for="uR">Peranan</label><select id="uR">'+ro.map(function(r){return'<option value="'+r+'"'+((u?u.peranan:"PEMERHATI")===r?" selected":"")+">"+esc(RLBL[r]||r)+"</option>"}).join("")+"</select>"+
+   (u&&(u.peranan==="PENYELARAS"||u.peranan==="PEMBANTU")?'<div id="uJB"><label for="uJ">Kod JK dijaga</label><input id="uJ" value="'+esc(u.kodJk.join(", "))+'"></div>':"")+
+   (u?"":'<label for="uP">Kata laluan awal *</label><input id="uP" type="text" autocomplete="off" placeholder="Sekurang-kurangnya 8 aksara">')+
+   '<label class="ck" style="margin-top:12px"><input type="checkbox" id="uA"'+(!u||u.status==="AKTIF"?" checked":"")+"> Akaun aktif</label>"+
+   '<div class="msg" id="uM"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="uS">Simpan</button></div>');
+  document.querySelector(".x2").onclick=tutupModal;var uSid=u?u.idStaf||"":"";
+  if($("uG"))$("uG").oninput=function(){var g=this.value.trim().replace(/^0+/,""),s=g?D.staf.filter(function(x){return String(x.noGaji||"").replace(/^0+/,"")===g})[0]:null;
+    if(s){uSid=s.id;$("uN").value=s.nama;if(s.emel)$("uE").value=s.emel.toLowerCase();$("uGi").innerHTML='<span style="color:var(--g,#1e6b4a)">✓ '+esc(nmS(s))+" · "+esc([s.jawatan,s.jabatan].filter(Boolean).join(" · "))+"</span>"+(s.emel?"":' <span style="color:var(--red)">· tiada emel dalam rekod staf, sila isi</span>');
+      if(UD&&UD.users.some(function(x){return x.idStaf===s.id}))$("uGi").innerHTML+='<br><span style="color:var(--red)">Staf ini sudah ada akaun pengguna.</span>'}
+    else{uSid="";$("uGi").textContent=g.length>=5?"No. gaji tidak dijumpai dalam senarai staf.":""}};
+  $("uS").onclick=async function(){var m=$("uM"),e=$("uE").value.trim().toLowerCase();m.textContent="";
+    if(!/^[a-z0-9._@+-]{1,80}$/.test(e)){m.textContent="Emel tidak sah.";return}
+    var data={id:e,nama:$("uN").value.trim(),idStaf:uSid,peranan:$("uR").value,kodJk:$("uJ")?$("uJ").value:"",status:$("uA").checked?"AKTIF":"TIDAK AKTIF"};
+    if(!u){var pw=$("uP").value;if(pw.length<8){m.textContent="Kata laluan awal sekurang-kurangnya 8 aksara.";return}data.h=await hashPw(e,pw)}
+    this.disabled=true;try{var j=await api({action:"saveuser",token:TOKEN,baru:!u,data:data});if(j.ok){tutupModal();toast(u?"Perubahan disimpan.":"Pengguna "+e+" ditambah. Beri emel dan kata laluan awal kepada pengguna; mereka akan diminta tukar kata laluan semasa log masuk pertama.");muatUsers()}else{m.textContent=j.error||"Gagal";this.disabled=false}}catch(x){this.disabled=false}}}
 async function uReset2(id){var pw=prompt("Kata laluan sementara baharu untuk "+id+" (sekurang-kurangnya 8 aksara):");if(pw===null)return;if(pw.length<8){toast("Terlalu pendek.");return}
   var j=await api({action:"resetpw",token:TOKEN,id:id,h:await hashPw(id,pw)});toast(j&&j.ok?"Kata laluan "+id+" direset.":"Gagal reset.")}
 
