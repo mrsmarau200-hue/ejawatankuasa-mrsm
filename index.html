@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<script>if(window.top!==window.self){document.documentElement.style.display="none";try{window.top.location=window.self.location}catch(e){}}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>e-Jawatankuasa MRSM Arau</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+:root{--bg:#f6f7f4;--card:#fff;--tx:#1d2a22;--mut:#5f6f65;--bd:#dfe4dc;--ac:#1f6b4a;--act:#fff;--red:#b3261e;--redbg:#fbe9e7;--grn:#1f6b4a;--grnbg:#e3f3ea;--amb:#8a5a00;--ambbg:#fff3d6;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#141a16;--card:#1d2620;--tx:#e8efe9;--mut:#9fb0a5;--bd:#2f3c34;--ac:#5fc08f;--act:#10281b;--red:#ff8a80;--redbg:#3a1f1d;--grn:#7fd6a5;--grnbg:#1a3326;--amb:#f5c46a;--ambbg:#3a2f14;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.hide{display:none!important}
+h1{font-size:20px;margin:0}h2{font-size:16px;margin:0 0 10px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 3px}
+input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+.btn{margin-top:14px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--ac);color:var(--act);font:inherit;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn2{padding:7px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.msg{margin-top:10px;font-size:13px;color:var(--red);min-height:1em}.ok{color:var(--grn)}
+.small{font-size:13px;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
+/* log masuk */
+.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(160deg,#14573b 0%,#0d3b28 55%,var(--bg) 55%)}
+.auth .card{max-width:380px;width:100%;padding:26px 22px;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+.auth .top{text-align:center;margin-bottom:8px}.auth .top img{height:70px}
+.auth .top p{margin:4px 0 0;color:var(--mut);font-size:13px}
+.pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--mut);font:inherit;font-size:12px;cursor:pointer;padding:6px}
+/* susun atur aplikasi */
+.app{display:grid;grid-template-columns:240px 1fr;gap:18px;max-width:1500px;margin:0 auto;padding:16px;align-items:start}
+.side{position:sticky;top:12px;background:linear-gradient(180deg,#14573b,#0d3b28);color:#e9f5ee;border-radius:18px;padding:16px 12px;display:flex;flex-direction:column;gap:14px;min-height:calc(100vh - 32px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.brand{display:flex;gap:10px;align-items:center;padding:0 6px}.brand img{height:40px;background:rgba(255,255,255,.92);border-radius:10px;padding:4px 6px}.brand b{display:block;font-size:15px}.brand small{opacity:.75;font-size:12px}
+.who{background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;font-size:13px}.who b{display:block;font-size:14px}
+.menu{display:flex;flex-direction:column;gap:3px}
+.menu a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#e9f5ee;cursor:pointer;font-weight:600;font-size:14px;text-decoration:none}
+.menu a:hover{background:rgba(255,255,255,.12)}.menu a.on{background:#fff;color:#14573b}
+.menu a.soon{opacity:.55;cursor:default}.menu a.soon:hover{background:none}
+.menu a i{margin-left:auto;font-style:normal;font-size:10px;background:rgba(255,255,255,.18);border-radius:99px;padding:1px 7px}
+.sf{margin-top:auto;border-top:1px solid rgba(255,255,255,.18);padding-top:10px;display:flex;flex-direction:column;gap:3px}
+.main{min-width:0}
+.ttl{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:4px 0 14px}
+.ttl p{margin:2px 0 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px}
+.stat b{display:block;font-size:26px;line-height:1.2}.stat span{font-size:13px;color:var(--mut)}
+.stat.warn{background:var(--ambbg);border-color:transparent}.stat.warn b{color:var(--amb)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bar{display:grid;grid-template-columns:minmax(120px,190px) 1fr 70px;gap:10px;align-items:center;padding:6px 0;font-size:13px}
+.bar .t{height:12px;background:var(--bd);border-radius:99px;overflow:hidden}.bar .t div{height:100%;background:var(--ac);border-radius:99px}
+.bar .n{text-align:right;font-weight:700}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{color:var(--mut);font-weight:600;white-space:nowrap}
+td.n,th.n{text-align:right}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.t-hi{background:var(--redbg);color:var(--red)}.t-md{background:var(--ambbg);color:var(--amb)}.t-lo{background:var(--grnbg);color:var(--grn)}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.tools input,.tools select{width:auto;flex:1;min-width:160px;padding:8px}
+.seg{display:flex;gap:4px}.seg button{padding:7px 12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.seg button.on{background:var(--ac);color:var(--act);border-color:var(--ac)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:4px}.chip{font-size:11px;padding:1px 7px;border-radius:99px;background:var(--grnbg);color:var(--grn);font-weight:700}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto;background:var(--tx);color:var(--bg);padding:10px 14px;border-radius:10px;z-index:60;font-size:14px}
+.load{padding:40px;text-align:center;color:var(--mut)}
+.mtop{display:none}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;padding:0 0 20px;gap:0}
+  .side{position:static;min-height:0;border-radius:0 0 18px 18px;padding:12px;gap:10px}
+  .who,.sf .x{display:none}
+  .menu{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}.menu a{white-space:nowrap;padding:8px 10px;font-size:13px}.menu a.soon{display:none}
+  .sf{margin-top:0;border-top:0;padding-top:0;flex-direction:row}
+  .side{flex-direction:column}.mtop{display:flex;justify-content:space-between;align-items:center}
+  .brand-d{display:none}
+  .main{padding:14px}
+  .two,.row{grid-template-columns:1fr}
+  .stat b{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOG MASUK ============ -->
+<section id="vLogin" class="auth hide">
+  <div class="card">
+    <div class="top"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau &middot; Sila log masuk untuk teruskan</p></div>
+    <label for="lid">ID Pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false">
+    <label for="lpw">Kata Laluan</label><div class="pw"><input id="lpw" type="password" autocomplete="current-password"><button type="button" data-eye="lpw">Lihat</button></div>
+    <button class="btn" id="bLogin">Log Masuk</button>
+    <div class="msg" id="lerr"></div>
+    <p class="small" style="text-align:center;margin:14px 0 0">Lupa kata laluan? Hubungi Pentadbir Sistem (Unit IT).</p>
+  </div>
+</section>
+
+<!-- ============ TUKAR KATA LALUAN ============ -->
+<section id="vPw" class="auth hide">
+  <div class="card">
+    <div class="top"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">Tukar Kata Laluan</h1><p id="pwWhy">Ini log masuk pertama anda. Sila tetapkan kata laluan baharu.</p></div>
+    <label for="np1">Kata laluan baharu (sekurang-kurangnya 8 aksara)</label><div class="pw"><input id="np1" type="password" autocomplete="new-password"><button type="button" data-eye="np1">Lihat</button></div>
+    <label for="np2">Ulang kata laluan baharu</label><input id="np2" type="password" autocomplete="new-password">
+    <button class="btn" id="bPw">Simpan Kata Laluan</button>
+    <button class="btn2" id="bPwBack" style="width:100%;margin-top:8px">Batal</button>
+    <div class="msg" id="perr"></div>
+  </div>
+</section>
+
+<!-- ============ APLIKASI ============ -->
+<div id="vApp" class="app hide">
+  <aside class="side">
+    <div class="mtop"><div class="brand"><img src="logo.png" alt=""><div><b>e-Jawatankuasa</b><small>MRSM Arau</small></div></div><button class="btn2" id="bOut2">Log Keluar</button></div>
+    <div class="brand brand-d"><img src="logo.png" alt=""><div><b>e-Jawatankuasa</b><small>MRSM Arau</small></div></div>
+    <div class="who"><b id="uNama"></b><span id="uRole"></span></div>
+    <nav class="menu" id="menu">
+      <a data-v="dash" class="on">Dashboard</a>
+      <a data-v="users" id="mUsers" class="hide">Pengguna</a>
+      <a class="soon">Senarai JK <i>akan datang</i></a>
+      <a class="soon">Lantikan <i>akan datang</i></a>
+      <a class="soon">Surat Lantikan <i>akan datang</i></a>
+    </nav>
+    <div class="sf"><a class="menu-x" id="bPwChg" style="color:#e9f5ee;cursor:pointer;padding:8px 12px;font-weight:600;font-size:14px">Tukar Kata Laluan</a><a class="x" id="bOut" style="color:#e9f5ee;cursor:pointer;padding:8px 12px;font-weight:600;font-size:14px">Log Keluar</a></div>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <section id="pDash">
+      <div class="ttl"><div><h1 id="dTitle">Dashboard</h1><p class="small" id="dSub"></p></div><button class="btn2" id="bRefresh">Muat Semula</button></div>
+      <div id="dLoad" class="load">Memuatkan data...</div>
+      <div id="dBody" class="hide">
+        <div class="stats" id="kpi"></div>
+        <div class="card hide" id="cJkSaya"><h2>Jawatankuasa Saya</h2><div class="wrap"><table><thead><tr><th>Kod</th><th>Jawatankuasa</th><th>Penyelaras</th><th>Setiausaha</th><th class="n">Ahli</th></tr></thead><tbody id="tJkSaya"></tbody></table></div></div>
+        <div class="two">
+          <div class="card" id="cInduk"><h2>Jawatankuasa ikut Bahagian</h2><div id="induk"></div></div>
+          <div class="card"><h2>Lantikan ikut Jawatan</h2><div class="wrap"><table><thead><tr><th>Jawatan</th><th class="n">Nilai</th><th class="n">Bil.</th></tr></thead><tbody id="tJaw"></tbody></table></div></div>
+        </div>
+        <div class="card">
+          <h2>Beban Tugas Staf</h2>
+          <div class="tools">
+            <input id="fCari" placeholder="Cari nama staf..." aria-label="Cari nama staf">
+            <div class="seg" id="fSort"><button data-s="hi" class="on">Paling tinggi</button><button data-s="lo">Paling rendah</button><button data-s="jab">Ikut jabatan</button><button data-s="az">Nama A-Z</button></div>
+          </div>
+          <div class="wrap"><table><thead><tr><th>#</th><th>Nama</th><th>Jabatan / Jawatan</th><th class="n">Bil. Jawatan</th><th class="n">Pemberat</th><th>Tahap</th></tr></thead><tbody id="tBeban"></tbody></table></div>
+          <div class="small" id="bebanInfo" style="margin-top:8px"></div>
+          <button class="btn2" id="bMore" style="margin-top:8px">Papar semua</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PENGGUNA -->
+    <section id="pUsers" class="hide">
+      <div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small">Hanya Pentadbir boleh tambah, ubah dan reset kata laluan pengguna.</p></div></div>
+      <div class="two">
+        <div class="card">
+          <h2 id="uHead">Tambah Pengguna</h2>
+          <div class="row"><div><label for="fId">ID Pengguna</label><input id="fId" autocapitalize="off" spellcheck="false" placeholder="cth: hakimi"></div>
+          <div><label for="fRole">Peranan</label><select id="fRole"><option value="PENYELARAS">Penyelaras</option><option value="PEMBANTU">Pembantu Penyelaras</option><option value="PENTADBIR">Pentadbir</option></select></div></div>
+          <label for="fStaf">Staf</label><select id="fStaf"><option value="">- pilih staf -</option></select>
+          <label for="fJk">Jawatankuasa dijaga (kod dipisah koma, cth: B02, C11)</label><input id="fJk" placeholder="Kosongkan untuk Pentadbir" autocapitalize="characters">
+          <div class="small" id="fJkName" style="margin-top:4px"></div>
+          <div class="row"><div><label for="fStatus">Status</label><select id="fStatus"><option>AKTIF</option><option>TIDAK AKTIF</option></select></div>
+          <div id="fPwBox"><label for="fPw">Kata laluan sementara</label><input id="fPw" type="text" autocomplete="off"></div></div>
+          <button class="btn" id="bSave">Tambah Pengguna</button>
+          <button class="btn2 hide" id="bCancel" style="width:100%;margin-top:8px">Batal</button>
+          <div class="msg" id="umsg"></div>
+        </div>
+        <div class="card">
+          <h2>Senarai Pengguna</h2>
+          <div class="wrap"><table><thead><tr><th>ID</th><th>Nama / Peranan</th><th>JK</th><th></th></tr></thead><tbody id="tUsers"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast hide" id="toast"></div>
+
+<script>
+/* ===== Tetapan: tampal URL Web App Apps Script di sini ===== */
+var API_URL="PASTE_URL_WEB_APP_DI_SINI";
+
+var $=function(i){return document.getElementById(i)};
+var TOKEN="",USER=null,DASH=null,sortMode="hi",showAll=false,UDATA=null,editId=null,pwForced=false;
+try{TOKEN=sessionStorage.getItem("jk_tok")||"";USER=JSON.parse(sessionStorage.getItem("jk_usr")||"null")}catch(e){}
+var ROLE={PENTADBIR:"Pentadbir Sistem",PENYELARAS:"Penyelaras JK",PEMBANTU:"Pembantu Penyelaras"};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.remove("hide");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.add("hide")},3500)}
+function fmt(n){return Number(n||0).toLocaleString("ms-MY")}
+var cbn=0;
+function api(body){return new Promise(function(res,rej){
+  if(!API_URL||API_URL.indexOf("PASTE")===0){rej(new Error("Alamat API belum ditetapkan"));return}
+  var name="__jk"+Date.now().toString(36)+(cbn++),sc=document.createElement("script"),done=false;
+  var t=setTimeout(function(){if(!done){fin();rej(new Error("tamat masa"))}},30000);
+  function fin(){done=true;clearTimeout(t);try{delete window[name]}catch(e){window[name]=undefined}if(sc.parentNode)sc.parentNode.removeChild(sc)}
+  window[name]=function(j){if(done)return;fin();if(j&&j.error==="auth"&&body.action!=="login"){sesiTamat();rej(new Error("auth"));return}res(j)};
+  sc.onerror=function(){if(!done){fin();rej(new Error("rangkaian"))}};
+  sc.src=API_URL+"?cb="+name+"&q="+encodeURIComponent(JSON.stringify(body));
+  document.head.appendChild(sc)})}
+async function sha(s){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return("0"+x.toString(16)).slice(-2)}).join("")}
+function hashPw(id,pw){return sha("mrsm-jk:"+id.toLowerCase()+":"+pw)}
+
+/* ===== Paparan ===== */
+function show(v){["vLogin","vPw","vApp"].forEach(function(k){$(k).classList.toggle("hide",k!==v)})}
+function simpanSesi(){try{sessionStorage.setItem("jk_tok",TOKEN);sessionStorage.setItem("jk_usr",JSON.stringify(USER))}catch(e){}}
+function buangSesi(){TOKEN="";USER=null;DASH=null;UDATA=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
+function sesiTamat(){buangSesi();show("vLogin");$("lerr").textContent="Sesi tamat. Sila log masuk semula."}
+
+function masuk(){
+  if(USER.mustChange){pwForced=true;$("pwWhy").textContent="Ini log masuk pertama anda. Sila tetapkan kata laluan baharu.";$("bPwBack").classList.add("hide");show("vPw");return}
+  show("vApp");$("uNama").textContent=USER.nama||USER.id;$("uRole").textContent=ROLE[USER.peranan]||USER.peranan;
+  $("mUsers").classList.toggle("hide",USER.peranan!=="PENTADBIR");
+  page("dash");
+}
+function page(p){
+  document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.classList.toggle("on",a.dataset.v===p)});
+  $("pDash").classList.toggle("hide",p!=="dash");$("pUsers").classList.toggle("hide",p!=="users");
+  if(p==="dash")muatDash(!DASH);if(p==="users")muatUsers();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.onclick=function(){page(a.dataset.v)}});
+document.querySelectorAll("[data-eye]").forEach(function(b){b.onclick=function(){var i=$(b.dataset.eye);i.type=i.type==="password"?"text":"password";b.textContent=i.type==="password"?"Lihat":"Sorok"}});
+
+/* ===== Log masuk ===== */
+$("lpw").addEventListener("keydown",function(e){if(e.key==="Enter")$("bLogin").click()});
+$("lid").addEventListener("keydown",function(e){if(e.key==="Enter")$("lpw").focus()});
+$("bLogin").onclick=async function(){
+  var id=$("lid").value.trim().toLowerCase(),pw=$("lpw").value,e=$("lerr"),b=this;e.textContent="";
+  if(!id||!pw){e.textContent="Sila isi ID dan kata laluan.";return}
+  if(!/^[a-z0-9._-]{1,30}$/.test(id)){e.textContent="ID atau kata laluan salah.";return}
+  b.disabled=true;b.textContent="Menyemak...";
+  try{var j=await api({action:"login",id:id,h:await hashPw(id,pw)});
+    if(j&&j.ok){TOKEN=j.token;USER=j.user;simpanSesi();$("lpw").value="";masuk()}
+    else e.textContent=j&&j.error==="locked"?"Terlalu banyak percubaan. Cuba lagi selepas 10 minit.":"ID atau kata laluan salah.";
+  }catch(x){e.textContent="Tidak dapat menghubungi pelayan ("+x.message+").";}
+  b.disabled=false;b.textContent="Log Masuk";
+};
+function logout(){var t=TOKEN;buangSesi();if(t)api({action:"logout",token:t}).catch(function(){});$("lerr").textContent="";$("lid").value="";show("vLogin")}
+$("bOut").onclick=logout;$("bOut2").onclick=logout;
+
+/* ===== Tukar kata laluan ===== */
+$("bPwChg").onclick=function(){pwForced=false;$("pwWhy").textContent="Tetapkan kata laluan baharu untuk akaun "+USER.id+".";$("bPwBack").classList.remove("hide");$("np1").value="";$("np2").value="";$("perr").textContent="";show("vPw")};
+$("bPwBack").onclick=function(){show("vApp")};
+$("bPw").onclick=async function(){
+  var a=$("np1").value,c=$("np2").value,e=$("perr"),b=this;e.textContent="";
+  if(a.length<8){e.textContent="Kata laluan mesti sekurang-kurangnya 8 aksara.";return}
+  if(a!==c){e.textContent="Kata laluan tidak sama.";return}
+  b.disabled=true;
+  try{var j=await api({action:"setpw",token:TOKEN,h:await hashPw(USER.id,a)});
+    if(j&&j.ok){USER=j.user;simpanSesi();$("np1").value="";$("np2").value="";toast("Kata laluan berjaya ditukar.");masuk()}else e.textContent="Gagal menyimpan. Cuba lagi.";
+  }catch(x){if(x.message!=="auth")e.textContent="Tidak dapat menghubungi pelayan."}
+  b.disabled=false;
+};
+
+/* ===== Dashboard ===== */
+$("bRefresh").onclick=function(){muatDash(true)};
+async function muatDash(force){
+  if(DASH&&!force){lukisDash();return}
+  $("dLoad").classList.remove("hide");$("dBody").classList.add("hide");$("dLoad").textContent="Memuatkan data...";
+  try{var j=await api({action:"dashboard",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");DASH=j;lukisDash()}
+  catch(x){if(x.message!=="auth")$("dLoad").textContent="Gagal memuatkan data ("+x.message+"). Tekan Muat Semula."}
+}
+function tahap(p,purata){if(!purata)return"";if(p>=purata*1.5)return'<span class="tag t-hi">Tinggi</span>';if(p<purata*0.5)return'<span class="tag t-lo">Rendah</span>';return'<span class="tag t-md">Sederhana</span>'}
+function lukisDash(){
+  var d=DASH,k=d.kpi,adm=USER.peranan==="PENTADBIR";
+  $("dLoad").classList.add("hide");$("dBody").classList.remove("hide");
+  $("dTitle").textContent=adm?"Dashboard Jawatankuasa":"Dashboard Penyelaras";
+  $("dSub").textContent=(adm?"Semua jawatankuasa MRSM Arau":"Jawatankuasa di bawah jagaan anda: "+(USER.kodJk.join(", ")||"belum ditetapkan"))+" · Dikemaskini "+new Date(d.dikemaskini).toLocaleString("ms-MY");
+  var cards=[["Jawatankuasa",k.jk],["Lantikan",k.lantikan],[adm?"Staf aktif":"Ahli JK",k.staf],["Jumlah pemberat",k.pemberat],["Purata pemberat / staf",k.purata]];
+  if(adm){cards.push(["Staf tiada tugas JK",k.tiadaTugas,k.tiadaTugas>0]);cards.push(["Rekod staf perlu disemak",k.semakan,k.semakan>0])}
+  $("kpi").innerHTML=cards.map(function(c){return'<div class="stat'+(c[2]?" warn":"")+'"><b>'+fmt(c[1])+'</b><span>'+esc(c[0])+'</span></div>'}).join("");
+  var mx=Math.max.apply(null,d.induk.map(function(x){return x.lantikan}).concat([1]));
+  $("induk").innerHTML=d.induk.length?d.induk.map(function(x){return'<div class="bar"><div>'+esc(x.induk)+'<div class="small">'+x.jk+' JK</div></div><div class="t"><div style="width:'+(x.lantikan/mx*100).toFixed(1)+'%"></div></div><div class="n">'+fmt(x.lantikan)+'</div></div>'}).join("")+'<div class="small">Bar menunjukkan bilangan lantikan.</div>':'<p class="small">Tiada data.</p>';
+  $("tJaw").innerHTML=d.jawatan.map(function(x){return"<tr><td>"+esc(x.jawatan)+'</td><td class="n">'+x.nilai+'</td><td class="n">'+fmt(x.bil)+"</td></tr>"}).join("")||'<tr><td colspan="3" class="small">Tiada data.</td></tr>';
+  $("cJkSaya").classList.toggle("hide",adm);
+  if(!adm)$("tJkSaya").innerHTML=d.jkSaya.map(function(j){return"<tr><td>"+esc(j.kod)+"</td><td>"+esc(j.nama)+"</td><td>"+esc(j.penyelaras||"-")+"</td><td>"+esc(j.setiausaha||"-")+'</td><td class="n">'+j.ahli+"</td></tr>"}).join("")||'<tr><td colspan="5" class="small">Belum ada jawatankuasa ditetapkan untuk akaun ini. Hubungi Pentadbir Sistem.</td></tr>';
+  lukisBeban();
+}
+function lukisBeban(){
+  if(!DASH)return;var q=$("fCari").value.trim().toUpperCase(),pur=DASH.kpi.purata;
+  var L=DASH.beban.filter(function(s){return!q||s.nama.toUpperCase().indexOf(q)>=0});
+  L=L.slice().sort(sortMode==="lo"?function(a,b){return a.pemberat-b.pemberat||a.nama.localeCompare(b.nama)}:sortMode==="az"?function(a,b){return a.nama.localeCompare(b.nama)}:sortMode==="jab"?function(a,b){return(a.susunan||9999)-(b.susunan||9999)||a.nama.localeCompare(b.nama)}:function(a,b){return b.pemberat-a.pemberat||a.nama.localeCompare(b.nama)});
+  var lim=showAll||q?L.length:15,V=L.slice(0,lim);
+  $("tBeban").innerHTML=V.map(function(s,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(s.nama)+(s.semak?' <span class="tag t-md" title="Rekod staf perlu disemak">semak</span>':"")+'</td><td class="small">'+esc(s.jabatan||"-")+(s.jawatan?"<br>"+esc(s.jawatan):"")+'</td><td class="n">'+s.bil+'</td><td class="n"><b>'+fmt(s.pemberat)+"</b></td><td>"+tahap(s.pemberat,pur)+"</td></tr>"}).join("")||'<tr><td colspan="6" class="small">Tiada padanan.</td></tr>';
+  $("bebanInfo").textContent="Memaparkan "+V.length+" daripada "+L.length+" staf. Tahap dibanding purata "+pur+": Tinggi = 1.5x purata ke atas, Rendah = kurang separuh purata.";
+  $("bMore").classList.toggle("hide",V.length>=L.length);
+}
+$("fCari").oninput=lukisBeban;
+$("bMore").onclick=function(){showAll=true;lukisBeban()};
+document.querySelectorAll("#fSort button").forEach(function(b){b.onclick=function(){sortMode=b.dataset.s;document.querySelectorAll("#fSort button").forEach(function(x){x.classList.toggle("on",x===b)});lukisBeban()}});
+
+/* ===== Pengguna ===== */
+async function muatUsers(){
+  $("tUsers").innerHTML='<tr><td colspan="4" class="small">Memuatkan...</td></tr>';
+  try{var j=await api({action:"users",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");UDATA=j;
+    $("fStaf").innerHTML='<option value="">- pilih staf -</option>'+j.staf.map(function(s){return'<option value="'+esc(s.id)+'">'+esc(s.nama)+"</option>"}).join("");
+    lukisUsers();
+  }catch(x){if(x.message!=="auth")$("tUsers").innerHTML='<tr><td colspan="4" class="msg">Gagal memuatkan ('+esc(x.message)+').</td></tr>'}
+}
+function lukisUsers(){
+  $("tUsers").innerHTML=UDATA.users.map(function(u){return"<tr><td><b>"+esc(u.id)+"</b>"+(u.status!=="AKTIF"?'<br><span class="tag t-hi">Tidak aktif</span>':"")+"</td><td>"+esc(u.nama)+'<br><span class="small">'+esc(ROLE[u.peranan]||u.peranan)+'</span></td><td><div class="chips">'+(u.kodJk.length?u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join(""):'<span class="small">Semua</span>')+'</div></td><td style="white-space:nowrap"><button class="btn2" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2" data-rs="'+esc(u.id)+'">Reset</button></td></tr>'}).join("")||'<tr><td colspan="4" class="small">Tiada pengguna.</td></tr>';
+  $("tUsers").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){ubahUser(b.dataset.ed)}});
+  $("tUsers").querySelectorAll("[data-rs]").forEach(function(b){b.onclick=function(){resetUser(b.dataset.rs)}});
+}
+function namaJk(){if(!UDATA)return;var m={};UDATA.jk.forEach(function(j){m[j.kod]=j.nama});
+  var ks=$("fJk").value.toUpperCase().split(/[,\s]+/).filter(Boolean);
+  $("fJkName").innerHTML=ks.map(function(k){return m[k]?esc(k)+": "+esc(m[k]):'<span style="color:var(--red)">'+esc(k)+": kod tidak wujud</span>"}).join("<br>")}
+$("fJk").oninput=namaJk;
+function borangReset(){editId=null;$("fId").value="";$("fId").disabled=false;$("fRole").value="PENYELARAS";$("fStaf").value="";$("fJk").value="";$("fStatus").value="AKTIF";$("fPw").value="";$("fPwBox").classList.remove("hide");$("bSave").textContent="Tambah Pengguna";$("uHead").textContent="Tambah Pengguna";$("bCancel").classList.add("hide");$("fJkName").textContent=""}
+$("bCancel").onclick=function(){borangReset();$("umsg").textContent=""};
+function ubahUser(id){var u=UDATA.users.filter(function(x){return x.id===id})[0];if(!u)return;editId=id;
+  $("fId").value=u.id;$("fId").disabled=true;$("fRole").value=u.peranan;$("fStaf").value=u.idStaf||"";$("fJk").value=u.kodJk.join(", ");$("fStatus").value=u.status||"AKTIF";
+  $("fPwBox").classList.add("hide");$("bSave").textContent="Simpan Perubahan";$("uHead").textContent="Ubah Pengguna: "+id;$("bCancel").classList.remove("hide");$("umsg").textContent="";namaJk();window.scrollTo(0,0)}
+$("bSave").onclick=async function(){
+  var m=$("umsg"),b=this;m.className="msg";m.textContent="";
+  var id=$("fId").value.trim().toLowerCase(),role=$("fRole").value,sid=$("fStaf").value,sel=$("fStaf").options[$("fStaf").selectedIndex];
+  var nama=sid?sel.textContent:"";
+  if(!/^[a-z0-9._-]{1,30}$/.test(id)){m.textContent="ID hanya huruf kecil, nombor, titik, _ atau - (tiada jarak).";return}
+  if(!sid){m.textContent="Sila pilih staf.";return}
+  if(role!=="PENTADBIR"&&!$("fJk").value.trim()){m.textContent="Sila isi sekurang-kurangnya satu kod JK untuk Penyelaras/Pembantu.";return}
+  var data={id:id,nama:nama,idStaf:sid,peranan:role,kodJk:$("fJk").value,status:$("fStatus").value};
+  if(!editId){var pw=$("fPw").value;if(pw.length<8){m.textContent="Kata laluan sementara sekurang-kurangnya 8 aksara.";return}data.h=await hashPw(id,pw)}
+  b.disabled=true;
+  try{var j=await api({action:"saveuser",token:TOKEN,baru:!editId,data:data});
+    if(j&&j.ok){m.className="msg ok";m.textContent=editId?"Perubahan disimpan.":"Pengguna "+id+" ditambah. Beri ID dan kata laluan sementara kepada pengguna; mereka wajib tukar semasa log masuk pertama.";borangReset();DASH=null;muatUsers()}
+    else m.textContent=(j&&j.error)||"Gagal menyimpan.";
+  }catch(x){if(x.message!=="auth")m.textContent="Tidak dapat menghubungi pelayan."}
+  b.disabled=false;
+};
+async function resetUser(id){
+  var pw=prompt("Kata laluan sementara baharu untuk "+id+" (sekurang-kurangnya 8 aksara):");if(pw===null)return;
+  if(pw.length<8){toast("Kata laluan terlalu pendek.");return}
+  try{var j=await api({action:"resetpw",token:TOKEN,id:id,h:await hashPw(id,pw)});toast(j&&j.ok?"Kata laluan "+id+" direset. Pengguna wajib tukar semasa log masuk.":"Gagal reset.")}catch(x){}
+}
+
+/* ===== Mula ===== */
+if(TOKEN&&USER){masuk();api({action:"me",token:TOKEN}).then(function(j){if(j&&j.ok){USER=j.user;simpanSesi()}}).catch(function(){})}
+else show("vLogin");
+</script>
+</body>
+</html>
