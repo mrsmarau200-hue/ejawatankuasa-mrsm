@@ -118,8 +118,15 @@ th.sort{cursor:pointer}
 .mg .lp{text-align:center;font-weight:700}
 .mg table.ls{width:100%;border-collapse:collapse;margin-top:8px}.mg table.ls th{color:#5a6b85;text-align:left;font-weight:700}.mg table.ls th,.mg table.ls td{border:1px solid #999;padding:3px 6px;vertical-align:top}
 .mg table.ah{width:100%;border-collapse:collapse;margin-top:14px;font-size:11.5px}.mg table.ah td{border-bottom:1px solid #b9c7da;padding:2px 4px}
-.pgb{page-break-after:always}
+.pgb{page-break-after:always}.printonly{display:none}@media print{.printonly{display:block}}
 @media print{.mg{border:0;padding:0;margin:0;max-width:none}}
+
+.ik .bh{background:#0f3d2a;color:#fff;font-weight:700;padding:9px 14px;border-radius:8px;margin:18px 0 8px;letter-spacing:.3px}
+.ik .jt{font-weight:700;margin:14px 0 4px;font-size:14px}
+.ik table.t{border:1px solid var(--bd);background:#fff}.ik table.t td{padding:6px 9px}
+.ik .bs+.bs{break-before:page}
+.ik .jw{break-inside:avoid}
+@media print{.ik .bh{background:#fff;color:#000;border:1.5px solid #000;border-radius:6px}.ik table.t{border:1px solid #888}.ik table.t th,.ik table.t td{border:1px solid #888;padding:3px 6px;font-size:11.5px}.ik table.t thead th{background:#dfe8f3!important;color:#2a3b55}.ik .jt{font-size:13px;margin:10px 0 3px}.ik .kos td{background:#fff}}
 @media (max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
 @media (max-width:860px){
   .app{grid-template-columns:1fr}
@@ -263,7 +270,7 @@ function masuk(){
 
 /* ===== menu ===== */
 var MENU=[
- ["UTAMA"],["dash","📊","Papan Pemuka"],["jk","🗂️","Jawatankuasa"],["staf","👥","Staf & Guru"],["beban","⚖️","Analisis Beban"],["takwim","📅","Takwim Sekolah"],["lap","🖨️","Laporan"],
+ ["UTAMA"],["dash","📊","Papan Pemuka"],["jk","🗂️","Jawatankuasa"],["induk","📘","Laporan JK Induk"],["staf","👥","Staf & Guru"],["beban","⚖️","Analisis Beban"],["takwim","📅","Takwim Sekolah"],["lap","🖨️","Laporan Lain"],
  ["SURAT RASMI"],["slantik","✉️","Surat Perlantikan"],["smesy","📨","Surat Panggilan Mesyuarat"],
  ["KONFIGURASI",1],["merit","🏷️","Jawatan & Merit",1],["impeks","⇅","Import / Eksport",1],
  ["PENTADBIRAN",1],["users","🔑","Pengguna",1],["tetapan","⚙️","Tetapan",1],["log","📜","Log Audit",1]];
@@ -523,6 +530,46 @@ function takwimDlg(e){var jkl=D.jk.filter(function(j){return boleh(j.kod)}).map(
   document.querySelector(".x2").onclick=tutupModal;
   $("eSave").onclick=async function(){this.disabled=true;var r=await tulis({action:"savetakwim",data:{id:e?e.id:"",acara:$("eA").value.trim(),mula:$("eM").value,tamat:$("eT").value,kod:$("eK").value,lokasi:$("eL").value.trim(),catatan:$("eC").value.trim()}},"Takwim disimpan.");
     if(r.ok){tutupModal();PAGES.takwim()}else{this.disabled=false;$("eMsg").textContent=r.error||"Gagal"}}}
+
+
+/* ===== LAPORAN JK INDUK ===== */
+ST.ik={ind:"",merit:false};
+function kodHuruf(j){return j.kod.charAt(0)}
+PAGES.induk=function(){var f=ST.ik,J=D.jk.filter(function(j){return j.status==="AKTIF"});
+  $("main").innerHTML='<div class="noprint"><div class="ttl"><div><h1>Laporan JK Induk '+esc(TAHUN)+'</h1><p class="small">'+J.length+" jawatankuasa · "+fmt(J.reduce(function(t,j){return t+j.ahli.length},0))+' pelantikan. Susunan ahli ikut jawatan (Pengerusi, Timbalan, Penyelaras, Setiausaha … Ahli).</p></div></div><div class="card"><div class="tools" style="margin:0"><span class="lb">Paparkan</span><select id="ikI">'+opt(indukList().map(function(i){var j=D.jk.filter(function(x){return x.induk===i})[0];return[i,"Bahagian "+kodHuruf(j)+" — "+i]}),f.ind,"Semua bahagian")+'</select><label style="display:flex;gap:6px;align-items:center;margin:0;color:var(--tx);font-size:13px;white-space:nowrap"><input type="checkbox" id="ikM" style="width:auto"'+(f.merit?" checked":"")+'> Sertakan lajur merit</label><button class="btn" onclick="window.print()">🖨️ Cetak / Simpan PDF</button><button class="btn2" id="ikX">📗 Muat turun Excel (.xlsx)</button></div><p class="small" style="margin:10px 0 0">Untuk PDF: tekan "Cetak / Simpan PDF", pilih destinasi "Save as PDF" (kertas A4). Setiap bahagian bermula pada halaman baharu.</p></div></div><div class="ik" id="ikB"></div>';
+  $("ikI").onchange=function(){f.ind=this.value;ikBody()};$("ikM").onchange=function(){f.merit=this.checked;ikBody()};$("ikX").onclick=ikXlsx;ikBody()};
+function ikGroups(){var f=ST.ik,g=[],m={};D.jk.forEach(function(j){if(j.status!=="AKTIF"||(f.ind&&j.induk!==f.ind))return;if(!m[j.induk]){m[j.induk]={h:kodHuruf(j),induk:j.induk,jk:[]};g.push(m[j.induk])}m[j.induk].jk.push(j)});return g}
+function ikNama(a){var s=SM[a.idStaf];return s?nmS(s):a.nama}
+function ikBody(){var f=ST.ik;
+  $("ikB").innerHTML='<div class="printonly" style="text-align:center;margin-bottom:6px"><img src="logo.png" alt="" style="height:64px"><div style="font-weight:700;font-size:16px;margin-top:8px">JAWATANKUASA KERJA '+esc(D.tetapan.NAMA_RINGKAS)+" TAHUN "+esc(TAHUN)+"</div></div>"+ikGroups().map(function(g){return'<div class="bs"><div class="bh">BAHAGIAN '+esc(g.h)+" — "+esc(g.induk)+"</div>"+g.jk.map(function(j){return'<div class="jw"><div class="jt">'+esc(j.kod)+" "+esc(j.nama)+'</div><table class="t"><thead><tr><th style="width:50px">Bil</th><th>Nama</th><th style="width:34%">Jawatan</th>'+(f.merit?'<th class="n" style="width:70px">Merit</th>':"")+"</tr></thead><tbody>"+(j.ahli.map(function(a,i){return'<tr class="'+(a.idStaf?"":"kos")+'"><td>'+(i+1)+'</td><td class="nm">'+esc(ikNama(a))+"</td><td>"+esc(a.asal)+"</td>"+(f.merit?'<td class="n">'+(a.idStaf?a.w:"-")+"</td>":"")+"</tr>"}).join("")||'<tr><td colspan="4" class="small">Belum ada ahli.</td></tr>')+"</tbody></table></div>"}).join("")+"</div>"}).join("")}
+/* penulis xlsx ringkas (tanpa pustaka luar) */
+var CRCT=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){var c=0xFFFFFFFF;for(var i=0;i<b.length;i++)c=CRCT[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+function zip(files){var enc=new TextEncoder(),parts=[],cen=[],off=0;
+  files.forEach(function(f){var nm=enc.encode(f.n),d=enc.encode(f.d),cr=crc32(d),h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(8,0,true);h.setUint32(14,cr,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,nm.length,true);
+    parts.push(new Uint8Array(h.buffer),nm,d);
+    var c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint32(16,cr,true);c.setUint32(20,d.length,true);c.setUint32(24,d.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    cen.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+d.length});
+  var cs=cen.reduce(function(t,x){return t+x.length},0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+  return new Blob(parts.concat(cen,[new Uint8Array(e.buffer)]),{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})}
+function xesc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]}).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,"")}
+function xlsx(nama,rows,widths,styles){
+  var col=function(i){var s="";i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+  var sd=rows.map(function(r,ri){return'<row r="'+(ri+1)+'">'+r.map(function(v,ci){if(v===""||v==null)return"";var st=styles&&styles[ri]?' s="'+styles[ri]+'"':"";var ref=col(ci)+(ri+1);return typeof v==="number"?'<c r="'+ref+'"'+st+"><v>"+v+"</v></c>":'<c r="'+ref+'" t="inlineStr"'+st+"><is><t xml:space=\"preserve\">"+xesc(v)+"</t></is></c>"}).join("")+"</row>"}).join("");
+  var ws='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>'+widths.map(function(w,i){return'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>'}).join("")+"</cols><sheetData>"+sd+"</sheetData></worksheet>";
+  var sty='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0F3D2A"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF5"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="4"><xf/><xf fontId="1" applyFont="1"/><xf fontId="2" fillId="2" applyFont="1" applyFill="1"/><xf fontId="1" fillId="3" applyFont="1" applyFill="1"/></cellXfs></styleSheet>';
+  var blob=zip([{n:"[Content_Types].xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
+    {n:"_rels/.rels",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+    {n:"xl/workbook.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="JK Induk" sheetId="1" r:id="rId1"/></sheets></workbook>'},
+    {n:"xl/_rels/workbook.xml.rels",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+    {n:"xl/worksheets/sheet1.xml",d:ws},{n:"xl/styles.xml",d:sty}]);
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nama+".xlsx";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800)}
+function ikXlsx(){var f=ST.ik,rows=[["JAWATANKUASA KERJA "+D.tetapan.NAMA_RINGKAS+" TAHUN "+TAHUN]],st={0:1};
+  ikGroups().forEach(function(g){rows.push([]);st[rows.length]=2;rows.push(["BAHAGIAN "+g.h+" — "+g.induk,"","",f.merit?"":undefined].filter(function(x){return x!==undefined}));
+    g.jk.forEach(function(j){rows.push([]);st[rows.length]=1;rows.push([j.kod+" "+j.nama]);st[rows.length]=3;rows.push(f.merit?["BIL","NAMA","JAWATAN","MERIT"]:["BIL","NAMA","JAWATAN"]);
+      j.ahli.forEach(function(a,i){var r=[i+1,ikNama(a),a.asal];if(f.merit)r.push(a.idStaf?a.w:0);rows.push(r)})})});
+  xlsx("Laporan_JK_Induk_"+TAHUN+(f.ind?"_"+f.ind.replace(/[^A-Z0-9]+/gi,"_"):""),rows,f.merit?[8,55,40,10]:[8,55,40],st)}
 
 /* ===== LAPORAN ===== */
 ST.lap={r:"induk",induk:"",staf:""};
