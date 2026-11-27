@@ -296,14 +296,15 @@ var MENU=[
  ["SURAT RASMI"],["slantik","✉️","Surat Perlantikan"],["smesy","📨","Surat Panggilan Mesyuarat"],
  ["KONFIGURASI",1],["merit","🏷️","Jawatan & Merit",1],["impeks","⇅","Import / Eksport",1],
  ["PENTADBIRAN",1],["users","🔑","Pengguna",1],["tetapan","⚙️","Tetapan",1],["log","📜","Log Audit",1]];
-function binaNav(){$("nav").innerHTML=MENU.filter(function(m){if(pem()&&(m[0]==="slantik"||m[0]==="smesy"||m[0]==="SURAT RASMI"))return false;return!(m[1]===1||m[3]===1)||adm()}).map(function(m){
+function binaNav(){$("nav").innerHTML=MENU.filter(function(m){if(pem()&&(m[0]==="slantik"||m[0]==="smesy"||m[0]==="SURAT RASMI"))return false;return!(m[1]===1||m[3]===1)||adm()||(ed()&&EDP[m[0]])}).map(function(m){
   return m.length<3||m[1]===1?'<div class="sec">'+m[0]+"</div>":'<a data-p="'+m[0]+'"><span class="ic">'+m[1]+"</span>"+m[2]+"</a>"}).join("");
   $("nav").querySelectorAll("a").forEach(function(a){a.onclick=function(){$("side").classList.remove("open");go(a.dataset.p)}})}
 $("burger").onclick=function(e){e.stopPropagation();$("side").classList.toggle("open")};
 document.addEventListener("click",function(e){if($("side").classList.contains("open")&&!$("side").contains(e.target))$("side").classList.remove("open")});
 var PAGES={};
 var ADMP={merit:1,impeks:1,users:1,tetapan:1,log:1};
-function go(p){if(!PAGES[p]||(ADMP[p]&&!adm())||(pem()&&(p==="slantik"||p==="smesy")))p="dash";var pz=document.getElementById("pgsz");if(pz&&p!=="takwim")pz.textContent="";PAGE=p;$("nav").querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.dataset.p===p)});
+var EDP={KONFIGURASI:1,merit:1,impeks:1};/* menu pentadbir yang Editor juga boleh guna */
+function go(p){if(!PAGES[p]||(ADMP[p]&&!adm()&&!(ed()&&EDP[p]))||(pem()&&(p==="slantik"||p==="smesy")))p="dash";var pz=document.getElementById("pgsz");if(pz&&p!=="takwim")pz.textContent="";PAGE=p;$("nav").querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.dataset.p===p)});
   var m=MENU.filter(function(x){return x[0]===p})[0];$("pTitle").textContent=m?m[2]:"";
   if(!D){$("main").innerHTML='<div class="load">Memuatkan data...</div>';return}
   PAGES[p]();window.scrollTo(0,0)}
