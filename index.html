@@ -133,7 +133,10 @@ th.sort{cursor:pointer}
 @media print{
   body{background:#fff}.side,.top,.noprint,.toast,.dlg{display:none!important}
   .app{display:block}.main{padding:0;max-width:none}
-  .card{border:0;padding:0;break-inside:avoid}.doc,.surat{border:0;border-radius:0;padding:0}
+  .card{border:0;padding:0;break-inside:auto;box-shadow:none}.stat{break-inside:avoid}.doc,.surat{border:0;border-radius:0;padding:0}
+  .wrap,[style*=max-height]{overflow:visible!important;max-height:none!important}
+  table.t thead{display:table-header-group}table.t tr{break-inside:avoid}
+  .grid{display:block}.grid>.card{margin-bottom:14px}
   .surat{page-break-after:always;margin:0}.surat:last-child{page-break-after:auto}
   table.t thead th{background:#eee!important}
   @page{margin:12mm}
