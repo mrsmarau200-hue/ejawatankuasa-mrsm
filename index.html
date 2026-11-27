@@ -170,6 +170,15 @@ table.tkb{border-collapse:collapse;width:100%;table-layout:fixed;font-size:10.5p
 @media print{.tkc{padding:0}.tkc .wrap{overflow:visible!important}table.tkx{min-width:0;font-size:7px}table.tkx th{font-size:8px}table.tkx td[data-d]{height:auto}table.tkx td.nn{font-size:6px}table.tkx col.ch{width:32px}table.tkx col.cn{width:9px}html,body,.app,.main{min-height:0!important;height:auto!important}
  .tkm{display:block}.tmo{break-inside:avoid;margin-bottom:8px}.tmo:nth-child(2n+1):not(:first-child){break-before:page}table.tkb td{height:60px}
  table.tkx td,table.tkb td,.tlg i,.sw{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@keyframes gx{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes gy{from{transform:scaleY(0)}to{transform:scaleY(1)}}@keyframes dn{from{transform:rotate(-90deg) scale(.6);opacity:0}to{transform:none;opacity:1}}@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hb .b div,.pbar i{transform-origin:left center;animation:gx .9s cubic-bezier(.2,.75,.25,1) both}
+.vb .bar{transform-origin:center bottom;animation:gy .9s cubic-bezier(.2,.75,.25,1) both}
+.vb .c span.v{animation:fu .5s .5s both}
+.donut svg{animation:dn .9s cubic-bezier(.2,.75,.25,1) both}
+.stats .stat{animation:fu .45s both}.stats .stat:nth-child(2){animation-delay:40ms}.stats .stat:nth-child(3){animation-delay:80ms}.stats .stat:nth-child(4){animation-delay:120ms}.stats .stat:nth-child(5){animation-delay:160ms}.stats .stat:nth-child(6){animation-delay:200ms}.stats .stat:nth-child(7){animation-delay:240ms}.stats .stat:nth-child(n+8){animation-delay:280ms}
+.hb:nth-child(2) .b div,.vb .c:nth-child(2) .bar{animation-delay:70ms}.hb:nth-child(3) .b div,.vb .c:nth-child(3) .bar{animation-delay:105ms}.hb:nth-child(4) .b div,.vb .c:nth-child(4) .bar{animation-delay:140ms}.hb:nth-child(5) .b div,.vb .c:nth-child(5) .bar{animation-delay:175ms}.hb:nth-child(6) .b div,.vb .c:nth-child(6) .bar{animation-delay:210ms}.hb:nth-child(7) .b div,.vb .c:nth-child(7) .bar{animation-delay:245ms}.hb:nth-child(8) .b div,.vb .c:nth-child(8) .bar{animation-delay:280ms}.hb:nth-child(9) .b div,.vb .c:nth-child(9) .bar{animation-delay:315ms}.hb:nth-child(10) .b div,.vb .c:nth-child(10) .bar{animation-delay:350ms}.hb:nth-child(11) .b div,.vb .c:nth-child(11) .bar{animation-delay:385ms}.hb:nth-child(12) .b div,.vb .c:nth-child(12) .bar{animation-delay:420ms}.hb:nth-child(13) .b div,.vb .c:nth-child(13) .bar{animation-delay:455ms}.hb:nth-child(14) .b div,.vb .c:nth-child(14) .bar{animation-delay:490ms}.hb:nth-child(15) .b div,.vb .c:nth-child(15) .bar{animation-delay:525ms}.hb:nth-child(16) .b div,.vb .c:nth-child(16) .bar{animation-delay:560ms}.hb:nth-child(17) .b div,.vb .c:nth-child(17) .bar{animation-delay:595ms}.hb:nth-child(18) .b div,.vb .c:nth-child(18) .bar{animation-delay:630ms}.hb:nth-child(19) .b div,.vb .c:nth-child(19) .bar{animation-delay:665ms}.hb:nth-child(20) .b div,.vb .c:nth-child(20) .bar{animation-delay:700ms}.hb:nth-child(21) .b div,.vb .c:nth-child(21) .bar{animation-delay:735ms}.hb:nth-child(22) .b div,.vb .c:nth-child(22) .bar{animation-delay:770ms}.hb:nth-child(23) .b div,.vb .c:nth-child(23) .bar{animation-delay:805ms}.hb:nth-child(24) .b div,.vb .c:nth-child(24) .bar{animation-delay:840ms}.hb:nth-child(25) .b div,.vb .c:nth-child(25) .bar{animation-delay:875ms}.hb:nth-child(26) .b div,.vb .c:nth-child(26) .bar{animation-delay:910ms}.hb:nth-child(27) .b div,.vb .c:nth-child(27) .bar{animation-delay:945ms}.hb:nth-child(28) .b div,.vb .c:nth-child(28) .bar{animation-delay:980ms}.hb:nth-child(29) .b div,.vb .c:nth-child(29) .bar{animation-delay:1015ms}.hb:nth-child(30) .b div,.vb .c:nth-child(30) .bar{animation-delay:1050ms}
+@media (prefers-reduced-motion:reduce){.hb .b div,.pbar i,.vb .bar,.vb .c span.v,.donut svg,.stats .stat{animation:none!important}}
+@media print{.hb .b div,.pbar i,.vb .bar,.vb .c span.v,.donut svg,.stats .stat{animation:none!important}}
 </style>
 </head>
 <body>
@@ -542,6 +551,17 @@ function stafDlg(s){var F=function(id,l,v,ph){return'<div><label for="'+id+'">'+
 
 
 
+
+
+/* ===== ANIMASI NOMBOR KAD ===== */
+(function(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  function naik(el){if(el.dataset.run)return;var t=el.textContent.trim(),m=/^(\d{1,3}(?:,\d{3})*|\d+)(\.\d+)?$/.exec(t);if(!m||el.dataset.an===t)return;el.dataset.an=t;el.dataset.run="1";
+    var dp=m[2]?m[2].length-1:0,v=Number(t.replace(/,/g,"")),s=null,D=800;if(!v){delete el.dataset.run;return}
+    var f=function(x){return dp?x.toFixed(dp):Math.round(x).toLocaleString("en-US")};
+    var st=function(ts){if(s===null)s=ts;var p=Math.min(1,(ts-s)/D),e=1-Math.pow(1-p,3);el.textContent=f(v*e);if(p<1)requestAnimationFrame(st);else{el.textContent=t;delete el.dataset.run}};requestAnimationFrame(st)}
+  var ob=new MutationObserver(function(){document.querySelectorAll("#main .stats .stat>b").forEach(naik)});
+  document.addEventListener("DOMContentLoaded",function(){var m=document.getElementById("main");if(m)ob.observe(m,{childList:true,subtree:true})});
+  if(document.getElementById("main"))ob.observe(document.getElementById("main"),{childList:true,subtree:true});})();
 
 /* ===== PROFIL STAF (halaman penuh) ===== */
 ST.sp={id:""};var SEJ={};
