@@ -26,7 +26,7 @@ textarea{min-height:90px;resize:vertical}
 .small{font-size:12.5px;color:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
 .stats.sp4{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:800px){.stats.sp4{grid-template-columns:repeat(2,minmax(0,1fr))}}.stat>b{display:block;font-size:26px}.pbar{position:relative;height:12px;background:#e6ebf2;border-radius:6px;margin-top:4px}.pbar i{display:block;height:100%;border-radius:6px}.pbar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:#555}
-.tset{max-width:760px}.tset .card{margin-bottom:14px}.tsh{margin-top:3px}
+.idw{display:flex;align-items:center;gap:6px}.idw input{flex:1}.idw span{color:var(--mut);font-size:13px}.tset{max-width:760px}.tset .card{margin-bottom:14px}.tsh{margin-top:3px}
 .lsh{font-size:14px;margin:14px 0 6px}.ls2{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}.ls2 select[size]{width:100%;margin-top:6px}@media(max-width:700px){.ls2{grid-template-columns:minmax(0,1fr)}}
 .sjw{max-height:58vh;overflow:auto;border:1px solid #dfe5ec;border-radius:8px;padding:6px}.sjg{margin-bottom:10px}.sjh{background:#e9eef4;padding:6px 8px;border-radius:6px;margin-bottom:4px}.sjr{display:flex;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid #f0f2f5}.sjn{width:24px;text-align:right;color:#888;font-size:12px}.sjk{width:42px;font-weight:600;font-size:13px}.sjm{flex:1;font-size:13px}.sjr select{width:auto;padding:3px 6px;font-size:12px}
 .pgr{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.pgb2{display:flex;gap:8px;align-items:center}.btn2.sm{padding:4px 10px;font-size:12.5px}.btn2:disabled{opacity:.45;cursor:default}
@@ -186,7 +186,7 @@ table.tkb{border-collapse:collapse;width:100%;table-layout:fixed;font-size:10.5p
 <section id="vLogin" class="auth hide">
   <div class="card">
     <div class="top" style="position:static;border:0;display:block;text-align:center"><img class="lgo" src="logo.png" alt="Logo"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau · Sila log masuk untuk teruskan</p></div>
-    <label for="lid">Emel / ID pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false">
+    <label for="lid">ID pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="cth: norzakiya (nama emel MARA)">
     <label for="lpw">Kata Laluan</label><div class="pw"><input id="lpw" type="password" autocomplete="current-password"><button type="button" data-eye="lpw">Lihat</button></div>
     <button class="btn full" id="bLogin">Log Masuk</button>
     <div class="msg" id="lerr"></div>
@@ -252,6 +252,7 @@ function api(body){return new Promise(function(res,rej){
   sc.src=API_URL+"?cb="+name+"&q="+encodeURIComponent(JSON.stringify(body));
   document.head.appendChild(sc)})}
 async function sha(s){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return("0"+x.toString(16)).slice(-2)}).join("")}
+function normId(x){return String(x||"").trim().toLowerCase().replace(/@mara\.gov\.my$/,"")}
 function hashPw(id,pw){return sha("mrsm-jk:"+id.toLowerCase()+":"+pw)}
 async function tulis(body,okMsg){
   body.token=TOKEN;body.tahun=TAHUN;
@@ -273,11 +274,11 @@ document.querySelectorAll("[data-eye]").forEach(function(b){b.onclick=function()
 $("lpw").addEventListener("keydown",function(e){if(e.key==="Enter")$("bLogin").click()});
 $("lid").addEventListener("keydown",function(e){if(e.key==="Enter")$("lpw").focus()});
 $("bLogin").onclick=async function(){
-  var id=$("lid").value.trim().toLowerCase(),pw=$("lpw").value,e=$("lerr"),b=this;e.textContent="";
+  var id=normId($("lid").value),pw=$("lpw").value,e=$("lerr"),b=this;e.textContent="";
   if(!id||!pw){e.textContent="Sila isi ID dan kata laluan.";return}
   if(!/^[a-z0-9._@+-]{1,80}$/.test(id)){e.textContent="ID atau kata laluan salah.";return}
   b.disabled=true;b.textContent="Menyemak...";
-  try{var j=await api({action:"login",id:id,h:await hashPw(id,pw)});
+  try{var j=await api({action:"login",id:id,h:await hashPw(id,pw),h2:id.indexOf("@")<0?await hashPw(id+"@mara.gov.my",pw):""});
     if(j&&j.ok){TOKEN=j.token;USER=j.user;simpanSesi();$("lpw").value="";masuk()}
     else e.textContent=j&&j.error==="locked"?"Terlalu banyak percubaan. Cuba lagi selepas 10 minit.":"ID atau kata laluan salah.";
   }catch(x){e.textContent="Tidak dapat menghubungi pelayan ("+x.message+")."}
@@ -997,18 +998,18 @@ function salinTahunDlg(){go("impeks");setTimeout(function(){var b=$("cyB");if(b)
 /* ===== PENGGUNA ===== */
 var UD=null,editU=null;
 PAGES.users=function(){
-  $("main").innerHTML='<div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small"><b>Pentadbir</b>: semua modul · <b>Editor</b>: urus jawatankuasa, takwim dan surat · <b>Viewer</b>: baca sahaja</p></div><button class="btn" id="bUNew">+ Pengguna Baharu</button></div><div class="card"><div class="wrap"><table class="t"><thead><tr><th>Emel / ID</th><th>Nama</th><th>Peranan</th><th>Log masuk akhir</th><th>Status</th><th></th></tr></thead><tbody id="tUsers"><tr><td colspan="6" class="small">Memuatkan...</td></tr></tbody></table></div></div>';
+  $("main").innerHTML='<div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small"><b>Pentadbir</b>: semua modul · <b>Editor</b>: urus jawatankuasa, takwim dan surat · <b>Viewer</b>: baca sahaja</p></div><button class="btn" id="bUNew">+ Pengguna Baharu</button></div><div class="card"><div class="wrap"><table class="t"><thead><tr><th>ID pengguna</th><th>Nama</th><th>Peranan</th><th>Log masuk akhir</th><th>Status</th><th></th></tr></thead><tbody id="tUsers"><tr><td colspan="6" class="small">Memuatkan...</td></tr></tbody></table></div></div>';
   $("bUNew").onclick=function(){uDlg(null)};muatUsers()};
 var RLBL={PENTADBIR:"Pentadbir (semua modul)",EDITOR:"Editor (urus jawatankuasa dan surat)",PEMERHATI:"Viewer (baca sahaja)",PENYELARAS:"Penyelaras (JK tertentu)",PEMBANTU:"Pembantu Penyelaras (JK tertentu)"};
 async function muatUsers(){try{var j=await api({action:"users",token:TOKEN});if(!j.ok)throw new Error(j.error);UD=j;
-  $("tUsers").innerHTML=j.users.map(function(u){return"<tr><td><b>"+esc(u.id)+"</b></td><td>"+esc(u.nama||"")+'</td><td class="small">'+esc((RLBL[u.peranan]||u.peranan).replace(/ \(.*\)$/,""))+(u.kodJk.length?'<div class="chips">'+u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join("")+"</div>":"")+'</td><td class="small">'+(u.akhir?new Date(u.akhir).toLocaleString("ms-MY",{dateStyle:"medium",timeStyle:"short"}):"—")+"</td><td>"+(u.status==="AKTIF"?'<span class="tag t-lo">Aktif</span>':'<span class="tag t-gr">Tidak aktif</span>')+'</td><td style="white-space:nowrap;text-align:right"><button class="btn2 sm" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2 sm" data-rs="'+esc(u.id)+'">Reset kata laluan</button></td></tr>'}).join("");
+  $("tUsers").innerHTML=j.users.map(function(u){return"<tr><td><b>"+esc(normId(u.id))+"</b>"+(u.id.indexOf("@")>0?'<div class="small">ID ditukar automatik semasa log masuk seterusnya</div>':"")+"</td><td>"+esc(u.nama||"")+'</td><td class="small">'+esc((RLBL[u.peranan]||u.peranan).replace(/ \(.*\)$/,""))+(u.kodJk.length?'<div class="chips">'+u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join("")+"</div>":"")+'</td><td class="small">'+(u.akhir?new Date(u.akhir).toLocaleString("ms-MY",{dateStyle:"medium",timeStyle:"short"}):"—")+"</td><td>"+(u.status==="AKTIF"?'<span class="tag t-lo">Aktif</span>':'<span class="tag t-gr">Tidak aktif</span>')+'</td><td style="white-space:nowrap;text-align:right"><button class="btn2 sm" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2 sm" data-rs="'+esc(u.id)+'">Reset kata laluan</button></td></tr>'}).join("");
   $("tUsers").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){uDlg(b.dataset.ed)}});
   $("tUsers").querySelectorAll("[data-rs]").forEach(function(b){b.onclick=function(){uReset2(b.dataset.rs)}})}
   catch(x){if(x.message!=="auth")$("tUsers").innerHTML='<tr><td colspan="6" class="msg">Gagal memuatkan.</td></tr>'}}
 function uDlg(id){var u=id?UD.users.filter(function(x){return x.id===id})[0]:null,ro=["PENTADBIR","EDITOR","PEMERHATI"];if(u&&ro.indexOf(u.peranan)<0)ro.push(u.peranan);
   modal('<h2><span>'+(u?"Ubah Pengguna":"Pengguna Baharu")+'</span><button class="x">×</button></h2>'+
    (u?"":'<label for="uG">No. gaji</label><input id="uG" inputmode="numeric" placeholder="Taip no. gaji, maklumat staf keluar sendiri"><div class="small" id="uGi" style="margin-top:4px"></div>')+
-   '<label for="uE">Emel *</label><input id="uE" type="email" autocapitalize="off" spellcheck="false" value="'+esc(u?u.id:"")+'"'+(u?" disabled":"")+' placeholder="nama@mara.gov.my">'+
+   '<label for="uE">ID pengguna *</label><div class="idw"><input id="uE" autocapitalize="off" spellcheck="false" value="'+esc(u?u.id:"")+'"'+(u?" disabled":"")+' placeholder="cth: norzakiya"><span>@mara.gov.my</span></div><div class="small tsh">Nama emel MARA sahaja (sebelum @). Pengguna log masuk dengan ID ini atau emel penuh.</div>'+
    '<label for="uN">Nama</label><input id="uN" value="'+esc(u?u.nama:"")+'">'+
    '<label for="uR">Peranan</label><select id="uR">'+ro.map(function(r){return'<option value="'+r+'"'+((u?u.peranan:"PEMERHATI")===r?" selected":"")+">"+esc(RLBL[r]||r)+"</option>"}).join("")+"</select>"+
    (u&&(u.peranan==="PENYELARAS"||u.peranan==="PEMBANTU")?'<div id="uJB"><label for="uJ">Kod JK dijaga</label><input id="uJ" value="'+esc(u.kodJk.join(", "))+'"></div>':"")+
@@ -1017,14 +1018,14 @@ function uDlg(id){var u=id?UD.users.filter(function(x){return x.id===id})[0]:nul
    '<div class="msg" id="uM"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="uS">Simpan</button></div>');
   document.querySelector(".x2").onclick=tutupModal;var uSid=u?u.idStaf||"":"";
   if($("uG"))$("uG").oninput=function(){var g=this.value.trim().replace(/^0+/,""),s=g?D.staf.filter(function(x){return String(x.noGaji||"").replace(/^0+/,"")===g})[0]:null;
-    if(s){uSid=s.id;$("uN").value=s.nama;if(s.emel)$("uE").value=s.emel.toLowerCase();$("uGi").innerHTML='<span style="color:var(--g,#1e6b4a)">✓ '+esc(nmS(s))+" · "+esc([s.jawatan,s.jabatan].filter(Boolean).join(" · "))+"</span>"+(s.emel?"":' <span style="color:var(--red)">· tiada emel dalam rekod staf, sila isi</span>');
+    if(s){uSid=s.id;$("uN").value=s.nama;if(s.emel)$("uE").value=normId(s.emel);$("uGi").innerHTML='<span style="color:var(--g,#1e6b4a)">✓ '+esc(nmS(s))+" · "+esc([s.jawatan,s.jabatan].filter(Boolean).join(" · "))+"</span>"+(s.emel?"":' <span style="color:var(--red)">· tiada emel dalam rekod staf, sila isi</span>');
       if(UD&&UD.users.some(function(x){return x.idStaf===s.id}))$("uGi").innerHTML+='<br><span style="color:var(--red)">Staf ini sudah ada akaun pengguna.</span>'}
     else{uSid="";$("uGi").textContent=g.length>=5?"No. gaji tidak dijumpai dalam senarai staf.":""}};
-  $("uS").onclick=async function(){var m=$("uM"),e=$("uE").value.trim().toLowerCase();m.textContent="";
-    if(!/^[a-z0-9._@+-]{1,80}$/.test(e)){m.textContent="Emel tidak sah.";return}
+  $("uS").onclick=async function(){var m=$("uM"),e=u?u.id:normId($("uE").value);m.textContent="";
+    if(!/^[a-z0-9._@+-]{1,80}$/.test(e)){m.textContent="ID pengguna tidak sah (huruf kecil, nombor, titik sahaja).";return}
     var data={id:e,nama:$("uN").value.trim(),idStaf:uSid,peranan:$("uR").value,kodJk:$("uJ")?$("uJ").value:"",status:$("uA").checked?"AKTIF":"TIDAK AKTIF"};
     if(!u){var pw=$("uP").value;if(pw.length<8){m.textContent="Kata laluan awal sekurang-kurangnya 8 aksara.";return}data.h=await hashPw(e,pw)}
-    this.disabled=true;try{var j=await api({action:"saveuser",token:TOKEN,baru:!u,data:data});if(j.ok){tutupModal();toast(u?"Perubahan disimpan.":"Pengguna "+e+" ditambah. Beri emel dan kata laluan awal kepada pengguna; mereka akan diminta tukar kata laluan semasa log masuk pertama.");muatUsers()}else{m.textContent=j.error||"Gagal";this.disabled=false}}catch(x){this.disabled=false}}}
+    this.disabled=true;try{var j=await api({action:"saveuser",token:TOKEN,baru:!u,data:data});if(j.ok){tutupModal();toast(u?"Perubahan disimpan.":"Pengguna "+e+" ditambah. Beri ID dan kata laluan awal kepada pengguna; mereka akan diminta tukar kata laluan semasa log masuk pertama.");muatUsers()}else{m.textContent=j.error||"Gagal";this.disabled=false}}catch(x){this.disabled=false}}}
 async function uReset2(id){var pw=prompt("Kata laluan sementara baharu untuk "+id+" (sekurang-kurangnya 8 aksara):");if(pw===null)return;if(pw.length<8){toast("Terlalu pendek.");return}
   var j=await api({action:"resetpw",token:TOKEN,id:id,h:await hashPw(id,pw)});toast(j&&j.ok?"Kata laluan "+id+" direset.":"Gagal reset.")}
 
