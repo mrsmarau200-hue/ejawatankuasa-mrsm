@@ -25,6 +25,7 @@ textarea{min-height:90px;resize:vertical}
 .msg{margin-top:10px;font-size:13px;color:var(--red);min-height:1em}.ok{color:var(--grn)}
 .small{font-size:12.5px;color:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
+.lsh{font-size:14px;margin:14px 0 6px}.ls2{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}.ls2 select[size]{width:100%;margin-top:6px}@media(max-width:700px){.ls2{grid-template-columns:minmax(0,1fr)}}
 .sjw{max-height:58vh;overflow:auto;border:1px solid #dfe5ec;border-radius:8px;padding:6px}.sjg{margin-bottom:10px}.sjh{background:#e9eef4;padding:6px 8px;border-radius:6px;margin-bottom:4px}.sjr{display:flex;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid #f0f2f5}.sjn{width:24px;text-align:right;color:#888;font-size:12px}.sjk{width:42px;font-weight:600;font-size:13px}.sjm{flex:1;font-size:13px}.sjr select{width:auto;padding:3px 6px;font-size:12px}
 .pgr{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.pgb2{display:flex;gap:8px;align-items:center}.btn2.sm{padding:4px 10px;font-size:12.5px}.btn2:disabled{opacity:.45;cursor:default}
 .tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
@@ -81,7 +82,7 @@ th.sort{cursor:pointer}
 .lg{display:flex;align-items:center;gap:6px;font-size:13px;margin:4px 0}.lg i{width:12px;height:12px;border-radius:3px;display:inline-block}
 /* modal */
 .dlg{position:fixed;inset:0;background:rgba(10,20,15,.5);display:flex;align-items:flex-start;justify-content:center;z-index:80;padding:30px 14px;overflow-y:auto}
-.dlg>div{background:#fff;border-radius:14px;padding:18px;max-width:560px;width:100%;box-shadow:0 18px 40px rgba(0,0,0,.25)}.dlg>div.lebar{max-width:820px}
+.dlg>div{background:#fff;border-radius:14px;padding:18px;max-width:560px;width:100%;box-shadow:0 18px 40px rgba(0,0,0,.25)}.dlg>div.lebar{max-width:820px;max-height:94vh;overflow:auto}
 .dlg h2{display:flex;justify-content:space-between;gap:10px}.dlg .x{border:0;background:none;font-size:20px;cursor:pointer;color:var(--mut)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .act{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
@@ -510,8 +511,8 @@ function sRows(){var L=sFil(),R=sRank(),f=ST.staf,ex=D.staf.filter(function(s){r
 function stafInfo(id){var s=SM[id];
   modal('<h2><span>'+esc(nmS(s))+'</span><button class="x">×</button></h2><div class="small">'+esc([s.jawatan,s.jabatan,s.subjek,s.gred].filter(Boolean).join(" · "))+'</div><div class="small">No. gaji: '+esc(s.noGaji||"-")+" · "+esc(s.emel||"tiada emel")+" · "+esc(s.telefon||"")+'</div>'+(s.catatan?'<div class="note" style="margin-top:8px">'+esc(s.catatan)+"</div>":"")+
   '<h2 style="margin-top:14px">Jawatankuasa '+esc(TAHUN)+" ("+s.bil+" jawatan · merit "+s.merit+')</h2><div class="wrap" style="max-height:340px;overflow:auto"><table class="t"><tbody>'+(s.jk.map(function(l){return'<tr class="clk" data-k="'+esc(l.kod)+'"><td>'+esc(l.kod)+"</td><td>"+esc(JM[l.kod]?JM[l.kod].nama:"")+'</td><td class="small">'+esc(l.asal)+'</td><td class="n">'+l.w+"</td></tr>"}).join("")||'<tr><td class="small">Tiada jawatan.</td></tr>')+"</tbody></table></div>"+
-  '<div class="act">'+(adm()?'<button class="btn2" id="bSEdit">Ubah maklumat staf</button>':"")+'<button class="btn2 x2">Tutup</button></div>');
-  document.querySelector(".x2").onclick=tutupModal;
+  '<div class="act">'+(!s.peg||adm()?(adm()||USER.kodJk.length?'<button class="btn" id="bSLant" style="margin-right:auto">📋 Tetapkan jawatankuasa</button>':""):"")+(adm()?'<button class="btn2" id="bSEdit">Ubah maklumat staf</button>':"")+'<button class="btn2 x2">Tutup</button></div>');
+  document.querySelector(".x2").onclick=tutupModal;if($("bSLant"))$("bSLant").onclick=function(){lantikStafDlg(id)};
   document.querySelectorAll("#dlgBox tr[data-k]").forEach(function(r){r.onclick=function(){tutupModal();bukaJk(r.dataset.k)}});
   if($("bSEdit"))$("bSEdit").onclick=function(){stafDlg(s)}}
 function stafDlg(s){var F=function(id,l,v,ph){return'<div><label for="'+id+'">'+l+'</label><input id="'+id+'" value="'+esc(v||"")+'" placeholder="'+(ph||"")+'"></div>'};
@@ -533,6 +534,49 @@ function stafDlg(s){var F=function(id,l,v,ph){return'<div><label for="'+id+'">'+
     var r=await tulis({action:"savestaf",baru:!s,data:{id:s?s.id:"",gelaran:v("fG"),noGaji:v("fNo"),nama:v("fN"),jabatan:v("fJb"),subjek:v("fSb"),jawatan:v("fJw"),gred:v("fGr"),emel:v("fEm"),telefon:v("fTl"),kategori:v("fKt"),jantina:v("fJn"),susunan:v("fSu"),status:s?v("fSt"):"AKTIF",catatan:v("fCt"),kosongkan:s&&$("fKos")&&$("fKos").checked}},"Maklumat staf disimpan.");
     if(r.ok){tutupModal();if(r.kosong)toast(r.kosong+" jawatan JK dijadikan KOSONG.");go(PAGE)}else{this.disabled=false;$("fMsg").textContent=r.error||"Gagal"}}}
 
+
+
+/* ===== TETAPKAN JK BAGI SEORANG STAF ===== */
+function lantikStafDlg(id){var s=SM[id],buang={},baru=[];
+  var ada=D.lantikan.filter(function(l){return l.idStaf===id}).sort(function(a,b){return D.jk.indexOf(JM[a.kod])-D.jk.indexOf(JM[b.kod])});
+  var jkOpts=function(q){q=(q||"").toUpperCase();var g="",h="";D.jk.forEach(function(j){if(j.status!=="AKTIF"||!boleh(j.kod))return;if(q&&(j.kod+" "+j.nama).toUpperCase().indexOf(q)<0)return;if(j.induk!==g){if(g)h+="</optgroup>";g=j.induk;h+='<optgroup label="'+esc(j.induk)+'">'}var n=j.ahli.filter(function(a){return!a.idStaf}).length,sy=ada.some(function(l){return l.kod===j.kod})||baru.some(function(x){return x.kod===j.kod});h+='<option value="'+esc(j.kod)+'">'+esc(j.kod+" "+j.nama)+(sy?" ✓":"")+(n?" · "+n+" kosong":"")+"</option>"});return h+(g?"</optgroup>":"")};
+  modal('<h2><span>Tetapkan Jawatankuasa · '+esc(nmS(s))+'</span><button class="x">×</button></h2><div class="small">'+esc([s.jawatan,s.jabatan].filter(Boolean).join(" · "))+" · tahun "+esc(TAHUN)+' · merit semasa <b>'+s.merit+'</b></div>'+
+   '<h3 class="lsh">Jawatankuasa sedia ada</h3><div id="lsAda" class="wrap" style="max-height:220px;overflow:auto"></div>'+
+   '<h3 class="lsh">Tambah jawatankuasa</h3><div class="ls2"><div><input id="lsQ" placeholder="Cari kod atau nama JK..."><select id="lsJ" size="9"></select><div class="small">✓ = sudah ahli · "kosong" = ada slot menunggu pengganti</div></div>'+
+   '<div><label for="lsW">Jawatan</label><select id="lsW" disabled><option>— pilih JK dahulu —</option></select><div id="lsLB" class="hide"><label for="lsL">Nama jawatan (lain-lain)</label><input id="lsL" placeholder="cth: AJK CENDERAMATA"></div><label for="lsK">Kategori pemberat</label><select id="lsK">'+opt(D.pemberat.map(function(p){return[p.jawatan,p.jawatan+" ("+p.nilai+")"]}),"AJK/ JK/ JAWATANKUASA")+'</select><button class="btn2" id="lsAdd" style="margin-top:10px;width:100%" disabled>+ Tambah ke senarai</button></div></div>'+
+   '<div id="lsBaru"></div><div class="msg" id="lsMsg"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="lsSave">Simpan</button></div>',"lebar");
+  document.querySelector(".x2").onclick=tutupModal;
+  var lukis=function(){
+    $("lsAda").innerHTML='<table class="t"><tbody>'+(ada.map(function(l){var x=buang[l.id],ok=boleh(l.kod);return'<tr'+(x?' style="text-decoration:line-through;opacity:.5"':"")+'><td><b>'+esc(l.kod)+"</b></td><td>"+esc(JM[l.kod]?JM[l.kod].nama:"")+'</td><td class="small">'+esc(l.asal)+'</td><td class="n small">'+esc(String(nilaiKat(l.kat)))+'</td><td style="text-align:right">'+(ok?'<button class="btn2 sm'+(x?"":" red")+'" data-b="'+esc(l.id)+'">'+(x?"Batal buang":"Buang")+"</button>":"")+"</td></tr>"}).join("")||'<tr><td class="small">Tiada jawatankuasa lagi.</td></tr>')+"</tbody></table>";
+    $("lsAda").querySelectorAll("[data-b]").forEach(function(b){b.onclick=function(){var k=b.dataset.b;if(buang[k])delete buang[k];else buang[k]=1;lukis()}});
+    $("lsBaru").innerHTML=baru.length?'<h3 class="lsh">Akan ditambah ('+baru.length+')</h3><table class="t"><tbody>'+baru.map(function(x,i){return"<tr><td><b>"+esc(x.kod)+"</b></td><td>"+esc(JM[x.kod].nama)+'</td><td class="small">'+esc(x.asal)+(x.slot?' <span class="tag t-md">isi slot kosong</span>':"")+'</td><td class="n small">'+esc(String(nilaiKat(x.kat)))+'</td><td style="text-align:right"><button class="btn2 sm red" data-x="'+i+'">✕</button></td></tr>'}).join("")+"</tbody></table>":"";
+    $("lsBaru").querySelectorAll("[data-x]").forEach(function(b){b.onclick=function(){baru.splice(Number(b.dataset.x),1);lukis()}});
+    var cur=$("lsJ").value;$("lsJ").innerHTML=jkOpts($("lsQ").value);if(cur)$("lsJ").value=cur;
+    var m=s.merit;ada.forEach(function(l){if(buang[l.id])m-=nilaiKat(l.kat)});baru.forEach(function(x){m+=nilaiKat(x.kat)});
+    $("lsSave").textContent=(baru.length||Object.keys(buang).length)?"Simpan (merit "+s.merit+" → "+m+")":"Simpan"};
+  $("lsQ").oninput=function(){$("lsJ").innerHTML=jkOpts(this.value)};
+  $("lsJ").onchange=function(){var j=JM[this.value],w=$("lsW");if(!j)return;var ks=j.ahli.filter(function(a){return!a.idStaf&&!baru.some(function(x){return x.slot===a.id})});
+    w.innerHTML=(ks.length?'<optgroup label="Isi slot kosong">'+ks.map(function(a){return'<option value="slot:'+esc(a.id)+'">'+esc(a.asal)+" — "+esc(a.nama)+"</option>"}).join("")+"</optgroup>":"")+'<optgroup label="Jawatan baharu">'+JAWLBL.map(function(x){return'<option value="'+esc(x[0])+'"'+(x[0]==="AJK"&&!ks.length?" selected":"")+">"+esc(x[0])+"</option>"}).join("")+'<option value="__lain">Lain-lain…</option></optgroup>';
+    w.disabled=false;$("lsAdd").disabled=false;w.onchange()};
+  $("lsW").onchange=function(){var v=this.value,j=JM[$("lsJ").value];$("lsLB").classList.toggle("hide",v!=="__lain");
+    if(v.indexOf("slot:")===0){var a=j.ahli.filter(function(x){return x.id===v.slice(5)})[0];if(a)$("lsK").value=a.kat}else{var m=JAWLBL.filter(function(x){return x[0]===v})[0];if(m)$("lsK").value=m[1]}};
+  $("lsAdd").onclick=function(){var kod=$("lsJ").value,v=$("lsW").value;if(!kod)return;var x={kod:kod,kat:$("lsK").value};
+    if(v.indexOf("slot:")===0){var a=JM[kod].ahli.filter(function(y){return y.id===v.slice(5)})[0];x.slot=a.id;x.asal=a.asal}else if(v==="__lain"){x.asal=$("lsL").value.trim().toUpperCase();if(!x.asal){$("lsMsg").textContent="Isi nama jawatan.";return}}else x.asal=v;
+    if(!x.slot&&ada.concat(baru).some(function(l){return l.kod===kod&&l.asal===x.asal&&!buang[l.id]})&&!confirm(nmS(s)+" sudah memegang "+x.asal+" dalam "+kod+". Tambah juga?"))return;
+    $("lsMsg").textContent="";baru.push(x);lukis();$("lsJ").onchange()};
+  $("lsSave").onclick=async function(){var del=Object.keys(buang);if(!baru.length&&!del.length){tutupModal();return}
+    if(del.length&&!confirm("Buang "+del.length+" lantikan daripada "+s.nama+"?"))return;
+    var kos=del.length?confirm("Jadikan slot yang dibuang sebagai KOSONG supaya boleh diisi pengganti?\n\nOK = jadikan KOSONG\nCancel = padam terus"):false;
+    this.disabled=true;var gagal=[],n=0,tot=baru.length+del.length;
+    for(var i=0;i<baru.length;i++){var x=baru[i];$("lsMsg").textContent="Menyimpan "+(++n)+"/"+tot+"...";var j=await api({action:"savelant",token:TOKEN,tahun:TAHUN,data:{id:x.slot||"",kod:x.kod,idStaf:id,asal:x.asal,kat:x.kat}});if(!j||!j.ok)gagal.push(x.kod+": "+((j&&j.error)||"gagal"))}
+    for(var k=0;k<del.length;k++){var l=ada.filter(function(y){return y.id===del[k]})[0];$("lsMsg").textContent="Menyimpan "+(++n)+"/"+tot+"...";
+      var j2=kos?await api({action:"savelant",token:TOKEN,tahun:TAHUN,data:{id:l.id,kod:l.kod,idStaf:"",asal:l.asal,kat:l.kat,namaKosong:"KOSONG (dahulu: "+s.nama+")"}}):await api({action:"dellant",token:TOKEN,tahun:TAHUN,id:l.id});
+      if(!j2||!j2.ok)gagal.push(l.kod+": "+((j2&&j2.error)||"gagal"))}
+    await muat(true);
+    if(gagal.length){$("lsMsg").textContent="Sebahagian gagal: "+gagal.join("; ");this.disabled=false;return}
+    tutupModal();toast(tot+" perubahan disimpan untuk "+s.nama+".");go(PAGE);stafInfo(id)};
+  lukis()}
+function nilaiKat(k){var p=D.pemberat.filter(function(x){return x.jawatan===k})[0];return p?Number(p.nilai):0}
 
 /* ===== SUSUN SEMULA JK ===== */
 function susunJkDlg(){var G=[],M={};D.jk.forEach(function(j){var k=j.induk;if(!M[k]){M[k]={induk:k,ki:String(j.kodInduk||j.kod.charAt(0)),L:[]};G.push(M[k])}M[k].L.push({kod:j.kod,nama:j.nama,st:j.status})});
