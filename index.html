@@ -58,13 +58,30 @@ th{color:var(--mut);font-weight:600;white-space:nowrap}
 td.n,th.n{text-align:right}
 .tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:700}
 .t-hi{background:var(--redbg);color:var(--red)}.t-md{background:var(--ambbg);color:var(--amb)}.t-lo{background:var(--grnbg);color:var(--grn)}
-.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.tools input,.tools select{width:auto;flex:1;min-width:160px;padding:8px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.tools input,.tools select{width:auto;flex:1;min-width:160px;padding:8px}.tools input[type=checkbox]{flex:none;min-width:0;width:16px;height:16px;padding:0}
 .seg{display:flex;gap:4px}.seg button{padding:7px 12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.seg button.on{background:var(--ac);color:var(--act);border-color:var(--ac)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .chips{display:flex;flex-wrap:wrap;gap:4px}.chip{font-size:11px;padding:1px 7px;border-radius:99px;background:var(--grnbg);color:var(--grn);font-weight:700}
 .toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto;background:var(--tx);color:var(--bg);padding:10px 14px;border-radius:10px;z-index:60;font-size:14px}
 .load{padding:40px;text-align:center;color:var(--mut)}
 .mtop{display:none}
+.jkgrp{margin-bottom:14px}.jkgrp h3{font-size:14px;margin:0 0 8px;color:var(--mut);letter-spacing:.3px}
+.jkrow{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer}
+.jkrow:hover{border-color:var(--ac)}.jkrow .k{font-weight:700;color:var(--ac)}.jkrow .m{font-size:12px;color:var(--mut)}
+.jkrow .c{display:flex;gap:6px;align-items:center;white-space:nowrap}
+.kos td{background:var(--ambbg)}.kos .nm{color:var(--amb);font-style:italic}
+.dhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.printonly{display:none}
+@media (max-width:860px){.jkrow{grid-template-columns:48px 1fr}.jkrow .c{grid-column:2}}
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  .side,.toast,.noprint,#pDash,#pUsers,#jkList{display:none!important}
+  .app{display:block;padding:0;max-width:none}.main{padding:0}
+  .card{border:0;padding:0}.printonly{display:block}
+  table{font-size:11.5px}th,td{border:1px solid #999;padding:5px}
+  .kos td{background:#fff}.tag{border:1px solid #999;background:#fff!important;color:#000!important}
+}
+
 @media (max-width:860px){
   .app{grid-template-columns:1fr;padding:0 0 20px;gap:0}
   .side{position:static;min-height:0;border-radius:0 0 18px 18px;padding:12px;gap:10px}
@@ -114,7 +131,7 @@ td.n,th.n{text-align:right}
     <nav class="menu" id="menu">
       <a data-v="dash" class="on">Dashboard</a>
       <a data-v="users" id="mUsers" class="hide">Pengguna</a>
-      <a class="soon">Senarai JK <i>akan datang</i></a>
+      <a data-v="jk">Senarai JK</a>
       <a class="soon">Lantikan <i>akan datang</i></a>
       <a class="soon">Surat Lantikan <i>akan datang</i></a>
     </nav>
@@ -142,6 +159,33 @@ td.n,th.n{text-align:right}
           <div class="wrap"><table><thead><tr><th>#</th><th>Nama</th><th>Jabatan / Jawatan</th><th class="n">Bil. Jawatan</th><th class="n">Pemberat</th><th>Tahap</th></tr></thead><tbody id="tBeban"></tbody></table></div>
           <div class="small" id="bebanInfo" style="margin-top:8px"></div>
           <button class="btn2" id="bMore" style="margin-top:8px">Papar semua</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SENARAI JK -->
+    <section id="pJk" class="hide">
+      <div id="jkList">
+        <div class="ttl"><div><h1>Senarai Jawatankuasa</h1><p class="small" id="jkSub">Semua jawatankuasa MRSM Arau</p></div><button class="btn2" id="bJkRefresh">Muat Semula</button></div>
+        <div class="tools">
+          <input id="jkCari" placeholder="Cari kod, nama JK atau penyelaras..." aria-label="Cari jawatankuasa">
+          <select id="jkInduk" aria-label="Tapis bahagian"><option value="">Semua bahagian</option></select>
+          <label style="display:flex;gap:6px;align-items:center;margin:0;color:var(--tx);font-size:13px;white-space:nowrap"><input type="checkbox" id="jkKosong" style="width:auto"> Ada slot kosong sahaja</label>
+        </div>
+        <div class="small" id="jkInfo" style="margin-bottom:8px"></div>
+        <div id="jkBox"><div class="load">Memuatkan senarai...</div></div>
+      </div>
+      <div id="jkDetail" class="hide">
+        <div class="dhead noprint" style="margin-bottom:12px">
+          <button class="btn2" id="bJkBack">&larr; Kembali ke senarai</button>
+          <button class="btn2" id="bJkPrint">Cetak</button>
+        </div>
+        <div class="card">
+          <div class="printonly" style="text-align:center;margin-bottom:10px"><img src="logo.png" alt="" style="height:60px"><div style="font-weight:700;font-size:15px">MAKTAB RENDAH SAINS MARA ARAU</div></div>
+          <div class="dhead"><div><div class="small" id="dInduk"></div><h1 id="dNama" style="font-size:19px;margin:2px 0"></h1><div class="small" id="dMeta"></div></div></div>
+          <div class="wrap" style="margin-top:12px"><table><thead><tr><th style="width:40px">Bil.</th><th>Jawatan</th><th>Nama</th><th class="noprint">Jabatan / Jawatan Staf</th></tr></thead><tbody id="tAhli"></tbody></table></div>
+          <div class="small" id="dNota" style="margin-top:8px"></div>
         </div>
       </div>
     </section>
@@ -179,7 +223,7 @@ td.n,th.n{text-align:right}
 var API_URL="https://script.google.com/macros/s/AKfycbz6Pj4j-dYiJ0AEclDvwMqm4PuJK4N-QlmzsoH0d1MQ7EaYpkxNkJzheQGjRI_nwut1Iw/exec";
 
 var $=function(i){return document.getElementById(i)};
-var TOKEN="",USER=null,DASH=null,sortMode="hi",showAll=false,UDATA=null,editId=null,pwForced=false;
+var TOKEN="",USER=null,DASH=null,JKL=null,sortMode="hi",showAll=false,UDATA=null,editId=null,pwForced=false;
 try{TOKEN=sessionStorage.getItem("jk_tok")||"";USER=JSON.parse(sessionStorage.getItem("jk_usr")||"null")}catch(e){}
 var ROLE={PENTADBIR:"Pentadbir Sistem",PENYELARAS:"Penyelaras JK",PEMBANTU:"Pembantu Penyelaras"};
 
@@ -202,7 +246,7 @@ function hashPw(id,pw){return sha("mrsm-jk:"+id.toLowerCase()+":"+pw)}
 /* ===== Paparan ===== */
 function show(v){["vLogin","vPw","vApp"].forEach(function(k){$(k).classList.toggle("hide",k!==v)})}
 function simpanSesi(){try{sessionStorage.setItem("jk_tok",TOKEN);sessionStorage.setItem("jk_usr",JSON.stringify(USER))}catch(e){}}
-function buangSesi(){TOKEN="";USER=null;DASH=null;UDATA=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
+function buangSesi(){TOKEN="";USER=null;DASH=null;JKL=null;UDATA=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
 function sesiTamat(){buangSesi();show("vLogin");$("lerr").textContent="Sesi tamat. Sila log masuk semula."}
 
 function masuk(){
@@ -213,8 +257,8 @@ function masuk(){
 }
 function page(p){
   document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.classList.toggle("on",a.dataset.v===p)});
-  $("pDash").classList.toggle("hide",p!=="dash");$("pUsers").classList.toggle("hide",p!=="users");
-  if(p==="dash")muatDash(!DASH);if(p==="users")muatUsers();
+  $("pDash").classList.toggle("hide",p!=="dash");$("pUsers").classList.toggle("hide",p!=="users");$("pJk").classList.toggle("hide",p!=="jk");
+  if(p==="dash")muatDash(!DASH);if(p==="users")muatUsers();if(p==="jk"){tutupJk();muatJk(!JKL)}
   window.scrollTo(0,0);
 }
 document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.onclick=function(){page(a.dataset.v)}});
@@ -287,6 +331,45 @@ function lukisBeban(){
 $("fCari").oninput=lukisBeban;
 $("bMore").onclick=function(){showAll=true;lukisBeban()};
 document.querySelectorAll("#fSort button").forEach(function(b){b.onclick=function(){sortMode=b.dataset.s;document.querySelectorAll("#fSort button").forEach(function(x){x.classList.toggle("on",x===b)});lukisBeban()}});
+
+
+/* ===== Senarai JK ===== */
+$("bJkRefresh").onclick=function(){muatJk(true)};
+async function muatJk(force){
+  if(JKL&&!force){lukisJk();return}
+  $("jkBox").innerHTML='<div class="load">Memuatkan senarai...</div>';
+  try{var j=await api({action:"jklist",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");JKL=j.jk;
+    var ind=[];JKL.forEach(function(x){if(ind.indexOf(x.induk)<0)ind.push(x.induk)});
+    var cur=$("jkInduk").value;$("jkInduk").innerHTML='<option value="">Semua bahagian</option>'+ind.map(function(i){return'<option>'+esc(i)+"</option>"}).join("");$("jkInduk").value=cur;
+    $("jkSub").textContent=USER.peranan==="PENTADBIR"?"Semua jawatankuasa MRSM Arau":"Jawatankuasa di bawah jagaan anda";
+    lukisJk();
+  }catch(x){if(x.message!=="auth")$("jkBox").innerHTML='<div class="load">Gagal memuatkan ('+esc(x.message)+'). Tekan Muat Semula.</div>'}
+}
+function lukisJk(){
+  var q=$("jkCari").value.trim().toUpperCase(),ind=$("jkInduk").value,ks=$("jkKosong").checked;
+  var L=JKL.filter(function(x){return(!ind||x.induk===ind)&&(!ks||x.kosong>0)&&(!q||(x.kod+" "+x.nama+" "+x.penyelaras).toUpperCase().indexOf(q)>=0)});
+  var tk=L.reduce(function(t,x){return t+x.kosong},0);
+  $("jkInfo").textContent=L.length+" jawatankuasa · "+L.reduce(function(t,x){return t+x.ahli},0)+" lantikan"+(tk?" · "+tk+" slot kosong":"");
+  var g={},ord=[];L.forEach(function(x){if(!g[x.induk]){g[x.induk]=[];ord.push(x.induk)}g[x.induk].push(x)});
+  $("jkBox").innerHTML=ord.map(function(i){return'<div class="jkgrp"><h3>'+esc(i)+" ("+g[i].length+")</h3>"+g[i].map(function(x){
+    return'<div class="jkrow" data-k="'+esc(x.kod)+'"><div class="k">'+esc(x.kod)+"</div><div><div>"+esc(x.nama)+'</div><div class="m">'+(x.penyelaras?"Penyelaras: "+esc(x.penyelaras):"Penyelaras: -")+'</div></div><div class="c">'+(x.kosong?'<span class="tag t-md">'+x.kosong+" kosong</span>":"")+'<span class="tag t-lo">'+x.ahli+" ahli</span></div></div>"}).join("")+"</div>"}).join("")||'<div class="load">Tiada jawatankuasa sepadan.</div>';
+  $("jkBox").querySelectorAll(".jkrow").forEach(function(r){r.onclick=function(){bukaJk(r.dataset.k)}});
+}
+$("jkCari").oninput=function(){if(JKL)lukisJk()};$("jkInduk").onchange=function(){if(JKL)lukisJk()};$("jkKosong").onchange=function(){if(JKL)lukisJk()};
+function tutupJk(){$("jkDetail").classList.add("hide");$("jkList").classList.remove("hide")}
+$("bJkBack").onclick=function(){tutupJk();window.scrollTo(0,0)};
+$("bJkPrint").onclick=function(){window.print()};
+async function bukaJk(kod){
+  $("jkList").classList.add("hide");$("jkDetail").classList.remove("hide");window.scrollTo(0,0);
+  $("dNama").textContent="Memuatkan...";$("dInduk").textContent="";$("dMeta").textContent="";$("tAhli").innerHTML="";$("dNota").textContent="";
+  try{var j=await api({action:"jkdetail",token:TOKEN,kod:kod});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");
+    var d=j.jk,A=j.ahli,kos=A.filter(function(a){return a.kosong}).length;
+    $("dInduk").textContent=d.kod+" · "+d.induk;$("dNama").textContent=d.nama;
+    $("dMeta").textContent=A.length+" ahli"+(kos?" · "+kos+" slot kosong":"")+(d.tahun?" · Tahun "+d.tahun:"");
+    $("tAhli").innerHTML=A.map(function(a,i){return'<tr class="'+(a.kosong?"kos":"")+'"><td>'+(i+1)+"</td><td>"+esc(a.jawatan)+'</td><td class="nm">'+esc(a.kosong?a.nama:(a.gelaran?a.gelaran+" ":"")+a.nama)+'</td><td class="small noprint">'+(a.kosong?"Perlu diisi":esc(a.jabatan||"-")+(a.jawatanStaf?"<br>"+esc(a.jawatanStaf):""))+"</td></tr>"}).join("")||'<tr><td colspan="4" class="small">Belum ada ahli.</td></tr>';
+    $("dNota").textContent=kos?"Baris berwarna ialah jawatan yang belum diisi.":"";
+  }catch(x){if(x.message!=="auth")$("dNama").textContent="Gagal memuatkan ("+x.message+")."}
+}
 
 /* ===== Pengguna ===== */
 async function muatUsers(){
