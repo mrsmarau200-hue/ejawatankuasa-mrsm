@@ -25,6 +25,7 @@ textarea{min-height:90px;resize:vertical}
 .msg{margin-top:10px;font-size:13px;color:var(--red);min-height:1em}.ok{color:var(--grn)}
 .small{font-size:12.5px;color:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
+.stats.sp4{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:800px){.stats.sp4{grid-template-columns:repeat(2,minmax(0,1fr))}}.stat>b{display:block;font-size:26px}.pbar{position:relative;height:12px;background:#e6ebf2;border-radius:6px;margin-top:4px}.pbar i{display:block;height:100%;border-radius:6px}.pbar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:#555}
 .lsh{font-size:14px;margin:14px 0 6px}.ls2{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}.ls2 select[size]{width:100%;margin-top:6px}@media(max-width:700px){.ls2{grid-template-columns:minmax(0,1fr)}}
 .sjw{max-height:58vh;overflow:auto;border:1px solid #dfe5ec;border-radius:8px;padding:6px}.sjg{margin-bottom:10px}.sjh{background:#e9eef4;padding:6px 8px;border-radius:6px;margin-bottom:4px}.sjr{display:flex;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid #f0f2f5}.sjn{width:24px;text-align:right;color:#888;font-size:12px}.sjk{width:42px;font-weight:600;font-size:13px}.sjm{flex:1;font-size:13px}.sjr select{width:auto;padding:3px 6px;font-size:12px}
 .pgr{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.pgb2{display:flex;gap:8px;align-items:center}.btn2.sm{padding:4px 10px;font-size:12.5px}.btn2:disabled{opacity:.45;cursor:default}
@@ -304,7 +305,7 @@ document.addEventListener("click",function(e){if($("side").classList.contains("o
 var PAGES={};
 var ADMP={merit:1,impeks:1,users:1,tetapan:1,log:1};
 var EDP={KONFIGURASI:1,merit:1,impeks:1};/* menu pentadbir yang Editor juga boleh guna */
-function go(p){if(!PAGES[p]||(ADMP[p]&&!adm()&&!(ed()&&EDP[p]))||(pem()&&(p==="slantik"||p==="smesy")))p="dash";var pz=document.getElementById("pgsz");if(pz&&p!=="takwim")pz.textContent="";PAGE=p;$("nav").querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.dataset.p===p)});
+function go(p){if(!PAGES[p]||(ADMP[p]&&!adm()&&!(ed()&&EDP[p]))||(pem()&&(p==="slantik"||p==="smesy")))p="dash";var pz=document.getElementById("pgsz");if(pz&&p!=="takwim")pz.textContent="";PAGE=p;$("nav").querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.dataset.p===(p==="stafp"?"staf":p))});
   var m=MENU.filter(function(x){return x[0]===p})[0];$("pTitle").textContent=m?m[2]:"";
   if(!D){$("main").innerHTML='<div class="load">Memuatkan data...</div>';return}
   PAGES[p]();window.scrollTo(0,0)}
@@ -513,13 +514,7 @@ function sRows(){var L=sFil(),R=sRank(),f=ST.staf,ex=D.staf.filter(function(s){r
   $("sb").querySelectorAll("tr[data-s]").forEach(function(r){r.onclick=function(){stafInfo(r.dataset.s)}});
   $("sb").querySelectorAll("[data-lj]").forEach(function(b){b.onclick=function(e){e.stopPropagation();lantikStafDlg(b.dataset.lj)}})}
 function bolehLantik(){return!pem()&&(ed()||(USER&&USER.kodJk.length>0))}
-function stafInfo(id){var s=SM[id];
-  modal('<h2><span>'+esc(nmS(s))+'</span><button class="x">×</button></h2><div class="small">'+esc([s.jawatan,s.jabatan,s.subjek,s.gred].filter(Boolean).join(" · "))+'</div><div class="small">No. gaji: '+esc(s.noGaji||"-")+" · "+esc(s.emel||"tiada emel")+" · "+esc(s.telefon||"")+'</div>'+(s.catatan?'<div class="note" style="margin-top:8px">'+esc(s.catatan)+"</div>":"")+
-  '<h2 style="margin-top:14px">Jawatankuasa '+esc(TAHUN)+" ("+s.bil+" jawatan · merit "+s.merit+')</h2><div class="wrap" style="max-height:340px;overflow:auto"><table class="t"><tbody>'+(s.jk.map(function(l){return'<tr class="clk" data-k="'+esc(l.kod)+'"><td>'+esc(l.kod)+"</td><td>"+esc(JM[l.kod]?JM[l.kod].nama:"")+'</td><td class="small">'+esc(l.asal)+'</td><td class="n">'+l.w+"</td></tr>"}).join("")||'<tr><td class="small">Tiada jawatan.</td></tr>')+"</tbody></table></div>"+
-  '<div class="act">'+(!pem()&&(!s.peg||ed())?(ed()||USER.kodJk.length?'<button class="btn" id="bSLant" style="margin-right:auto">📋 Tetapkan jawatankuasa</button>':""):"")+(adm()?'<button class="btn2" id="bSEdit">Ubah maklumat staf</button>':"")+'<button class="btn2 x2">Tutup</button></div>');
-  document.querySelector(".x2").onclick=tutupModal;if($("bSLant"))$("bSLant").onclick=function(){lantikStafDlg(id)};
-  document.querySelectorAll("#dlgBox tr[data-k]").forEach(function(r){r.onclick=function(){tutupModal();bukaJk(r.dataset.k)}});
-  if($("bSEdit"))$("bSEdit").onclick=function(){stafDlg(s)}}
+function stafInfo(id){tutupModal();ST.sp={id:id};go("stafp")}
 function stafDlg(s){var F=function(id,l,v,ph){return'<div><label for="'+id+'">'+l+'</label><input id="'+id+'" value="'+esc(v||"")+'" placeholder="'+(ph||"")+'"></div>'};
   modal('<h2><span>'+(s?"Ubah Staf":"Staf Baharu")+'</span><button class="x">×</button></h2>'+
   '<div class="row2">'+F("fG","Gelaran",s&&s.gelaran,"EN. / PN. / UST.")+F("fNo","No. gaji",s&&s.noGaji)+'</div>'+F("fN","Nama penuh",s&&s.nama)+
@@ -540,6 +535,40 @@ function stafDlg(s){var F=function(id,l,v,ph){return'<div><label for="'+id+'">'+
     if(r.ok){tutupModal();if(r.kosong)toast(r.kosong+" jawatan JK dijadikan KOSONG.");go(PAGE)}else{this.disabled=false;$("fMsg").textContent=r.error||"Gagal"}}}
 
 
+
+
+/* ===== PROFIL STAF (halaman penuh) ===== */
+ST.sp={id:""};var SEJ={};
+PAGES.stafp=function(){var s=SM[ST.sp.id];if(!s){go("staf");return}
+  var A=analisis(),dlm=A.L.indexOf(s)>=0,pk=A.pk[s.kat],pur=pk?pk.pur:0,rk=A.rk[s.id];
+  var tg=dlm?tahapTag(s.tahap):'<span class="tag t-gr">Tidak dianalisis</span>',
+   ket=dlm?"Purata "+esc(KATL[s.kat]||s.kat)+": "+pur.toFixed(1)+"<br>Julat seimbang: "+Math.round(pur*A.lo)+"–"+Math.round(pur*A.hi)+" merit ("+Math.round(A.lo*100)+"–"+Math.round(A.hi*100)+"% purata)":(s.kat==="PENGURUSAN"?"Kategori Pengurusan diasingkan daripada analisis beban.":"Pemegang tempat (rekod umum) tidak dianalisis.");
+  var L=s.jk.slice(),mx=Math.max(s.merit,pur*A.hi,1)*1.08;
+  var bar=function(lbl,v,c,w){return'<div class="small" style="margin-top:8px">'+lbl+'</div><div class="pbar"><i style="width:'+(v/mx*100).toFixed(1)+'%;background:'+c+'"></i>'+(w?'<b style="left:'+(pur*A.lo/mx*100).toFixed(1)+'%" title="Ambang rendah"></b><b style="left:'+(pur*A.hi/mx*100).toFixed(1)+'%" title="Ambang tinggi"></b>':"")+"</div>"};
+  var bolehU=adm(),bL=bolehLantik()&&s.status==="AKTIF";
+  $("main").innerHTML='<div class="noprint"><button class="btn2 sm" id="spBack">‹ Senarai staf</button></div>'+
+   '<div class="ttl" style="margin-top:8px"><div><h1>'+esc(nmS(s))+'</h1><p class="small">'+esc([s.jawatan,s.jabatan,s.subjek,s.gred].filter(Boolean).join(" · "))+" · ID "+esc(s.id)+(s.noGaji?" · No. gaji "+esc(s.noGaji):"")+(s.emel?" · "+esc(s.emel):"")+(s.telefon?" · "+esc(s.telefon):"")+(s.status!=="AKTIF"?' · <span class="tag t-gr">TIDAK AKTIF</span>':"")+'</p></div>'+
+   '<div class="noprint" style="display:flex;gap:8px;flex-wrap:wrap">'+(bL?'<button class="btn" id="spJk">📋 Tetapkan jawatankuasa</button>':"")+(bolehU?'<button class="btn2" id="spEd">Sunting</button><button class="btn2 red" id="spDel">Padam</button>':"")+'<button class="btn2" onclick="window.print()">🖨️ Cetak laporan</button><button class="btn2" id="spCsv">⬇ CSV</button></div></div>'+
+   (s.catatan?'<div class="note">'+esc(s.catatan)+"</div>":"")+
+   '<div class="stats sp4"><div class="stat"><b>'+s.merit+'</b><span>Jumlah merit '+esc(TAHUN)+'</span></div><div class="stat"><b>'+s.bil+'</b><span>Pelantikan jawatankuasa</span></div><div class="stat"><b>'+(rk?rk+" / "+A.L.length:"—")+'</b><span>Kedudukan beban kerja</span></div><div class="stat"><div>'+tg+'</div><span class="small" style="display:block;margin-top:6px">'+ket+"</span></div></div>"+
+   (dlm?'<div class="card"><h2>Ringkasan Visual Beban</h2>'+bar("Anda: "+s.merit,s.merit,s.tahap==="TINGGI"?"var(--red,#b3261e)":"#1f4e79",1)+bar("Purata kategori: "+pur.toFixed(1),pur,"#9aa8c2")+'<div class="small" style="margin-top:6px">Garis menegak = ambang beban rendah dan tinggi.</div></div>':"")+
+   '<div class="grid g2"><div class="card"><h2>Pelantikan Tahun '+esc(TAHUN)+'</h2><div class="wrap"><table class="t"><thead><tr><th>Kod</th><th>Jawatankuasa</th><th>Jawatan</th><th class="n">Merit</th></tr></thead><tbody>'+(L.map(function(l){return'<tr class="clk" data-k="'+esc(l.kod)+'"><td class="small">'+esc(l.kod)+"</td><td>"+esc(JM[l.kod]?JM[l.kod].nama:"")+'</td><td class="small">'+esc(l.asal)+'<div class="small" style="opacity:.7">'+esc(l.kat)+'</div></td><td class="n"><b>'+l.w+"</b></td></tr>"}).join("")||'<tr><td colspan="4" class="small">Tiada pelantikan.</td></tr>')+(L.length?'<tr><td></td><td colspan="2" style="text-align:right"><b>Jumlah</b></td><td class="n"><b>'+s.merit+"</b></td></tr>":"")+"</tbody></table></div></div>"+
+   '<div class="card"><h2>Sejarah Merit mengikut Tahun</h2><div id="spSej" class="small">Memuatkan...</div><h2 style="margin-top:18px">Pecahan ikut Kategori Jawatan</h2>'+pecahan(s)+"</div></div>";
+  $("spBack").onclick=function(){go("staf")};
+  if($("spJk"))$("spJk").onclick=function(){lantikStafDlg(s.id)};
+  if($("spEd"))$("spEd").onclick=function(){stafDlg(s)};
+  if($("spDel"))$("spDel").onclick=function(){stafDlg(s);setTimeout(function(){$("fDel").click()},50)};
+  $("spCsv").onclick=function(){csv("Staf_"+s.id+"_"+TAHUN,[["KOD","JAWATANKUASA","JAWATAN","KATEGORI","MERIT"]].concat(L.map(function(l){return[l.kod,JM[l.kod]?JM[l.kod].nama:"",l.asal,l.kat,l.w]})))};
+  document.querySelectorAll("#main tr[data-k]").forEach(function(r){r.onclick=function(){bukaJk(r.dataset.k)}});
+  sejarahStaf(s)};
+function pecahan(s){var k=Object.keys(s.k).sort(function(a,b){return s.k[b]*(N[b]||0)-s.k[a]*(N[a]||0)});if(!k.length)return'<p class="small">—</p>';
+  return'<table class="t"><thead><tr><th>Kategori</th><th class="n">Bil.</th><th class="n">Nilai</th><th class="n">Merit</th></tr></thead><tbody>'+k.map(function(x){return"<tr><td class=small>"+esc(x)+'</td><td class="n">'+s.k[x]+'</td><td class="n">'+(N[x]||0)+'</td><td class="n"><b>'+s.k[x]*(N[x]||0)+"</b></td></tr>"}).join("")+"</tbody></table>"}
+async function sejarahStaf(s){var lukis=function(d){var el=$("spSej");if(!el)return;var t=Object.keys(d).sort();if(!t.length){el.textContent="Tiada data.";return}
+    var mx=Math.max.apply(null,t.map(function(y){return d[y].m}).concat([1]));
+    el.innerHTML='<div class="vb" style="height:200px">'+t.map(function(y){return'<div class="c" title="'+y+": "+d[y].m+" merit, "+d[y].n+' jawatan"><span class="v">'+d[y].m+'</span><div class="bar" style="height:'+(d[y].m/mx*88).toFixed(1)+'%'+(y===String(TAHUN)?"":";opacity:.6")+'"></div></div>'}).join("")+'</div><div class="vbx">'+t.map(function(y){return"<div>"+y+" ("+d[y].n+")</div>"}).join("")+"</div>"};
+  if(SEJ[s.id]){lukis(SEJ[s.id]);return}
+  var cur={};cur[TAHUN]={m:s.merit,n:s.bil};
+  try{var j=await api({action:"sejarah",token:TOKEN,id:s.id});if(j&&j.ok){j.data[TAHUN]=cur[TAHUN];SEJ[s.id]=j.data;lukis(j.data)}else lukis(cur)}catch(x){lukis(cur)}}
 
 /* ===== TETAPKAN JK BAGI SEORANG STAF ===== */
 function lantikStafDlg(id){var s=SM[id],buang={},baru=[];
@@ -579,7 +608,7 @@ function lantikStafDlg(id){var s=SM[id],buang={},baru=[];
       if(!j2||!j2.ok)gagal.push(l.kod+": "+((j2&&j2.error)||"gagal"))}
     await muat(true);
     if(gagal.length){$("lsMsg").textContent="Sebahagian gagal: "+gagal.join("; ");this.disabled=false;return}
-    tutupModal();toast(tot+" perubahan disimpan untuk "+s.nama+".");go(PAGE);stafInfo(id)};
+    tutupModal();toast(tot+" perubahan disimpan untuk "+s.nama+".");go(PAGE)};
   lukis()}
 function nilaiKat(k){var p=D.pemberat.filter(function(x){return x.jawatan===k})[0];return p?Number(p.nilai):0}
 
