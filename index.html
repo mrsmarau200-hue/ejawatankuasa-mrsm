@@ -26,6 +26,7 @@ textarea{min-height:90px;resize:vertical}
 .small{font-size:12.5px;color:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
 .stats.sp4{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:800px){.stats.sp4{grid-template-columns:repeat(2,minmax(0,1fr))}}.stat>b{display:block;font-size:26px}.pbar{position:relative;height:12px;background:#e6ebf2;border-radius:6px;margin-top:4px}.pbar i{display:block;height:100%;border-radius:6px}.pbar b{position:absolute;top:-3px;bottom:-3px;width:2px;background:#555}
+.tset{max-width:760px}.tset .card{margin-bottom:14px}.tsh{margin-top:3px}
 .lsh{font-size:14px;margin:14px 0 6px}.ls2{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px}.ls2 select[size]{width:100%;margin-top:6px}@media(max-width:700px){.ls2{grid-template-columns:minmax(0,1fr)}}
 .sjw{max-height:58vh;overflow:auto;border:1px solid #dfe5ec;border-radius:8px;padding:6px}.sjg{margin-bottom:10px}.sjh{background:#e9eef4;padding:6px 8px;border-radius:6px;margin-bottom:4px}.sjr{display:flex;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid #f0f2f5}.sjn{width:24px;text-align:right;color:#888;font-size:12px}.sjk{width:42px;font-weight:600;font-size:13px}.sjm{flex:1;font-size:13px}.sjr select{width:auto;padding:3px 6px;font-size:12px}
 .pgr{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.pgb2{display:flex;gap:8px;align-items:center}.btn2.sm{padding:4px 10px;font-size:12.5px}.btn2:disabled{opacity:.45;cursor:default}
@@ -175,7 +176,7 @@ table.tkb{border-collapse:collapse;width:100%;table-layout:fixed;font-size:10.5p
 
 <section id="vLogin" class="auth hide">
   <div class="card">
-    <div class="top" style="position:static;border:0;display:block;text-align:center"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau · Sila log masuk untuk teruskan</p></div>
+    <div class="top" style="position:static;border:0;display:block;text-align:center"><img class="lgo" src="logo.png" alt="Logo"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau · Sila log masuk untuk teruskan</p></div>
     <label for="lid">Emel / ID pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false">
     <label for="lpw">Kata Laluan</label><div class="pw"><input id="lpw" type="password" autocomplete="current-password"><button type="button" data-eye="lpw">Lihat</button></div>
     <button class="btn full" id="bLogin">Log Masuk</button>
@@ -186,7 +187,7 @@ table.tkb{border-collapse:collapse;width:100%;table-layout:fixed;font-size:10.5p
 
 <section id="vPw" class="auth hide">
   <div class="card">
-    <div style="text-align:center"><img src="logo.png" alt="" style="height:70px"><h1 style="margin-top:8px">Tukar Kata Laluan</h1><p class="small" id="pwWhy"></p></div>
+    <div style="text-align:center"><img class="lgo" src="logo.png" alt="" style="height:70px"><h1 style="margin-top:8px">Tukar Kata Laluan</h1><p class="small" id="pwWhy"></p></div>
     <label for="np1">Kata laluan baharu (sekurang-kurangnya 8 aksara)</label><div class="pw"><input id="np1" type="password" autocomplete="new-password"><button type="button" data-eye="np1">Lihat</button></div>
     <label for="np2">Ulang kata laluan baharu</label><input id="np2" type="password" autocomplete="new-password">
     <button class="btn full" id="bPw">Simpan Kata Laluan</button>
@@ -197,7 +198,7 @@ table.tkb{border-collapse:collapse;width:100%;table-layout:fixed;font-size:10.5p
 
 <div id="vApp" class="app hide">
   <aside class="side" id="side">
-    <div class="brand"><img src="logo.png" alt=""><div><b>MRSM ARAU</b><small>Pengurusan Jawatankuasa</small></div></div>
+    <div class="brand"><img class="lgo" src="logo.png" alt=""><div><b id="brNm">MRSM ARAU</b><small>Pengurusan Jawatankuasa</small></div></div>
     <nav class="nav" id="nav"></nav>
   </aside>
   <div>
@@ -315,12 +316,17 @@ async function muat(force){
   if(D&&!force)return;
   if(!D)$("main").innerHTML='<div class="load">Memuatkan data...</div>';
   try{var j=await api({action:"boot",token:TOKEN,tahun:TAHUN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");
-    D=j;TAHUN=j.tahun;USER=j.user;simpanSesi();kira();
+    D=j;TAHUN=j.tahun;USER=j.user;simpanSesi();kira();terapLogo();
     $("selTahun").innerHTML=j.tahunList.map(function(t){return"<option"+(t===TAHUN?" selected":"")+">"+t+"</option>"}).join("")+(adm()?'<option value="__baru">+ Tahun baharu…</option>':"");
   }catch(x){if(x.message!=="auth")$("main").innerHTML='<div class="load">Gagal memuatkan data ('+esc(x.message)+'). <button class="btn2" onclick="location.reload()">Cuba lagi</button></div>'}
 }
 $("selTahun").onchange=async function(){var v=this.value;if(v==="__baru"){this.value=TAHUN;salinTahunDlg();return}TAHUN=v;D=null;simpanSesi();await muat(true);go(PAGE)};
 var N={},SM={},JM={},LBL={};
+var LOGO="logo.png";try{LOGO=localStorage.getItem("ejk_logo")||"logo.png"}catch(e){}
+function terapLogo(){var t=D.tetapan,n=Number(t.LOGO_N||0),s="";for(var i=1;i<=n;i++)s+=t["LOGO_"+i]||"";LOGO=/^data:image\//.test(s)?s:"logo.png";
+  try{if(LOGO==="logo.png")localStorage.removeItem("ejk_logo");else localStorage.setItem("ejk_logo",LOGO)}catch(e){}
+  document.querySelectorAll("img.lgo").forEach(function(im){im.src=LOGO});if(t.NAMA_RINGKAS)$("brNm").textContent=t.NAMA_RINGKAS}
+document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("img.lgo").forEach(function(im){im.src=LOGO})});
 function kira(){
   N={};D.pemberat.forEach(function(p){N[p.jawatan]=p.nilai});
   SM={};D.staf.forEach(function(s){s.bil=0;s.merit=0;s.k={};s.jk=[];SM[s.id]=s});
@@ -381,7 +387,7 @@ function dashBody(){
   var ms=S.map(function(x){return x.m}),tot=ms.reduce(function(t,v){return t+v},0),pur=S.length?tot/S.length:0,a=ambang(pur);
   var sorted=S.slice().sort(function(x,y){return y.m-x.m||x.s.nama.localeCompare(y.s.nama)});
   var hi=sorted[0],lo=sorted[sorted.length-1];
-  var pk={};S.forEach(function(x){var o=pk[x.s.kat]||(pk[x.s.kat]={n:0,t:0});o.n++;o.t+=x.m});var AH=Number(D.tetapan.AMBANG_TINGGI||1.3),AL=Number(D.tetapan.AMBANG_RENDAH||0.5);S.forEach(function(x){var p=pk[x.s.kat].t/pk[x.s.kat].n;x.hi=x.m>p*AH;x.lo=x.b>0&&x.m<p*AL});
+  var pk={};S.forEach(function(x){var o=pk[x.s.kat]||(pk[x.s.kat]={n:0,t:0});o.n++;o.t+=x.m});var AH=Number(D.tetapan.AMBANG_TINGGI||1.3),AL=Number(D.tetapan.AMBANG_RENDAH||0.5);S.forEach(function(x){var a=ambangKat(x.s.kat,pk[x.s.kat].t/pk[x.s.kat].n);x.hi=x.m>a.hi;x.lo=x.b>0&&x.m<a.lo});
   var tiada=S.filter(function(x){return x.b===0}).length,bt=S.filter(function(x){return x.hi}).length,br=S.filter(function(x){return x.lo}).length;
   var tl=jkSet.filter(function(j){return!j.lengkap});
   var aktifL=L.filter(function(l){return l.idStaf}).length;
@@ -542,9 +548,9 @@ ST.sp={id:""};var SEJ={};
 PAGES.stafp=function(){var s=SM[ST.sp.id];if(!s){go("staf");return}
   var A=analisis(),dlm=A.L.indexOf(s)>=0,pk=A.pk[s.kat],pur=pk?pk.pur:0,rk=A.rk[s.id];
   var tg=dlm?tahapTag(s.tahap):'<span class="tag t-gr">Tidak dianalisis</span>',
-   ket=dlm?"Purata "+esc(KATL[s.kat]||s.kat)+": "+pur.toFixed(1)+"<br>Julat seimbang: "+Math.round(pur*A.lo)+"–"+Math.round(pur*A.hi)+" merit ("+Math.round(A.lo*100)+"–"+Math.round(A.hi*100)+"% purata)":(s.kat==="PENGURUSAN"?"Kategori Pengurusan diasingkan daripada analisis beban.":"Pemegang tempat (rekod umum) tidak dianalisis.");
-  var L=s.jk.slice(),mx=Math.max(s.merit,pur*A.hi,1)*1.08;
-  var bar=function(lbl,v,c,w){return'<div class="small" style="margin-top:8px">'+lbl+'</div><div class="pbar"><i style="width:'+(v/mx*100).toFixed(1)+'%;background:'+c+'"></i>'+(w?'<b style="left:'+(pur*A.lo/mx*100).toFixed(1)+'%" title="Ambang rendah"></b><b style="left:'+(pur*A.hi/mx*100).toFixed(1)+'%" title="Ambang tinggi"></b>':"")+"</div>"};
+   ket=dlm?"Purata "+esc(KATL[s.kat]||s.kat)+": "+pur.toFixed(1)+"<br>Julat seimbang: "+Math.round(pk.lo)+"–"+Math.round(pk.hi)+" merit"+(pk.sas?" (sasaran ditetapkan)":" ("+Math.round(A.lo*100)+"–"+Math.round(A.hi*100)+"% purata)"):(s.kat==="PENGURUSAN"?"Kategori Pengurusan diasingkan daripada analisis beban.":"Pemegang tempat (rekod umum) tidak dianalisis.");
+  var L=s.jk.slice(),mx=Math.max(s.merit,pk?pk.hi:0,pur,1)*1.08;
+  var bar=function(lbl,v,c,w){return'<div class="small" style="margin-top:8px">'+lbl+'</div><div class="pbar"><i style="width:'+(v/mx*100).toFixed(1)+'%;background:'+c+'"></i>'+(w?'<b style="left:'+(pk.lo/mx*100).toFixed(1)+'%" title="Ambang rendah"></b><b style="left:'+(pk.hi/mx*100).toFixed(1)+'%" title="Ambang tinggi"></b>':"")+"</div>"};
   var bolehU=adm(),bL=bolehLantik()&&s.status==="AKTIF";
   $("main").innerHTML='<div class="noprint"><button class="btn2 sm" id="spBack">‹ Senarai staf</button></div>'+
    '<div class="ttl" style="margin-top:8px"><div><h1>'+esc(nmS(s))+'</h1><p class="small">'+esc([s.jawatan,s.jabatan,s.subjek,s.gred].filter(Boolean).join(" · "))+" · ID "+esc(s.id)+(s.noGaji?" · No. gaji "+esc(s.noGaji):"")+(s.emel?" · "+esc(s.emel):"")+(s.telefon?" · "+esc(s.telefon):"")+(s.status!=="AKTIF"?' · <span class="tag t-gr">TIDAK AKTIF</span>':"")+'</p></div>'+
@@ -630,11 +636,13 @@ function susunJkDlg(){var G=[],M={};D.jk.forEach(function(j){var k=j.induk;if(!M
     if(r.ok){tutupModal();var n=Object.keys(r.peta||{}).filter(function(k){return r.peta[k]!==k}).length;if(nb)toast(n+" kod JK ditukar.");go(PAGE)}else{this.disabled=false;$("sjMsg").textContent=r.error||"Gagal"}}}
 
 /* ===== ANALISIS BEBAN ===== */
+function ambangKat(kat,pur){var t=D.tetapan,AH=Number(t.AMBANG_TINGGI||1.3),AL=Number(t.AMBANG_RENDAH||0.5),mn=t["SASARAN_MIN_"+kat],mx=t["SASARAN_MAX_"+kat];
+  return{lo:mn!==undefined&&String(mn).trim()!==""?Number(mn):pur*AL,hi:mx!==undefined&&String(mx).trim()!==""?Number(mx):pur*AH,sas:!!((mn&&String(mn).trim())||(mx&&String(mx).trim()))}}
 function analisis(){var hi=Number(D.tetapan.AMBANG_TINGGI||1.3),lo=Number(D.tetapan.AMBANG_RENDAH||0.5);
   var L=orang().filter(function(s){return!s.exo}),pk={};
   L.forEach(function(s){var o=pk[s.kat]||(pk[s.kat]={n:0,t:0});o.n++;o.t+=s.merit});
-  Object.keys(pk).forEach(function(k){pk[k].pur=pk[k].n?pk[k].t/pk[k].n:0});
-  L.forEach(function(s){var p=pk[s.kat].pur;s.tahap=s.bil===0?"TIADA":s.merit>p*hi?"TINGGI":s.merit<p*lo?"RENDAH":"SEDERHANA"});
+  Object.keys(pk).forEach(function(k){pk[k].pur=pk[k].n?pk[k].t/pk[k].n:0;var a=ambangKat(k,pk[k].pur);pk[k].lo=a.lo;pk[k].hi=a.hi;pk[k].sas=a.sas});
+  L.forEach(function(s){var o=pk[s.kat];s.tahap=s.bil===0?"TIADA":s.merit>o.hi?"TINGGI":s.merit<o.lo?"RENDAH":"SEDERHANA"});
   var srt=L.slice().sort(function(a,b){return b.merit-a.merit||a.nama.localeCompare(b.nama)}),rk={};srt.forEach(function(s,i){rk[s.id]=i>0&&srt[i-1].merit===s.merit?rk[srt[i-1].id]:i+1});
   return{L:L,pk:pk,hi:hi,lo:lo,rk:rk,srt:srt}}
 function tahapTag(t){return t==="TINGGI"?'<span class="tag t-hi">Beban tinggi</span>':t==="RENDAH"?'<span class="tag t-bl">Beban rendah</span>':t==="TIADA"?'<span class="tag t-bl">Tiada tugasan</span>':'<span class="tag t-lo">Seimbang</span>'}
@@ -652,7 +660,7 @@ PAGES.beban=function(){var A=analisis(),f=ST.beban;
   $("main").innerHTML='<div class="ttl"><div><h1>Analisis Beban Kerja '+esc(TAHUN)+'</h1><p class="small">Ambang: tinggi &gt; '+Math.round(A.hi*100)+"% dan rendah &lt; "+Math.round(A.lo*100)+"% daripada purata kategori sendiri. "+esc(pkt)+'. Pengurusan dan pemegang tempat tidak dikira.</p></div><div class="noprint" style="display:flex;gap:8px"><button class="btn2" id="bcsv">⬇ CSV</button><button class="btn2" onclick="window.print()">🖨️ Cetak</button></div></div>'+
   '<div class="note" style="background:#e9f0f8;color:#1f4e79">Jumlah merit tidak perlu sama rata: peranan berbeza wajar mempunyai jumlah berbeza. Senarai di bawah ialah petunjuk untuk semakan pentadbir, bukan pelantikan automatik.</div>'+
   '<div class="grid g3"><div class="card"><h2>Beban Tinggi ('+T.length+")</h2>"+tbl("bT",T.map(row),C)+'</div><div class="card"><h2>Beban Rendah — Sesuai Menerima Tanggungjawab Tambahan ('+R.length+")</h2>"+tbl("bR",R.map(row),C)+'</div><div class="card"><h2>Tiada Sebarang Tugasan ('+Z.length+")</h2>"+tbl("bZ",Z.map(function(s){return'<tr class="clk" data-s="'+esc(s.id)+'"><td>'+esc(s.nama)+'</td><td class="small">'+esc(s.kat)+"</td></tr>"}),[["Nama"],["Kategori"]])+"</div></div>"+
-  '<div class="grid g2"><div class="card"><h2>Purata Merit mengikut Jabatan</h2>'+chart+'</div><div class="card"><h2>Ringkasan ikut Kategori</h2><div class="wrap"><table class="t"><thead><tr><th>Kategori</th><th class="n">Bil.</th><th class="n">Purata</th><th class="n">Ambang tinggi</th><th class="n">Ambang rendah</th><th class="n">Tinggi</th><th class="n">Rendah</th><th class="n">Tiada</th></tr></thead><tbody>'+Object.keys(A.pk).map(function(k){var o=A.pk[k],X=A.L.filter(function(s){return s.kat===k});return"<tr><td>"+esc(KATL[k])+'</td><td class="n">'+o.n+'</td><td class="n">'+o.pur.toFixed(1)+'</td><td class="n">&gt; '+(o.pur*A.hi).toFixed(0)+'</td><td class="n">&lt; '+(o.pur*A.lo).toFixed(0)+'</td><td class="n">'+X.filter(function(s){return s.tahap==="TINGGI"}).length+'</td><td class="n">'+X.filter(function(s){return s.tahap==="RENDAH"}).length+'</td><td class="n">'+X.filter(function(s){return s.tahap==="TIADA"}).length+"</td></tr>"}).join("")+"</tbody></table></div></div></div>"+
+  '<div class="grid g2"><div class="card"><h2>Purata Merit mengikut Jabatan</h2>'+chart+'</div><div class="card"><h2>Ringkasan ikut Kategori</h2><div class="wrap"><table class="t"><thead><tr><th>Kategori</th><th class="n">Bil.</th><th class="n">Purata</th><th class="n">Ambang tinggi</th><th class="n">Ambang rendah</th><th class="n">Tinggi</th><th class="n">Rendah</th><th class="n">Tiada</th></tr></thead><tbody>'+Object.keys(A.pk).map(function(k){var o=A.pk[k],X=A.L.filter(function(s){return s.kat===k});return"<tr><td>"+esc(KATL[k])+'</td><td class="n">'+o.n+'</td><td class="n">'+o.pur.toFixed(1)+'</td><td class="n">&gt; '+o.hi.toFixed(0)+(o.sas?"*":"")+'</td><td class="n">&lt; '+o.lo.toFixed(0)+(o.sas?"*":"")+'</td><td class="n">'+X.filter(function(s){return s.tahap==="TINGGI"}).length+'</td><td class="n">'+X.filter(function(s){return s.tahap==="RENDAH"}).length+'</td><td class="n">'+X.filter(function(s){return s.tahap==="TIADA"}).length+"</td></tr>"}).join("")+"</tbody></table></div></div></div>"+
   '<div class="card"><h2>Senarai Penuh</h2><div class="tools noprint"><select id="bj">'+opt(jabatanList(),f.jab,"Semua jabatan")+'</select></div><div class="wrap"><table class="t"><thead><tr><th class="n">#</th><th>Nama</th><th>Kategori</th><th>Jabatan</th><th>Jawatan</th><th class="n">Tugasan</th><th class="n">Merit</th><th>Tahap</th></tr></thead><tbody>'+PJ.rows.map(function(s){return'<tr class="clk" data-s="'+esc(s.id)+'"><td class="n">'+A.rk[s.id]+"</td><td>"+esc(s.nama)+'</td><td class="small">'+esc(s.kat)+'</td><td class="small">'+esc(s.jabatan)+'</td><td class="small">'+esc(s.jawatan)+'</td><td class="n">'+s.bil+'</td><td class="n"><b>'+s.merit+"</b></td><td>"+tahapTag(s.tahap)+"</td></tr>"}).join("")+"</tbody></table></div>"+PJ.html+"</div>";
   $("bj").onchange=function(){f.jab=this.value;PG.bJ=1;PAGES.beban()};pgBind($("main"),PAGES.beban);
   $("bcsv").onclick=function(){csv("Analisis_Beban_"+TAHUN,[["KEDUDUKAN","NAMA","KATEGORI","JABATAN","JAWATAN","TUGASAN","MERIT","TAHAP"]].concat(A.srt.map(function(s){return[A.rk[s.id],s.nama,s.kat,s.jabatan,s.jawatan,s.bil,s.merit,s.tahap]})))};
@@ -850,7 +858,7 @@ PAGES.induk=function(){var f=ST.ik,J=D.jk.filter(function(j){return j.status==="
 function ikGroups(){var f=ST.ik,g=[],m={};D.jk.forEach(function(j){if(j.status!=="AKTIF"||(f.ind&&j.induk!==f.ind))return;if(!m[j.induk]){m[j.induk]={h:kodHuruf(j),induk:j.induk,jk:[]};g.push(m[j.induk])}m[j.induk].jk.push(j)});return g}
 function ikNama(a){var s=SM[a.idStaf];return s?nmS(s):a.nama}
 function ikBody(){var f=ST.ik;
-  $("ikB").innerHTML='<div class="printonly" style="text-align:center;margin-bottom:6px"><img src="logo.png" alt="" style="height:64px"><div style="font-weight:700;font-size:16px;margin-top:8px">JAWATANKUASA KERJA '+esc(D.tetapan.NAMA_RINGKAS)+" TAHUN "+esc(TAHUN)+"</div></div>"+ikGroups().map(function(g){return'<div class="bs"><div class="bh">BAHAGIAN '+esc(g.h)+" — "+esc(g.induk)+"</div>"+g.jk.map(function(j){return'<div class="jw"><div class="jt">'+esc(j.kod)+" "+esc(j.nama)+'</div><table class="t"><thead><tr><th style="width:50px">Bil</th><th>Nama</th><th style="width:34%">Jawatan</th>'+(f.merit?'<th class="n" style="width:70px">Merit</th>':"")+"</tr></thead><tbody>"+(j.ahli.map(function(a,i){return'<tr class="'+(a.idStaf?"":"kos")+'"><td>'+(i+1)+'</td><td class="nm">'+esc(ikNama(a))+"</td><td>"+esc(a.asal)+"</td>"+(f.merit?'<td class="n">'+(a.idStaf?a.w:"-")+"</td>":"")+"</tr>"}).join("")||'<tr><td colspan="4" class="small">Belum ada ahli.</td></tr>')+"</tbody></table></div>"}).join("")+"</div>"}).join("")}
+  $("ikB").innerHTML='<div class="printonly" style="text-align:center;margin-bottom:6px"><img src="'+LOGO+'" alt="" style="height:64px"><div style="font-weight:700;font-size:16px;margin-top:8px">JAWATANKUASA KERJA '+esc(D.tetapan.NAMA_RINGKAS)+" TAHUN "+esc(TAHUN)+"</div></div>"+ikGroups().map(function(g){return'<div class="bs"><div class="bh">BAHAGIAN '+esc(g.h)+" — "+esc(g.induk)+"</div>"+g.jk.map(function(j){return'<div class="jw"><div class="jt">'+esc(j.kod)+" "+esc(j.nama)+'</div><table class="t"><thead><tr><th style="width:50px">Bil</th><th>Nama</th><th style="width:34%">Jawatan</th>'+(f.merit?'<th class="n" style="width:70px">Merit</th>':"")+"</tr></thead><tbody>"+(j.ahli.map(function(a,i){return'<tr class="'+(a.idStaf?"":"kos")+'"><td>'+(i+1)+'</td><td class="nm">'+esc(ikNama(a))+"</td><td>"+esc(a.asal)+"</td>"+(f.merit?'<td class="n">'+(a.idStaf?a.w:"-")+"</td>":"")+"</tr>"}).join("")||'<tr><td colspan="4" class="small">Belum ada ahli.</td></tr>')+"</tbody></table></div>"}).join("")+"</div>"}).join("")}
 /* penulis xlsx ringkas (tanpa pustaka luar) */
 var CRCT=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
 function crc32(b){var c=0xFFFFFFFF;for(var i=0;i<b.length;i++)c=CRCT[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
@@ -908,11 +916,11 @@ function hariIni(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth(
 function isninPertama(t){var d=new Date(Number(t),0,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);return t+"-01-"+("0"+d.getDate()).slice(-2)}
 var HB=["Muharram","Safar","Rabiulawal","Rabiulakhir","Jamadil Awal","Jamadil Akhir","Rejab","Syaaban","Ramadan","Syawal","Zulkaedah","Zulhijjah"];
 function hijrah(s){if(!s)return"";try{var p=s.split("-"),d=new Date(Date.UTC(+p[0],+p[1]-1,+p[2],12));var f=new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn",{day:"numeric",month:"numeric",year:"numeric",timeZone:"UTC"}).formatToParts(d),o={};f.forEach(function(x){o[x.type]=x.value});return Number(o.day)+" "+HB[Number(o.month)-1]+" "+String(o.year).replace(/\D/g,"")+"H"}catch(e){return""}}
-function slogan(){return(D.tetapan.SLOGAN||"").split(/\n/).filter(Boolean).map(function(x){return"<b>"+esc(x)+"</b>"}).join("<br>")}
-function memo(kepada,f,tajuk,isi){var t=D.tetapan;return'<div class="hd"><b>mara</b><span>memograf</span></div><table class="kd"><tr><td class="k">Kepada :</td><td><b>'+esc(kepada)+'</b></td></tr><tr><td class="k">Daripada :</td><td><b>'+esc(f.dari)+'</b></td></tr><tr><td colspan="2">Salinan Kepada :</td></tr></table><table class="rj"><tr><td style="width:31%">Rujuk Kami<br><b>'+esc(f.ruj||"")+'</b></td><td style="width:30%">Tarikh<br><b>'+tarikhPanjang(f.tarikh)+"<br>"+esc(f.hijrah||hijrah(f.tarikh))+'</b></td><td style="width:22%">Rujuk Tuan</td><td>Tarikh</td></tr></table><p>Tuan / Puan,</p><div class="tj">'+esc(tajuk)+"</div>"+isi+'<p>Sekian,</p><p style="margin-top:18px">'+slogan()+"<br><b>Saya yang menjalankan amanah,</b></p><br><br><br><p><b>"+esc(f.ttNama)+"</b><br>"+esc(f.ttJaw)+"<br>"+esc(t.NAMA_RINGKAS)+"<br>"+esc(t.BANDAR)+"</p>"}
+function slogan(){return(D.tetapan.SLOGAN||"").split(/\n|\|/).map(function(x){return x.trim()}).filter(Boolean).map(function(x){return"<b>"+esc(x)+"</b>"}).join("<br>")}
+function memo(kepada,f,tajuk,isi){var t=D.tetapan;return'<div class="hd"><b>'+esc(t.KEPALA_KIRI===undefined?"mara":t.KEPALA_KIRI)+'</b><span>'+esc(t.KEPALA_KANAN===undefined?"memograf":t.KEPALA_KANAN)+'</span></div><table class="kd"><tr><td class="k">Kepada :</td><td><b>'+esc(kepada)+'</b></td></tr><tr><td class="k">Daripada :</td><td><b>'+esc(f.dari)+'</b></td></tr><tr><td colspan="2">Salinan Kepada :</td></tr></table><table class="rj"><tr><td style="width:31%">Rujuk Kami<br><b>'+esc(f.ruj||"")+'</b></td><td style="width:30%">Tarikh<br><b>'+tarikhPanjang(f.tarikh)+"<br>"+esc(f.hijrah||hijrah(f.tarikh))+'</b></td><td style="width:22%">Rujuk Tuan</td><td>Tarikh</td></tr></table><p>Tuan / Puan,</p><div class="tj">'+esc(tajuk)+"</div>"+isi+'<p>Sekian,</p><p style="margin-top:18px">'+slogan()+"<br><b>Saya yang menjalankan amanah,</b></p><br><br><br><p><b>"+esc(f.ttNama)+"</b><br>"+esc(f.ttJaw)+"<br>"+esc(t.NAMA_RINGKAS)+"<br>"+esc(t.BANDAR)+"</p>"}
 function slBorang(f,extra){return'<div class="card noprint"><div class="grid g3" style="gap:10px">'+extra+'<div><label>Tarikh surat</label><input type="date" id="sT" value="'+esc(f.tarikh)+'"></div><div><label>Tarikh Hijrah (pilihan)</label><input id="sH" value="'+esc(f.hijrah)+'" placeholder="Auto: '+esc(hijrah(f.tarikh))+'"><div class="small">Dikira automatik (Umm al-Qura). Isi hanya jika kalendar rasmi berbeza satu hari.</div></div><div><label>Rujuk Kami (pilihan)</label><input id="sR" value="'+esc(f.ruj)+'" placeholder="Kosongkan untuk tulis manual"></div><div><label>Daripada</label><input id="sD" value="'+esc(f.dari)+'"></div><div><label>Nama penandatangan</label><input id="sN" value="'+esc(f.ttNama)+'"></div><div><label>Jawatan penandatangan</label><input id="sJ" value="'+esc(f.ttJaw)+'"></div></div><button class="btn" style="margin-top:12px" onclick="window.print()">🖨️ Cetak / Simpan PDF</button></div>'}
 function slIkat(f,draw){[["sT","tarikh"],["sH","hijrah"],["sR","ruj"],["sD","dari"],["sN","ttNama"],["sJ","ttJaw"]].forEach(function(x){$(x[0]).oninput=$(x[0]).onchange=function(){f[x[1]]=this.value;if(x[0]==="sT")$("sH").placeholder="Auto: "+hijrah(this.value);draw()}})}
-function slInit(f){var t=D.tetapan;if(f.thn!==TAHUN){f.thn=TAHUN;f.tarikh=f.isMesy?hariIni():isninPertama(TAHUN);f.hijrah=""}if(f.dari==null)f.dari="Pengetua "+t.NAMA_RINGKAS;if(f.ttNama==null)f.ttNama=t.PENANDATANGAN_NAMA;if(f.ttJaw==null)f.ttJaw=t.PENANDATANGAN_JAWATAN;if(f.ruj==null)f.ruj=""}
+function slInit(f){var t=D.tetapan;if(f.thn!==TAHUN){f.thn=TAHUN;f.tarikh=f.isMesy?hariIni():isninPertama(TAHUN);f.hijrah=""}if(f.dari==null)f.dari=t.DARIPADA||("Pengetua "+t.NAMA_RINGKAS);if(f.ttNama==null)f.ttNama=t.PENANDATANGAN_NAMA;if(f.ttJaw==null)f.ttJaw=t.PENANDATANGAN_JAWATAN;if(f.ruj==null)f.ruj=""}
 ST.sl={who:"",jab:"",tajuk:""};
 PAGES.slantik=function(){var f=ST.sl,t=D.tetapan;slInit(f);if(!f.tajuk||f.tajukThn!==TAHUN){f.tajuk="PERLANTIKAN SEBAGAI AHLI JAWATANKUASA KERJA "+t.NAMA_RINGKAS+" TAHUN "+TAHUN;f.tajukThn=TAHUN}
   $("main").innerHTML='<div class="noprint"><div class="ttl"><div><h1>Surat Perlantikan '+esc(TAHUN)+'</h1><p class="small">Satu surat bagi setiap staf. Senarai jawatankuasa dan jawatan dipaparkan pada lampiran. Tarikh lalai ialah Isnin pertama bulan Januari.</p></div></div></div>'+
@@ -1001,10 +1009,32 @@ async function uReset2(id){var pw=prompt("Kata laluan sementara baharu untuk "+i
   var j=await api({action:"resetpw",token:TOKEN,id:id,h:await hashPw(id,pw)});toast(j&&j.ok?"Kata laluan "+id+" direset.":"Gagal reset.")}
 
 /* ===== TETAPAN ===== */
-var TLBL=[["NAMA_MAKTAB","Nama penuh maktab"],["NAMA_RINGKAS","Nama ringkas (dalam surat, cth: MRSM ARAU)"],["BANDAR","Bandar (bawah tandatangan)"],["ALAMAT","Alamat"],["TAHUN_AKTIF","Tahun aktif (dibuka secara lalai)"],["HUJUNG_MINGGU","Hari hujung minggu untuk takwim (0=Ahad, 5=Jumaat, 6=Sabtu), cth 6,0"],["JAWATAN_WAJIB","Jawatan wajib global untuk JK lengkap (koma = semua perlu, | = salah satu)"],["AMBANG_TINGGI","Ambang beban tinggi (× purata kategori, cth 1.3 = 130%)"],["AMBANG_RENDAH","Ambang beban rendah (× purata kategori, cth 0.5 = 50%)"],["ASING_EXOFFICIO","Asingkan kategori Pengurusan daripada analisis beban (YA/TIDAK)"],["RUJUKAN_SURAT","Awalan rujukan surat"],["PENANDATANGAN_NAMA","Penandatangan surat lantikan (nama)"],["PENANDATANGAN_JAWATAN","Jawatan penandatangan"],["SLOGAN","Slogan surat (satu baris setiap slogan)"]];
-PAGES.tetapan=function(){
-  $("main").innerHTML='<div class="ttl"><div><h1>Tetapan</h1><p class="small">Tetapan umum sistem, ambang beban dan teks surat.</p></div></div><div class="card">'+TLBL.map(function(x){var v=D.tetapan[x[0]]||"",big=x[0]==="SLOGAN";return"<label>"+esc(x[1])+"</label>"+(big?'<textarea data-k="'+x[0]+'">'+esc(v)+"</textarea>":x[0]==="ASING_EXOFFICIO"?'<select data-k="'+x[0]+'">'+opt(["YA","TIDAK"],v)+"</select>":'<input data-k="'+x[0]+'" value="'+esc(v)+'">')}).join("")+'<div class="act"><button class="btn" id="tSave">Simpan Tetapan</button></div><div class="msg" id="tMsg"></div></div>';
-  $("tSave").onclick=async function(){var d={};document.querySelectorAll("[data-k]").forEach(function(i){d[i.dataset.k]=i.value});this.disabled=true;var r=await tulis({action:"savetetapan",data:d},"Tetapan disimpan.");this.disabled=false;if(!r.ok)$("tMsg").textContent=r.error||"Gagal";else PAGES.tetapan()}};
+var TSEK=[["Maklumat Sekolah",[["NAMA_MAKTAB","Nama penuh sekolah","Dipaparkan pada laporan dan surat."],["NAMA_RINGKAS","Nama ringkas","Dipaparkan pada menu sisi dan surat, cth: MRSM ARAU."],["BANDAR","Lokasi","Cth: Arau, Perlis. Dipaparkan di bawah tandatangan surat."],["ALAMAT","Alamat",""]]],
+ ["Surat Rasmi",[["PENANDATANGAN_NAMA","Nama penandatangan lalai",""],["PENANDATANGAN_JAWATAN","Jawatan penandatangan",""],["DARIPADA","Baris \"Daripada\" pada surat","Cth: Pengetua Maktab Rendah Sains MARA Arau."],["RUJUKAN_SURAT","Awalan rujukan surat","Cth: MRSMRA/JK"],["KEPALA_KIRI","Kepala surat, kiri","Teks besar di atas surat, cth: mara."],["KEPALA_KANAN","Kepala surat, kanan","Cth: memograf. Boleh dikosongkan."],["SLOGAN","Cogan kata penutup","Pisahkan setiap baris dengan |. Boleh dikosongkan."]]],
+ ["Tetapan Analisis",[["TAHUN_AKTIF","Tahun lalai semasa log masuk","Kosongkan untuk sentiasa membuka tahun terkini dalam data. Tahun juga boleh ditukar dari menu di bahagian atas."],["AMBANG_TINGGI","Ambang beban tinggi (% daripada purata kategori)","Cth 130 = melebihi 130% daripada purata dikira beban tinggi.","%"],["AMBANG_RENDAH","Ambang beban rendah (% daripada purata kategori)","Cth 50 = kurang daripada 50% purata dikira beban rendah.","%"],
+   ["SASARAN_MIN_GURU","Sasaran merit minimum — GURU","Kosong = gunakan ambang peratusan."],["SASARAN_MAX_GURU","Sasaran merit maksimum — GURU",""],["SASARAN_MIN_SOKONGAN","Sasaran merit minimum — SOKONGAN",""],["SASARAN_MAX_SOKONGAN","Sasaran merit maksimum — SOKONGAN",""],
+   ["ASING_EXOFFICIO","Asingkan kategori Pengurusan daripada analisis beban","","yt"],["JAWATAN_WAJIB","Jawatan wajib bagi kelengkapan JK","Pisahkan dengan koma; gunakan | untuk alternatif. Cth: Pengerusi|Penyelaras,Setiausaha"],["HUJUNG_MINGGU","Hari hujung minggu (takwim)","0=Ahad, 5=Jumaat, 6=Sabtu. Cth Perlis: 6,0"]]]];
+PAGES.tetapan=function(){var t=D.tetapan,logoBaru=null;
+  var fld=function(x){var k=x[0],v=t[k]==null?"":String(t[k]);if(x[3]==="%"&&v!=="")v=String(Math.round(Number(v)*1000)/10);if(k==="SLOGAN")v=v.split(/\n|\|/).map(function(y){return y.trim()}).filter(Boolean).join("|");
+    return'<label for="ts_'+k+'">'+esc(x[1])+"</label>"+(x[3]==="yt"?'<select id="ts_'+k+'" data-k="'+k+'">'+opt([["YA","Ya"],["TIDAK","Tidak"]],v||"YA")+"</select>":'<input id="ts_'+k+'" data-k="'+k+'" value="'+esc(v)+'"'+(x[3]==="%"||/^SASARAN|TAHUN/.test(k)?' inputmode="numeric"':"")+">")+(x[2]?'<div class="small tsh">'+esc(x[2])+"</div>":"")};
+  $("main").innerHTML='<div class="ttl"><div><h1>Tetapan Sistem</h1><p class="small">Semua nilai boleh diubah tanpa menyunting kod. Nilai merit jawatan diurus di halaman Jawatan &amp; Merit.</p></div></div><div class="tset">'+
+   TSEK.map(function(g,gi){return'<div class="card"><h2>'+esc(g[0])+"</h2>"+(gi===0?'<div style="text-align:center;margin:6px 0 10px"><img id="tsLogo" src="'+LOGO+'" alt="" style="max-height:110px;max-width:220px"></div><label for="tsLf">Logo sekolah (PNG atau JPG)</label><input type="file" id="tsLf" accept="image/png,image/jpeg"><div class="small tsh">Dikecilkan secara automatik. '+(LOGO!=="logo.png"?'<a href="#" id="tsLr">Guna semula logo asal</a>':"")+"</div>":"")+g[1].map(fld).join("")+"</div>"}).join("")+
+   '<div class="act" style="justify-content:flex-start"><button class="btn" id="tSave">Simpan tetapan</button><span class="msg" id="tMsg"></span></div></div>';
+  $("tsLf").onchange=function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var S=180,r=Math.min(1,S/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      var u=c.toDataURL("image/png");if(u.length>45000)u=c.toDataURL("image/jpeg",0.85);logoBaru=u;$("tsLogo").src=u;$("tMsg").textContent="Logo baharu dipilih ("+Math.round(u.length/1024)+" KB). Tekan Simpan tetapan."};im.src=rd.result};rd.readAsDataURL(f)};
+  if($("tsLr"))$("tsLr").onclick=function(e){e.preventDefault();logoBaru="";$("tsLogo").src="logo.png";$("tMsg").textContent="Logo asal akan digunakan. Tekan Simpan tetapan."};
+  $("tSave").onclick=async function(){var d={},bad="";TSEK.forEach(function(g){g[1].forEach(function(x){var el=$("ts_"+x[0]),v=el.value.trim();
+      if(x[3]==="%"){if(v===""||isNaN(v)){bad=x[1];return}v=String(Number(v)/100)}
+      if(/^SASARAN/.test(x[0])&&v!==""&&isNaN(v)){bad=x[1];return}
+      if(x[0]==="TAHUN_AKTIF"&&v!==""&&!/^\d{4}$/.test(v)){bad=x[1];return}
+      if(x[0]==="SLOGAN")v=v.split("|").map(function(y){return y.trim()}).filter(Boolean).join("\n");d[x[0]]=v})});
+    if(bad){$("tMsg").textContent="Semak nilai: "+bad;return}
+    this.disabled=true;var m=$("tMsg");
+    try{if(logoBaru!==null){var P=[],N=1500;for(var i=0;i<logoBaru.length;i+=N)P.push(logoBaru.slice(i,i+N));
+        for(var j=0;j<P.length;j++){m.textContent="Memuat naik logo "+(j+1)+"/"+P.length+"...";var o={};o["LOGO_"+(j+1)]=P[j];var r0=await api({action:"savetetapan",token:TOKEN,data:o});if(!r0||!r0.ok)throw new Error((r0&&r0.error)||"Gagal muat naik logo")}
+        d.LOGO_N=String(P.length)}
+      m.textContent="Menyimpan...";var r=await tulis({action:"savetetapan",data:d},"Tetapan disimpan.");this.disabled=false;if(!r.ok)m.textContent=r.error||"Gagal";else PAGES.tetapan()}
+    catch(x){this.disabled=false;m.textContent=x.message||String(x)}}};
 
 /* ===== LOG AUDIT ===== */
 PAGES.log=function(){
