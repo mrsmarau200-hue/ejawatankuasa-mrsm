@@ -9,276 +9,200 @@
 <title>e-Jawatankuasa MRSM Arau</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
-:root{--bg:#f6f7f4;--card:#fff;--tx:#1d2a22;--mut:#5f6f65;--bd:#dfe4dc;--ac:#1f6b4a;--act:#fff;--red:#b3261e;--redbg:#fbe9e7;--grn:#1f6b4a;--grnbg:#e3f3ea;--amb:#8a5a00;--ambbg:#fff3d6;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#141a16;--card:#1d2620;--tx:#e8efe9;--mut:#9fb0a5;--bd:#2f3c34;--ac:#5fc08f;--act:#10281b;--red:#ff8a80;--redbg:#3a1f1d;--grn:#7fd6a5;--grnbg:#1a3326;--amb:#f5c46a;--ambbg:#3a2f14;color-scheme:dark}}
+:root{--bg:#f3f6f4;--card:#fff;--tx:#1b2a21;--mut:#5f6f65;--bd:#dfe5e0;--ac:#1f6b4a;--ac2:#14573b;--act:#fff;--red:#b3261e;--redbg:#fbe9e7;--grn:#1f6b4a;--grnbg:#e3f3ea;--amb:#8a5a00;--ambbg:#fff3d6;--blu:#1f4e79;--side:#0f3d2a;color-scheme:light}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:14.5px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 .hide{display:none!important}
-h1{font-size:20px;margin:0}h2{font-size:16px;margin:0 0 10px}
-label{display:block;font-size:13px;color:var(--mut);margin:10px 0 3px}
-input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
-.btn{margin-top:14px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--ac);color:var(--act);font:inherit;font-weight:700;cursor:pointer}
+h1{font-size:21px;margin:0}h2{font-size:15.5px;margin:0 0 10px}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 3px}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:#fff;color:var(--tx);font:inherit}
+textarea{min-height:90px;resize:vertical}
+.btn{padding:10px 16px;border:0;border-radius:9px;background:var(--ac);color:var(--act);font:inherit;font-weight:700;cursor:pointer}
+.btn.full{width:100%;margin-top:14px;padding:12px}
 .btn:disabled{opacity:.5;cursor:wait}
-.btn2{padding:7px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.btn2{padding:7px 12px;border:1px solid var(--bd);border-radius:8px;background:#fff;color:var(--tx);font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn2:hover{border-color:var(--ac)}.btn2.red{color:var(--red)}.btn2.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
 .msg{margin-top:10px;font-size:13px;color:var(--red);min-height:1em}.ok{color:var(--grn)}
-.small{font-size:13px;color:var(--mut)}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
-/* log masuk */
+.small{font-size:12.5px;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.t-hi{background:var(--redbg);color:var(--red)}.t-md{background:var(--ambbg);color:var(--amb)}.t-lo{background:var(--grnbg);color:var(--grn)}.t-bl{background:#e6eef7;color:var(--blu)}.t-gr{background:#eee;color:#666}
+/* auth */
 .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(160deg,#14573b 0%,#0d3b28 55%,var(--bg) 55%)}
 .auth .card{max-width:380px;width:100%;padding:26px 22px;box-shadow:0 12px 32px rgba(0,0,0,.18)}
-.auth .top{text-align:center;margin-bottom:8px}.auth .top img{height:70px}
-.auth .top p{margin:4px 0 0;color:var(--mut);font-size:13px}
+.auth .top{text-align:center;margin-bottom:8px}.auth .top img{height:70px}.auth .top p{margin:4px 0 0;color:var(--mut);font-size:13px}
 .pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--mut);font:inherit;font-size:12px;cursor:pointer;padding:6px}
-/* susun atur aplikasi */
-.app{display:grid;grid-template-columns:240px 1fr;gap:18px;max-width:1500px;margin:0 auto;padding:16px;align-items:start}
-.side{position:sticky;top:12px;background:linear-gradient(180deg,#14573b,#0d3b28);color:#e9f5ee;border-radius:18px;padding:16px 12px;display:flex;flex-direction:column;gap:14px;min-height:calc(100vh - 32px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
-.brand{display:flex;gap:10px;align-items:center;padding:0 6px}.brand img{height:40px;background:rgba(255,255,255,.92);border-radius:10px;padding:4px 6px}.brand b{display:block;font-size:15px}.brand small{opacity:.75;font-size:12px}
-.who{background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;font-size:13px}.who b{display:block;font-size:14px}
-.menu{display:flex;flex-direction:column;gap:3px}
-.menu a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#e9f5ee;cursor:pointer;font-weight:600;font-size:14px;text-decoration:none}
-.menu a:hover{background:rgba(255,255,255,.12)}.menu a.on{background:#fff;color:#14573b}
-.menu a.soon{opacity:.55;cursor:default}.menu a.soon:hover{background:none}
-.menu a i{margin-left:auto;font-style:normal;font-size:10px;background:rgba(255,255,255,.18);border-radius:99px;padding:1px 7px}
-.sf{margin-top:auto;border-top:1px solid rgba(255,255,255,.18);padding-top:10px;display:flex;flex-direction:column;gap:3px}
-.main{min-width:0}
-.ttl{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:4px 0 14px}
-.ttl p{margin:2px 0 0}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
-.stat{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px}
-.stat b{display:block;font-size:26px;line-height:1.2}.stat span{font-size:13px;color:var(--mut)}
-.stat.warn{background:var(--ambbg);border-color:transparent}.stat.warn b{color:var(--amb)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.bar{display:grid;grid-template-columns:minmax(120px,190px) 1fr 70px;gap:10px;align-items:center;padding:6px 0;font-size:13px}
-.bar .t{height:12px;background:var(--bd);border-radius:99px;overflow:hidden}.bar .t div{height:100%;background:var(--ac);border-radius:99px}
-.bar .n{text-align:right;font-weight:700}
+/* layout */
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}.app>div{min-width:0}
+.side{background:var(--side);color:#dcefe4;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;z-index:40}
+.brand{display:flex;gap:10px;align-items:center;padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand img{height:40px;background:#fff;border-radius:9px;padding:3px 5px}.brand b{display:block;font-size:14.5px;color:#fff}.brand small{opacity:.7;font-size:11.5px}
+.nav{padding:8px 0 16px;flex:1}
+.nav .sec{font-size:10.5px;letter-spacing:.8px;color:#8fb5a1;padding:14px 18px 4px;font-weight:700}
+.nav a{display:flex;align-items:center;gap:10px;margin:1px 10px;padding:9px 12px;border-radius:9px;color:#dcefe4;cursor:pointer;font-weight:600;font-size:13.5px;text-decoration:none}
+.nav a:hover{background:rgba(255,255,255,.08)}.nav a.on{background:#f5b335;color:#2a1d00}
+.nav a .ic{width:18px;text-align:center;opacity:.9}
+.top{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;padding:8px 18px}
+.top .pt{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top select{width:auto;padding:6px 8px}
+.top .who{font-size:13px;color:var(--mut);white-space:nowrap}
+.burger{display:none;border:1px solid var(--bd);background:#fff;border-radius:8px;padding:5px 10px;font-size:18px;cursor:pointer}
+.main{padding:22px 26px 50px;max-width:1500px;width:100%;margin:0 auto}
+.ttl{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:16px}.ttl p{margin:3px 0 0}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.tools input,.tools select{width:auto;flex:1;min-width:150px;padding:8px}
+.tools .lb{font-size:12.5px;color:var(--mut);white-space:nowrap}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:14px 16px}
+.stat b{display:block;font-size:26px;line-height:1.15}.stat span{font-size:13px}.stat i{display:block;font-style:normal;font-size:11.5px;color:var(--mut);margin-top:2px}
+.stat.w b{color:var(--amb)}.stat.r b{color:var(--red)}
 .wrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd);vertical-align:top}
-th{color:var(--mut);font-weight:600;white-space:nowrap}
-td.n,th.n{text-align:right}
-.tag{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:700}
-.t-hi{background:var(--redbg);color:var(--red)}.t-md{background:var(--ambbg);color:var(--amb)}.t-lo{background:var(--grnbg);color:var(--grn)}
-.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.tools input,.tools select{width:auto;flex:1;min-width:160px;padding:8px}.tools input[type=checkbox]{flex:none;min-width:0;width:16px;height:16px;padding:0}
-.seg{display:flex;gap:4px}.seg button{padding:7px 12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.seg button.on{background:var(--ac);color:var(--act);border-color:var(--ac)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.chips{display:flex;flex-wrap:wrap;gap:4px}.chip{font-size:11px;padding:1px 7px;border-radius:99px;background:var(--grnbg);color:var(--grn);font-weight:700}
-.toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto;background:var(--tx);color:var(--bg);padding:10px 14px;border-radius:10px;z-index:60;font-size:14px}
+table.t{border-collapse:collapse;width:100%;font-size:13px}
+table.t th,table.t td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd);vertical-align:top}
+table.t thead th{background:#eef3ef;color:#3d5246;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;font-weight:700;white-space:nowrap}
+table.t th.n,table.t td.n{text-align:right}
+table.t tr.clk{cursor:pointer}table.t tr.clk:hover td{background:#f6faf7}
+table.t tr.kos td{background:var(--ambbg)}table.t tr.kos .nm{color:var(--amb);font-style:italic}
+th.sort{cursor:pointer}
+/* charts */
+.hb{display:grid;grid-template-columns:minmax(90px,38%) 1fr 44px;gap:8px;align-items:center;font-size:12px;padding:2.5px 0}
+.hb .l{text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#334}
+.hb .b{height:14px;background:#eef1ef;border-radius:3px;overflow:hidden}.hb .b div{height:100%;border-radius:3px}
+.hb .v{font-weight:700;font-size:12px}
+.vb{display:flex;align-items:flex-end;gap:6px;height:220px;padding:6px 4px 0;border-bottom:1px solid #ccd}
+.vb .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.vb .c div.bar{width:78%;background:var(--blu);border-radius:3px 3px 0 0}
+.vb .c span.v{font-size:11px;font-weight:700;margin-bottom:2px}
+.vbx{display:flex;gap:6px;padding:4px 4px 0}.vbx div{flex:1;text-align:center;font-size:10.5px;color:var(--mut);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.donut{display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center}
+.lg{display:flex;align-items:center;gap:6px;font-size:13px;margin:4px 0}.lg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+/* modal */
+.dlg{position:fixed;inset:0;background:rgba(10,20,15,.5);display:flex;align-items:flex-start;justify-content:center;z-index:80;padding:30px 14px;overflow-y:auto}
+.dlg>div{background:#fff;border-radius:14px;padding:18px;max-width:560px;width:100%;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.dlg h2{display:flex;justify-content:space-between;gap:10px}.dlg .x{border:0;background:none;font-size:20px;cursor:pointer;color:var(--mut)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.act{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.toast{position:fixed;left:16px;right:16px;bottom:18px;max-width:440px;margin:auto;background:#1b2a21;color:#fff;padding:10px 14px;border-radius:10px;z-index:90;font-size:14px}
 .load{padding:40px;text-align:center;color:var(--mut)}
-.mtop{display:none}
-.jkgrp{margin-bottom:14px}.jkgrp h3{font-size:14px;margin:0 0 8px;color:var(--mut);letter-spacing:.3px}
-.jkrow{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);margin-bottom:6px;cursor:pointer}
-.jkrow:hover{border-color:var(--ac)}.jkrow .k{font-weight:700;color:var(--ac)}.jkrow .m{font-size:12px;color:var(--mut)}
-.jkrow .c{display:flex;gap:6px;align-items:center;white-space:nowrap}
-.kos td{background:var(--ambbg)}.kos .nm{color:var(--amb);font-style:italic}
-.dhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
-.printonly{display:none}
-@media (max-width:860px){.jkrow{grid-template-columns:48px 1fr}.jkrow .c{grid-column:2}}
-/*LAP*/
-.lapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px}
-.lapbtn{text-align:left;padding:14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
-.lapbtn b{display:block;font-size:14px}.lapbtn span{font-size:12px;color:var(--mut)}.lapbtn.on{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac) inset}.lapbtn:disabled{opacity:.55;cursor:default}
-#rpt{background:#fff;color:#000;border:1px solid var(--bd);border-radius:12px;padding:22px;font-family:"Times New Roman",serif}
-#rpt h2.rt{text-align:center;font-size:17px;margin:0 0 2px;font-weight:700;letter-spacing:.3px}
-#rpt .rs{text-align:center;font-size:12px;margin-bottom:12px}
-#rpt h3.ri{text-align:center;font-size:13.5px;text-decoration:underline;margin:16px 0 6px}
-#rpt .jb{border:1px solid #000;margin-bottom:10px;break-inside:avoid}
-#rpt .jb .jh{background:#1f2430;color:#fff;font-weight:700;font-size:13px;padding:3px 8px}
-#rpt table{width:100%;border-collapse:collapse;font-size:11.5px;font-family:inherit}
-#rpt .jb td{border:0;padding:1.5px 8px}#rpt .jb td.b{width:30px;text-align:right}#rpt .jb td.j{width:32%;text-align:center}
-#rpt .kos{font-style:italic;color:#8a5a00}
-#rpt table.rg th,#rpt table.rg td{border:1px solid #000;padding:3px 4px;font-size:10.5px;text-align:center;vertical-align:middle}
-#rpt table.rg td.l,#rpt table.rg th.l{text-align:left}#rpt table.rg thead th{background:#e8e8e8}
-#rpt table.rg tr.gh td{background:#f1f1f1;font-weight:700;text-align:left}
-#rpt .rv th{writing-mode:vertical-rl;transform:rotate(180deg);height:120px;white-space:nowrap;font-weight:600}
-#rpt .sb{border:1px solid #000;margin-bottom:10px;break-inside:avoid}#rpt .sb .sh{background:#e8e8e8;font-weight:700;padding:3px 8px;font-size:12.5px;display:flex;justify-content:space-between}
-#rpt .sb td{border-top:1px solid #ccc;padding:2px 8px;font-size:11.5px}
-@media print{#pLap .noprint{display:none!important}#rpt{border:0;padding:0}@page{margin:12mm}}
+.chips{display:flex;flex-wrap:wrap;gap:4px}.chip{font-size:11px;padding:1px 7px;border-radius:99px;background:var(--grnbg);color:var(--grn);font-weight:700}
+.note{background:var(--ambbg);color:#5d4300;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+/* cetakan */
+.doc{background:#fff;color:#000;font-family:"Times New Roman",Times,serif;border:1px solid var(--bd);border-radius:12px;padding:26px}
+.doc h2.rt{text-align:center;font-size:17px;margin:0 0 2px}.doc .rs{text-align:center;font-size:12.5px;margin-bottom:12px}
+.doc h3.ri{text-align:center;font-size:13.5px;text-decoration:underline;margin:16px 0 6px}
+.doc .jb{border:1px solid #000;margin-bottom:10px;break-inside:avoid}.doc .jb .jh{background:#1f2430;color:#fff;font-weight:700;font-size:13px;padding:3px 8px}
+.doc table{width:100%;border-collapse:collapse;font-size:11.5px;font-family:inherit}
+.doc .jb td{padding:1.5px 8px}.doc .jb td.b{width:30px;text-align:right}.doc .jb td.j{width:32%;text-align:center}
+.doc .kos{font-style:italic;color:#8a5a00}
+.doc table.rg th,.doc table.rg td{border:1px solid #000;padding:3px 4px;font-size:10.5px;text-align:center}
+.doc table.rg td.l,.doc table.rg th.l{text-align:left}.doc table.rg thead th{background:#e8e8e8}
+.doc table.rg tr.gh td{background:#f1f1f1;font-weight:700;text-align:left}
+.doc .rv th{writing-mode:vertical-rl;transform:rotate(180deg);height:118px;white-space:nowrap;font-weight:600}
+.doc .sb{border:1px solid #000;margin-bottom:10px;break-inside:avoid}.doc .sb .sh{background:#e8e8e8;font-weight:700;padding:3px 8px;font-size:12.5px;display:flex;justify-content:space-between;gap:8px}
+.doc .sb td{border-top:1px solid #ccc;padding:2px 8px;font-size:11.5px}
+.surat{font-family:"Times New Roman",Times,serif;color:#000;background:#fff;font-size:13.5px;line-height:1.55;padding:28px 34px;border:1px solid var(--bd);border-radius:12px;margin-bottom:16px}
+.surat .kp{display:flex;align-items:center;gap:14px;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:12px}
+.surat .kp img{height:64px}.surat .kp b{font-size:15.5px;display:block}.surat .kp span{font-size:12px}
+.surat table.tb{border-collapse:collapse;width:100%;margin:8px 0;font-size:12.5px}.surat table.tb th,.surat table.tb td{border:1px solid #000;padding:3px 6px;text-align:left}
+.surat .rj{display:grid;grid-template-columns:110px 1fr;font-size:13px}
+.surat .tj{font-weight:700;text-transform:uppercase;margin:12px 0 8px}
 
-@media print{
-  body{background:#fff;color:#000;padding:0}
-  .side,.toast,.noprint,#pDash,#pUsers,#jkList{display:none!important}
-  .app{display:block;padding:0;max-width:none}.main{padding:0}
-  .card{border:0;padding:0}.printonly{display:block}
-  table{font-size:11.5px}th,td{border:1px solid #999;padding:5px}
-  .kos td{background:#fff}.tag{border:1px solid #999;background:#fff!important;color:#000!important}
-}
-
+.mg{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-size:12.5px;line-height:1.5;padding:34px 46px;border:1px solid var(--bd);border-radius:6px;margin:0 auto 16px;max-width:794px}
+.mg .hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #000;padding-bottom:1px}
+.mg .hd b{font-size:30px;line-height:1;letter-spacing:-.5px}.mg .hd span{font-size:12.5px}
+.mg table.kd{width:100%;border-collapse:collapse}.mg table.kd td{border-bottom:1px solid #000;padding:2px 4px}.mg table.kd td.k{width:110px}
+.mg table.rj{width:100%;border-collapse:collapse;border-bottom:1px solid #000}.mg table.rj td{text-align:center;vertical-align:top;padding:2px 4px 8px;border-left:1px solid #000;height:52px}.mg table.rj td:first-child{border-left:0}
+.mg .tj{font-weight:700;margin:12px 0}.mg p{margin:10px 0;text-align:justify}.mg .pn{display:inline-block;width:42px}
+.mg .bt{display:grid;grid-template-columns:90px 14px 1fr;margin-left:100px}
+.mg .lp{text-align:center;font-weight:700}
+.mg table.ls{width:100%;border-collapse:collapse;margin-top:8px}.mg table.ls th{color:#5a6b85;text-align:left;font-weight:700}.mg table.ls th,.mg table.ls td{border:1px solid #999;padding:3px 6px;vertical-align:top}
+.mg table.ah{width:100%;border-collapse:collapse;margin-top:14px;font-size:11.5px}.mg table.ah td{border-bottom:1px solid #b9c7da;padding:2px 4px}
+.pgb{page-break-after:always}
+@media print{.mg{border:0;padding:0;margin:0;max-width:none}}
+@media (max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
 @media (max-width:860px){
-  .app{grid-template-columns:1fr;padding:0 0 20px;gap:0}
-  .side{position:static;min-height:0;border-radius:0 0 18px 18px;padding:12px;gap:10px}
-  .who,.sf .x{display:none}
-  .menu{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}.menu a{white-space:nowrap;padding:8px 10px;font-size:13px}.menu a.soon{display:none}
-  .sf{margin-top:0;border-top:0;padding-top:0;flex-direction:row}
-  .side{flex-direction:column}.mtop{display:flex;justify-content:space-between;align-items:center}
-  .brand-d{display:none}
-  .main{padding:14px}
-  .two,.row{grid-template-columns:1fr}
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;width:260px;transform:translateX(-100%);transition:transform .2s}
+  .side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.4)}
+  .burger{display:block}.top .who,.top>.small{display:none}.top{padding:8px 10px;gap:6px}.top .pt{font-size:14px}.top .btn2{padding:6px 8px;font-size:12px}
+  .tools input,.tools select{min-width:0;flex:1 1 100%}.tools .lb{flex:0 0 auto}
+  .main{padding:16px 14px 40px}.g2,.g3,.row2{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stat b{font-size:22px}
+}
+@media print{
+  body{background:#fff}.side,.top,.noprint,.toast,.dlg{display:none!important}
+  .app{display:block}.main{padding:0;max-width:none}
+  .card{border:0;padding:0;break-inside:avoid}.doc,.surat{border:0;border-radius:0;padding:0}
+  .surat{page-break-after:always;margin:0}.surat:last-child{page-break-after:auto}
+  table.t thead th{background:#eee!important}
+  @page{margin:12mm}
 }
 </style>
 </head>
 <body>
 
-<!-- ============ LOG MASUK ============ -->
 <section id="vLogin" class="auth hide">
   <div class="card">
-    <div class="top"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau &middot; Sila log masuk untuk teruskan</p></div>
+    <div class="top" style="position:static;border:0;display:block;text-align:center"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">e-Jawatankuasa</h1><p>MRSM Arau · Sila log masuk untuk teruskan</p></div>
     <label for="lid">ID Pengguna</label><input id="lid" autocomplete="username" autocapitalize="off" spellcheck="false">
     <label for="lpw">Kata Laluan</label><div class="pw"><input id="lpw" type="password" autocomplete="current-password"><button type="button" data-eye="lpw">Lihat</button></div>
-    <button class="btn" id="bLogin">Log Masuk</button>
+    <button class="btn full" id="bLogin">Log Masuk</button>
     <div class="msg" id="lerr"></div>
     <p class="small" style="text-align:center;margin:14px 0 0">Lupa kata laluan? Hubungi Pentadbir Sistem (Unit IT).</p>
   </div>
 </section>
 
-<!-- ============ TUKAR KATA LALUAN ============ -->
 <section id="vPw" class="auth hide">
   <div class="card">
-    <div class="top"><img src="logo.png" alt="Logo MRSM Arau"><h1 style="margin-top:8px">Tukar Kata Laluan</h1><p id="pwWhy">Ini log masuk pertama anda. Sila tetapkan kata laluan baharu.</p></div>
+    <div style="text-align:center"><img src="logo.png" alt="" style="height:70px"><h1 style="margin-top:8px">Tukar Kata Laluan</h1><p class="small" id="pwWhy"></p></div>
     <label for="np1">Kata laluan baharu (sekurang-kurangnya 8 aksara)</label><div class="pw"><input id="np1" type="password" autocomplete="new-password"><button type="button" data-eye="np1">Lihat</button></div>
     <label for="np2">Ulang kata laluan baharu</label><input id="np2" type="password" autocomplete="new-password">
-    <button class="btn" id="bPw">Simpan Kata Laluan</button>
+    <button class="btn full" id="bPw">Simpan Kata Laluan</button>
     <button class="btn2" id="bPwBack" style="width:100%;margin-top:8px">Batal</button>
     <div class="msg" id="perr"></div>
   </div>
 </section>
 
-<!-- ============ APLIKASI ============ -->
 <div id="vApp" class="app hide">
-  <aside class="side">
-    <div class="mtop"><div class="brand"><img src="logo.png" alt=""><div><b>e-Jawatankuasa</b><small>MRSM Arau</small></div></div><button class="btn2" id="bOut2">Log Keluar</button></div>
-    <div class="brand brand-d"><img src="logo.png" alt=""><div><b>e-Jawatankuasa</b><small>MRSM Arau</small></div></div>
-    <div class="who"><b id="uNama"></b><span id="uRole"></span></div>
-    <nav class="menu" id="menu">
-      <a data-v="dash" class="on">Dashboard</a>
-      <a data-v="users" id="mUsers" class="hide">Pengguna</a>
-      <a data-v="jk">Senarai JK</a>
-      <a data-v="lap">Laporan</a>
-      <a class="soon">Lantikan <i>akan datang</i></a>
-      <a class="soon">Surat Lantikan <i>akan datang</i></a>
-    </nav>
-    <div class="sf"><a class="menu-x" id="bPwChg" style="color:#e9f5ee;cursor:pointer;padding:8px 12px;font-weight:600;font-size:14px">Tukar Kata Laluan</a><a class="x" id="bOut" style="color:#e9f5ee;cursor:pointer;padding:8px 12px;font-weight:600;font-size:14px">Log Keluar</a></div>
+  <aside class="side" id="side">
+    <div class="brand"><img src="logo.png" alt=""><div><b>MRSM ARAU</b><small>Pengurusan Jawatankuasa</small></div></div>
+    <nav class="nav" id="nav"></nav>
   </aside>
-
-  <main class="main">
-    <!-- DASHBOARD -->
-    <section id="pDash">
-      <div class="ttl"><div><h1 id="dTitle">Dashboard</h1><p class="small" id="dSub"></p></div><button class="btn2" id="bRefresh">Muat Semula</button></div>
-      <div id="dLoad" class="load">Memuatkan data...</div>
-      <div id="dBody" class="hide">
-        <div class="stats" id="kpi"></div>
-        <div class="card hide" id="cJkSaya"><h2>Jawatankuasa Saya</h2><div class="wrap"><table><thead><tr><th>Kod</th><th>Jawatankuasa</th><th>Penyelaras</th><th>Setiausaha</th><th class="n">Ahli</th></tr></thead><tbody id="tJkSaya"></tbody></table></div></div>
-        <div class="two">
-          <div class="card" id="cInduk"><h2>Jawatankuasa ikut Bahagian</h2><div id="induk"></div></div>
-          <div class="card"><h2>Lantikan ikut Jawatan</h2><div class="wrap"><table><thead><tr><th>Jawatan</th><th class="n">Nilai</th><th class="n">Bil.</th></tr></thead><tbody id="tJaw"></tbody></table></div></div>
-        </div>
-        <div class="card">
-          <h2>Beban Tugas Staf</h2>
-          <div class="tools">
-            <input id="fCari" placeholder="Cari nama staf..." aria-label="Cari nama staf">
-            <div class="seg" id="fSort"><button data-s="hi" class="on">Paling tinggi</button><button data-s="lo">Paling rendah</button><button data-s="jab">Ikut jabatan</button><button data-s="az">Nama A-Z</button></div>
-          </div>
-          <div class="wrap"><table><thead><tr><th>#</th><th>Nama</th><th>Jabatan / Jawatan</th><th class="n">Bil. Jawatan</th><th class="n">Pemberat</th><th>Tahap</th></tr></thead><tbody id="tBeban"></tbody></table></div>
-          <div class="small" id="bebanInfo" style="margin-top:8px"></div>
-          <button class="btn2" id="bMore" style="margin-top:8px">Papar semua</button>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- SENARAI JK -->
-    <section id="pJk" class="hide">
-      <div id="jkList">
-        <div class="ttl"><div><h1>Senarai Jawatankuasa</h1><p class="small" id="jkSub">Semua jawatankuasa MRSM Arau</p></div><button class="btn2" id="bJkRefresh">Muat Semula</button></div>
-        <div class="tools">
-          <input id="jkCari" placeholder="Cari kod, nama JK atau penyelaras..." aria-label="Cari jawatankuasa">
-          <select id="jkInduk" aria-label="Tapis bahagian"><option value="">Semua bahagian</option></select>
-          <label style="display:flex;gap:6px;align-items:center;margin:0;color:var(--tx);font-size:13px;white-space:nowrap"><input type="checkbox" id="jkKosong" style="width:auto"> Ada slot kosong sahaja</label>
-        </div>
-        <div class="small" id="jkInfo" style="margin-bottom:8px"></div>
-        <div id="jkBox"><div class="load">Memuatkan senarai...</div></div>
-      </div>
-      <div id="jkDetail" class="hide">
-        <div class="dhead noprint" style="margin-bottom:12px">
-          <button class="btn2" id="bJkBack">&larr; Kembali ke senarai</button>
-          <button class="btn2" id="bJkPrint">Cetak</button>
-        </div>
-        <div class="card">
-          <div class="printonly" style="text-align:center;margin-bottom:10px"><img src="logo.png" alt="" style="height:60px"><div style="font-weight:700;font-size:15px">MAKTAB RENDAH SAINS MARA ARAU</div></div>
-          <div class="dhead"><div><div class="small" id="dInduk"></div><h1 id="dNama" style="font-size:19px;margin:2px 0"></h1><div class="small" id="dMeta"></div></div></div>
-          <div class="wrap" style="margin-top:12px"><table><thead><tr><th style="width:40px">Bil.</th><th>Jawatan</th><th>Nama</th><th class="noprint">Jabatan / Jawatan Staf</th></tr></thead><tbody id="tAhli"></tbody></table></div>
-          <div class="small" id="dNota" style="margin-top:8px"></div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- LAPORAN -->
-    <section id="pLap" class="hide">
-      <div class="noprint">
-        <div class="ttl"><div><h1>Laporan</h1><p class="small">Pilih laporan untuk dilihat. Tekan Cetak untuk cetak atau simpan sebagai PDF.</p></div><button class="btn2" id="bLapRefresh">Muat Semula Data</button></div>
-        <div class="lapgrid">
-          <button class="lapbtn" data-r="induk"><b>Jawatankuasa Induk Guru</b><span>Buku JK penuh ikut bahagian</span></button>
-          <button class="lapbtn" data-r="wajaran"><b>Ringkasan Wajaran Guru</b><span>Pemberat staf ikut jabatan</span></button>
-          <button class="lapbtn" data-r="wnama"><b>Ringkasan Wajaran Mengikut Nama</b><span>Pemberat staf ikut nama A-Z</span></button>
-          <button class="lapbtn" data-r="kerja"><b>Ringkasan Jawatankuasa Kerja Guru</b><span>Senarai JK setiap staf</span></button>
-          <button class="lapbtn" disabled><b>Surat Perlantikan</b><span>Menunggu format DDMS</span></button>
-        </div>
-        <div class="tools" id="lapTools" style="display:none">
-          <select id="lapInduk" aria-label="Bahagian"><option value="">Semua bahagian</option></select>
-          <select id="lapStaf" aria-label="Staf"><option value="">Semua staf</option></select>
-          <button class="btn2" id="bLapPrint">Cetak</button>
-        </div>
-      </div>
-      <div id="rptLoad" class="load hide">Memuatkan data laporan...</div>
-      <div id="rpt" class="hide"></div>
-    </section>
-
-    <!-- PENGGUNA -->
-    <section id="pUsers" class="hide">
-      <div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small">Hanya Pentadbir boleh tambah, ubah dan reset kata laluan pengguna.</p></div></div>
-      <div class="two">
-        <div class="card">
-          <h2 id="uHead">Tambah Pengguna</h2>
-          <div class="row"><div><label for="fId">ID Pengguna</label><input id="fId" autocapitalize="off" spellcheck="false" placeholder="cth: hakimi"></div>
-          <div><label for="fRole">Peranan</label><select id="fRole"><option value="PENYELARAS">Penyelaras</option><option value="PEMBANTU">Pembantu Penyelaras</option><option value="PENTADBIR">Pentadbir</option></select></div></div>
-          <label for="fStaf">Staf</label><select id="fStaf"><option value="">- pilih staf -</option></select>
-          <label for="fJk">Jawatankuasa dijaga (kod dipisah koma, cth: B02, C11)</label><input id="fJk" placeholder="Kosongkan untuk Pentadbir" autocapitalize="characters">
-          <div class="small" id="fJkName" style="margin-top:4px"></div>
-          <div class="row"><div><label for="fStatus">Status</label><select id="fStatus"><option>AKTIF</option><option>TIDAK AKTIF</option></select></div>
-          <div id="fPwBox"><label for="fPw">Kata laluan sementara</label><input id="fPw" type="text" autocomplete="off"></div></div>
-          <button class="btn" id="bSave">Tambah Pengguna</button>
-          <button class="btn2 hide" id="bCancel" style="width:100%;margin-top:8px">Batal</button>
-          <div class="msg" id="umsg"></div>
-        </div>
-        <div class="card">
-          <h2>Senarai Pengguna</h2>
-          <div class="wrap"><table><thead><tr><th>ID</th><th>Nama / Peranan</th><th>JK</th><th></th></tr></thead><tbody id="tUsers"></tbody></table></div>
-        </div>
-      </div>
-    </section>
-  </main>
+  <div>
+    <header class="top">
+      <button class="burger" id="burger" aria-label="Menu">☰</button>
+      <div class="pt" id="pTitle">Papan Pemuka</div>
+      <span class="small">Tahun</span><select id="selTahun" aria-label="Tahun"></select>
+      <span class="who" id="who"></span>
+      <button class="btn2" id="bPwChg">Kata laluan</button>
+      <button class="btn2" id="bOut">Log keluar</button>
+    </header>
+    <main class="main" id="main"></main>
+  </div>
 </div>
 
+<div class="dlg hide" id="dlg"><div id="dlgBox"></div></div>
 <div class="toast hide" id="toast"></div>
 
 <script>
-/* ===== Tetapan: tampal URL Web App Apps Script di sini ===== */
 var API_URL="https://script.google.com/macros/s/AKfycbz6Pj4j-dYiJ0AEclDvwMqm4PuJK4N-QlmzsoH0d1MQ7EaYpkxNkJzheQGjRI_nwut1Iw/exec";
 
+/* ===== asas ===== */
 var $=function(i){return document.getElementById(i)};
-var TOKEN="",USER=null,DASH=null,JKL=null,LAP=null,RPT="",sortMode="hi",showAll=false,UDATA=null,editId=null,pwForced=false;
-try{TOKEN=sessionStorage.getItem("jk_tok")||"";USER=JSON.parse(sessionStorage.getItem("jk_usr")||"null")}catch(e){}
+var TOKEN="",USER=null,D=null,PAGE="dash",TAHUN="",ST={};
+try{TOKEN=sessionStorage.getItem("jk_tok")||"";USER=JSON.parse(sessionStorage.getItem("jk_usr")||"null");TAHUN=sessionStorage.getItem("jk_thn")||""}catch(e){}
 var ROLE={PENTADBIR:"Pentadbir Sistem",PENYELARAS:"Penyelaras JK",PEMBANTU:"Pembantu Penyelaras"};
-
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-function toast(m){var t=$("toast");t.textContent=m;t.classList.remove("hide");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.add("hide")},3500)}
 function fmt(n){return Number(n||0).toLocaleString("ms-MY")}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.remove("hide");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.add("hide")},3800)}
+function adm(){return USER&&USER.peranan==="PENTADBIR"}
+function boleh(kod){return adm()||(USER&&USER.kodJk.indexOf(kod)>=0)}
 var cbn=0;
 function api(body){return new Promise(function(res,rej){
   if(!API_URL||API_URL.indexOf("PASTE")===0){rej(new Error("Alamat API belum ditetapkan"));return}
   var name="__jk"+Date.now().toString(36)+(cbn++),sc=document.createElement("script"),done=false;
-  var t=setTimeout(function(){if(!done){fin();rej(new Error("tamat masa"))}},30000);
+  var t=setTimeout(function(){if(!done){fin();rej(new Error("tamat masa"))}},45000);
   function fin(){done=true;clearTimeout(t);try{delete window[name]}catch(e){window[name]=undefined}if(sc.parentNode)sc.parentNode.removeChild(sc)}
   window[name]=function(j){if(done)return;fin();if(j&&j.error==="auth"&&body.action!=="login"){sesiTamat();rej(new Error("auth"));return}res(j)};
   sc.onerror=function(){if(!done){fin();rej(new Error("rangkaian"))}};
@@ -286,29 +210,23 @@ function api(body){return new Promise(function(res,rej){
   document.head.appendChild(sc)})}
 async function sha(s){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return("0"+x.toString(16)).slice(-2)}).join("")}
 function hashPw(id,pw){return sha("mrsm-jk:"+id.toLowerCase()+":"+pw)}
+async function tulis(body,okMsg){
+  body.token=TOKEN;body.tahun=TAHUN;
+  try{var j=await api(body);if(!j||!j.ok){toast((j&&j.error)||"Gagal");return j||{}}if(okMsg)toast(okMsg);await muat(true);return j}
+  catch(x){if(x.message!=="auth")toast("Tidak dapat menghubungi pelayan ("+x.message+")");return{}}
+}
+function csv(nama,rows){var s=rows.map(function(r){return r.map(function(v){v=String(v==null?"":v);return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")}).join("\r\n");
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+s],{type:"text/csv;charset=utf-8"}));a.download=nama+".csv";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)}
+function modal(html){$("dlgBox").innerHTML=html;$("dlg").classList.remove("hide");var x=$("dlgBox").querySelector(".x");if(x)x.onclick=tutupModal}
+function tutupModal(){$("dlg").classList.add("hide");$("dlgBox").innerHTML=""}
+$("dlg").onclick=function(e){if(e.target===$("dlg"))tutupModal()};
 
-/* ===== Paparan ===== */
+/* ===== sesi ===== */
 function show(v){["vLogin","vPw","vApp"].forEach(function(k){$(k).classList.toggle("hide",k!==v)})}
-function simpanSesi(){try{sessionStorage.setItem("jk_tok",TOKEN);sessionStorage.setItem("jk_usr",JSON.stringify(USER))}catch(e){}}
-function buangSesi(){TOKEN="";USER=null;DASH=null;JKL=null;LAP=null;RPT="";UDATA=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
+function simpanSesi(){try{sessionStorage.setItem("jk_tok",TOKEN);sessionStorage.setItem("jk_usr",JSON.stringify(USER));sessionStorage.setItem("jk_thn",TAHUN)}catch(e){}}
+function buangSesi(){TOKEN="";USER=null;D=null;try{sessionStorage.removeItem("jk_tok");sessionStorage.removeItem("jk_usr")}catch(e){}}
 function sesiTamat(){buangSesi();show("vLogin");$("lerr").textContent="Sesi tamat. Sila log masuk semula."}
-
-function masuk(){
-  if(USER.mustChange){pwForced=true;$("pwWhy").textContent="Ini log masuk pertama anda. Sila tetapkan kata laluan baharu.";$("bPwBack").classList.add("hide");show("vPw");return}
-  show("vApp");$("uNama").textContent=USER.nama||USER.id;$("uRole").textContent=ROLE[USER.peranan]||USER.peranan;
-  $("mUsers").classList.toggle("hide",USER.peranan!=="PENTADBIR");
-  page("dash");
-}
-function page(p){
-  document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.classList.toggle("on",a.dataset.v===p)});
-  $("pDash").classList.toggle("hide",p!=="dash");$("pUsers").classList.toggle("hide",p!=="users");$("pJk").classList.toggle("hide",p!=="jk");$("pLap").classList.toggle("hide",p!=="lap");
-  if(p==="dash")muatDash(!DASH);if(p==="users")muatUsers();if(p==="jk"){tutupJk();muatJk(!JKL)}if(p==="lap")bukaLap();
-  window.scrollTo(0,0);
-}
-document.querySelectorAll("#menu a[data-v]").forEach(function(a){a.onclick=function(){page(a.dataset.v)}});
 document.querySelectorAll("[data-eye]").forEach(function(b){b.onclick=function(){var i=$(b.dataset.eye);i.type=i.type==="password"?"text":"password";b.textContent=i.type==="password"?"Lihat":"Sorok"}});
-
-/* ===== Log masuk ===== */
 $("lpw").addEventListener("keydown",function(e){if(e.key==="Enter")$("bLogin").click()});
 $("lid").addEventListener("keydown",function(e){if(e.key==="Enter")$("lpw").focus()});
 $("bLogin").onclick=async function(){
@@ -319,206 +237,408 @@ $("bLogin").onclick=async function(){
   try{var j=await api({action:"login",id:id,h:await hashPw(id,pw)});
     if(j&&j.ok){TOKEN=j.token;USER=j.user;simpanSesi();$("lpw").value="";masuk()}
     else e.textContent=j&&j.error==="locked"?"Terlalu banyak percubaan. Cuba lagi selepas 10 minit.":"ID atau kata laluan salah.";
-  }catch(x){e.textContent="Tidak dapat menghubungi pelayan ("+x.message+").";}
+  }catch(x){e.textContent="Tidak dapat menghubungi pelayan ("+x.message+")."}
   b.disabled=false;b.textContent="Log Masuk";
 };
-function logout(){var t=TOKEN;buangSesi();if(t)api({action:"logout",token:t}).catch(function(){});$("lerr").textContent="";$("lid").value="";show("vLogin")}
-$("bOut").onclick=logout;$("bOut2").onclick=logout;
-
-/* ===== Tukar kata laluan ===== */
-$("bPwChg").onclick=function(){pwForced=false;$("pwWhy").textContent="Tetapkan kata laluan baharu untuk akaun "+USER.id+".";$("bPwBack").classList.remove("hide");$("np1").value="";$("np2").value="";$("perr").textContent="";show("vPw")};
+$("bOut").onclick=function(){var t=TOKEN;buangSesi();PAGE="dash";ST.jk.open="";if(t)api({action:"logout",token:t}).catch(function(){});$("lid").value="";$("lerr").textContent="";show("vLogin")};
+$("bPwChg").onclick=function(){$("pwWhy").textContent="Tetapkan kata laluan baharu untuk akaun "+USER.id+".";$("bPwBack").classList.remove("hide");$("np1").value="";$("np2").value="";$("perr").textContent="";show("vPw")};
 $("bPwBack").onclick=function(){show("vApp")};
 $("bPw").onclick=async function(){
   var a=$("np1").value,c=$("np2").value,e=$("perr"),b=this;e.textContent="";
   if(a.length<8){e.textContent="Kata laluan mesti sekurang-kurangnya 8 aksara.";return}
   if(a!==c){e.textContent="Kata laluan tidak sama.";return}
   b.disabled=true;
-  try{var j=await api({action:"setpw",token:TOKEN,h:await hashPw(USER.id,a)});
-    if(j&&j.ok){USER=j.user;simpanSesi();$("np1").value="";$("np2").value="";toast("Kata laluan berjaya ditukar.");masuk()}else e.textContent="Gagal menyimpan. Cuba lagi.";
-  }catch(x){if(x.message!=="auth")e.textContent="Tidak dapat menghubungi pelayan."}
+  try{var j=await api({action:"setpw",token:TOKEN,h:await hashPw(USER.id,a)});if(j&&j.ok){USER=j.user;simpanSesi();toast("Kata laluan berjaya ditukar.");masuk()}else e.textContent="Gagal menyimpan."}
+  catch(x){if(x.message!=="auth")e.textContent="Tidak dapat menghubungi pelayan."}
   b.disabled=false;
 };
-
-/* ===== Dashboard ===== */
-$("bRefresh").onclick=function(){muatDash(true)};
-async function muatDash(force){
-  if(DASH&&!force){lukisDash();return}
-  $("dLoad").classList.remove("hide");$("dBody").classList.add("hide");$("dLoad").textContent="Memuatkan data...";
-  try{var j=await api({action:"dashboard",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");DASH=j;lukisDash()}
-  catch(x){if(x.message!=="auth")$("dLoad").textContent="Gagal memuatkan data ("+x.message+"). Tekan Muat Semula."}
-}
-function tahap(p,purata){if(!purata)return"";if(p>=purata*1.5)return'<span class="tag t-hi">Tinggi</span>';if(p<purata*0.5)return'<span class="tag t-lo">Rendah</span>';return'<span class="tag t-md">Sederhana</span>'}
-function lukisDash(){
-  var d=DASH,k=d.kpi,adm=USER.peranan==="PENTADBIR";
-  $("dLoad").classList.add("hide");$("dBody").classList.remove("hide");
-  $("dTitle").textContent=adm?"Dashboard Jawatankuasa":"Dashboard Penyelaras";
-  $("dSub").textContent=(adm?"Semua jawatankuasa MRSM Arau":"Jawatankuasa di bawah jagaan anda: "+(USER.kodJk.join(", ")||"belum ditetapkan"))+" · Dikemaskini "+new Date(d.dikemaskini).toLocaleString("ms-MY");
-  var cards=[["Jawatankuasa",k.jk],["Lantikan",k.lantikan],[adm?"Staf aktif":"Ahli JK",k.staf],["Jumlah pemberat",k.pemberat],["Purata pemberat / staf",k.purata]];
-  if(adm){cards.push(["Staf tiada tugas JK",k.tiadaTugas,k.tiadaTugas>0]);cards.push(["Rekod staf perlu disemak",k.semakan,k.semakan>0])}
-  $("kpi").innerHTML=cards.map(function(c){return'<div class="stat'+(c[2]?" warn":"")+'"><b>'+fmt(c[1])+'</b><span>'+esc(c[0])+'</span></div>'}).join("");
-  var mx=Math.max.apply(null,d.induk.map(function(x){return x.lantikan}).concat([1]));
-  $("induk").innerHTML=d.induk.length?d.induk.map(function(x){return'<div class="bar"><div>'+esc(x.induk)+'<div class="small">'+x.jk+' JK</div></div><div class="t"><div style="width:'+(x.lantikan/mx*100).toFixed(1)+'%"></div></div><div class="n">'+fmt(x.lantikan)+'</div></div>'}).join("")+'<div class="small">Bar menunjukkan bilangan lantikan.</div>':'<p class="small">Tiada data.</p>';
-  $("tJaw").innerHTML=d.jawatan.map(function(x){return"<tr><td>"+esc(x.jawatan)+'</td><td class="n">'+x.nilai+'</td><td class="n">'+fmt(x.bil)+"</td></tr>"}).join("")||'<tr><td colspan="3" class="small">Tiada data.</td></tr>';
-  $("cJkSaya").classList.toggle("hide",adm);
-  if(!adm)$("tJkSaya").innerHTML=d.jkSaya.map(function(j){return"<tr><td>"+esc(j.kod)+"</td><td>"+esc(j.nama)+"</td><td>"+esc(j.penyelaras||"-")+"</td><td>"+esc(j.setiausaha||"-")+'</td><td class="n">'+j.ahli+"</td></tr>"}).join("")||'<tr><td colspan="5" class="small">Belum ada jawatankuasa ditetapkan untuk akaun ini. Hubungi Pentadbir Sistem.</td></tr>';
-  lukisBeban();
-}
-function lukisBeban(){
-  if(!DASH)return;var q=$("fCari").value.trim().toUpperCase(),pur=DASH.kpi.purata;
-  var L=DASH.beban.filter(function(s){return!q||s.nama.toUpperCase().indexOf(q)>=0});
-  L=L.slice().sort(sortMode==="lo"?function(a,b){return a.pemberat-b.pemberat||a.nama.localeCompare(b.nama)}:sortMode==="az"?function(a,b){return a.nama.localeCompare(b.nama)}:sortMode==="jab"?function(a,b){return(a.susunan||9999)-(b.susunan||9999)||a.nama.localeCompare(b.nama)}:function(a,b){return b.pemberat-a.pemberat||a.nama.localeCompare(b.nama)});
-  var lim=showAll||q?L.length:15,V=L.slice(0,lim);
-  $("tBeban").innerHTML=V.map(function(s,i){return"<tr><td>"+(i+1)+"</td><td>"+esc(s.nama)+(s.semak?' <span class="tag t-md" title="Rekod staf perlu disemak">semak</span>':"")+'</td><td class="small">'+esc(s.jabatan||"-")+(s.jawatan?"<br>"+esc(s.jawatan):"")+'</td><td class="n">'+s.bil+'</td><td class="n"><b>'+fmt(s.pemberat)+"</b></td><td>"+tahap(s.pemberat,pur)+"</td></tr>"}).join("")||'<tr><td colspan="6" class="small">Tiada padanan.</td></tr>';
-  $("bebanInfo").textContent="Memaparkan "+V.length+" daripada "+L.length+" staf. Tahap dibanding purata "+pur+": Tinggi = 1.5x purata ke atas, Rendah = kurang separuh purata.";
-  $("bMore").classList.toggle("hide",V.length>=L.length);
-}
-$("fCari").oninput=lukisBeban;
-$("bMore").onclick=function(){showAll=true;lukisBeban()};
-document.querySelectorAll("#fSort button").forEach(function(b){b.onclick=function(){sortMode=b.dataset.s;document.querySelectorAll("#fSort button").forEach(function(x){x.classList.toggle("on",x===b)});lukisBeban()}});
-
-
-/* ===== Senarai JK ===== */
-$("bJkRefresh").onclick=function(){muatJk(true)};
-async function muatJk(force){
-  if(JKL&&!force){lukisJk();return}
-  $("jkBox").innerHTML='<div class="load">Memuatkan senarai...</div>';
-  try{var j=await api({action:"jklist",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");JKL=j.jk;
-    var ind=[];JKL.forEach(function(x){if(ind.indexOf(x.induk)<0)ind.push(x.induk)});
-    var cur=$("jkInduk").value;$("jkInduk").innerHTML='<option value="">Semua bahagian</option>'+ind.map(function(i){return'<option>'+esc(i)+"</option>"}).join("");$("jkInduk").value=cur;
-    $("jkSub").textContent=USER.peranan==="PENTADBIR"?"Semua jawatankuasa MRSM Arau":"Jawatankuasa di bawah jagaan anda";
-    lukisJk();
-  }catch(x){if(x.message!=="auth")$("jkBox").innerHTML='<div class="load">Gagal memuatkan ('+esc(x.message)+'). Tekan Muat Semula.</div>'}
-}
-function lukisJk(){
-  var q=$("jkCari").value.trim().toUpperCase(),ind=$("jkInduk").value,ks=$("jkKosong").checked;
-  var L=JKL.filter(function(x){return(!ind||x.induk===ind)&&(!ks||x.kosong>0)&&(!q||(x.kod+" "+x.nama+" "+x.penyelaras).toUpperCase().indexOf(q)>=0)});
-  var tk=L.reduce(function(t,x){return t+x.kosong},0);
-  $("jkInfo").textContent=L.length+" jawatankuasa · "+L.reduce(function(t,x){return t+x.ahli},0)+" lantikan"+(tk?" · "+tk+" slot kosong":"");
-  var g={},ord=[];L.forEach(function(x){if(!g[x.induk]){g[x.induk]=[];ord.push(x.induk)}g[x.induk].push(x)});
-  $("jkBox").innerHTML=ord.map(function(i){return'<div class="jkgrp"><h3>'+esc(i)+" ("+g[i].length+")</h3>"+g[i].map(function(x){
-    return'<div class="jkrow" data-k="'+esc(x.kod)+'"><div class="k">'+esc(x.kod)+"</div><div><div>"+esc(x.nama)+'</div><div class="m">'+(x.penyelaras?"Penyelaras: "+esc(x.penyelaras):"Penyelaras: -")+'</div></div><div class="c">'+(x.kosong?'<span class="tag t-md">'+x.kosong+" kosong</span>":"")+'<span class="tag t-lo">'+x.ahli+" ahli</span></div></div>"}).join("")+"</div>"}).join("")||'<div class="load">Tiada jawatankuasa sepadan.</div>';
-  $("jkBox").querySelectorAll(".jkrow").forEach(function(r){r.onclick=function(){bukaJk(r.dataset.k)}});
-}
-$("jkCari").oninput=function(){if(JKL)lukisJk()};$("jkInduk").onchange=function(){if(JKL)lukisJk()};$("jkKosong").onchange=function(){if(JKL)lukisJk()};
-function tutupJk(){$("jkDetail").classList.add("hide");$("jkList").classList.remove("hide")}
-$("bJkBack").onclick=function(){tutupJk();window.scrollTo(0,0)};
-$("bJkPrint").onclick=function(){window.print()};
-async function bukaJk(kod){
-  $("jkList").classList.add("hide");$("jkDetail").classList.remove("hide");window.scrollTo(0,0);
-  $("dNama").textContent="Memuatkan...";$("dInduk").textContent="";$("dMeta").textContent="";$("tAhli").innerHTML="";$("dNota").textContent="";
-  try{var j=await api({action:"jkdetail",token:TOKEN,kod:kod});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");
-    var d=j.jk,A=j.ahli,kos=A.filter(function(a){return a.kosong}).length;
-    $("dInduk").textContent=d.kod+" · "+d.induk;$("dNama").textContent=d.nama;
-    $("dMeta").textContent=A.length+" ahli"+(kos?" · "+kos+" slot kosong":"")+(d.tahun?" · Tahun "+d.tahun:"");
-    $("tAhli").innerHTML=A.map(function(a,i){return'<tr class="'+(a.kosong?"kos":"")+'"><td>'+(i+1)+"</td><td>"+esc(a.jawatan)+'</td><td class="nm">'+esc(a.kosong?a.nama:(a.gelaran?a.gelaran+" ":"")+a.nama)+'</td><td class="small noprint">'+(a.kosong?"Perlu diisi":esc(a.jabatan||"-")+(a.jawatanStaf?"<br>"+esc(a.jawatanStaf):""))+"</td></tr>"}).join("")||'<tr><td colspan="4" class="small">Belum ada ahli.</td></tr>';
-    $("dNota").textContent=kos?"Baris berwarna ialah jawatan yang belum diisi.":"";
-  }catch(x){if(x.message!=="auth")$("dNama").textContent="Gagal memuatkan ("+x.message+")."}
+function masuk(){
+  if(USER.mustChange){$("pwWhy").textContent="Ini log masuk pertama anda. Sila tetapkan kata laluan baharu.";$("bPwBack").classList.add("hide");show("vPw");return}
+  show("vApp");$("who").textContent=(USER.nama||USER.id)+" ("+(ROLE[USER.peranan]||USER.peranan)+")";
+  binaNav();muat(false).then(function(){go(PAGE)});
 }
 
+/* ===== menu ===== */
+var MENU=[
+ ["UTAMA"],["dash","📊","Papan Pemuka"],["jk","🗂️","Jawatankuasa"],["staf","👥","Staf & Guru"],["beban","⚖️","Analisis Beban"],["takwim","📅","Takwim Sekolah"],["lap","🖨️","Laporan"],
+ ["SURAT RASMI"],["slantik","✉️","Surat Perlantikan"],["smesy","📨","Surat Panggilan Mesyuarat"],
+ ["KONFIGURASI",1],["merit","🏷️","Jawatan & Merit",1],["impeks","⇅","Import / Eksport",1],
+ ["PENTADBIRAN",1],["users","🔑","Pengguna",1],["tetapan","⚙️","Tetapan",1],["log","📜","Log Audit",1]];
+function binaNav(){$("nav").innerHTML=MENU.filter(function(m){return!(m[1]===1||m[3]===1)||adm()}).map(function(m){
+  return m.length<3||m[1]===1?'<div class="sec">'+m[0]+"</div>":'<a data-p="'+m[0]+'"><span class="ic">'+m[1]+"</span>"+m[2]+"</a>"}).join("");
+  $("nav").querySelectorAll("a").forEach(function(a){a.onclick=function(){$("side").classList.remove("open");go(a.dataset.p)}})}
+$("burger").onclick=function(e){e.stopPropagation();$("side").classList.toggle("open")};
+document.addEventListener("click",function(e){if($("side").classList.contains("open")&&!$("side").contains(e.target))$("side").classList.remove("open")});
+var PAGES={};
+var ADMP={merit:1,impeks:1,users:1,tetapan:1,log:1};
+function go(p){if(!PAGES[p]||(ADMP[p]&&!adm()))p="dash";PAGE=p;$("nav").querySelectorAll("a").forEach(function(a){a.classList.toggle("on",a.dataset.p===p)});
+  var m=MENU.filter(function(x){return x[0]===p})[0];$("pTitle").textContent=m?m[2]:"";
+  if(!D){$("main").innerHTML='<div class="load">Memuatkan data...</div>';return}
+  PAGES[p]();window.scrollTo(0,0)}
 
-/* ===== Laporan ===== */
+/* ===== data ===== */
+async function muat(force){
+  if(D&&!force)return;
+  if(!D)$("main").innerHTML='<div class="load">Memuatkan data...</div>';
+  try{var j=await api({action:"boot",token:TOKEN,tahun:TAHUN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");
+    D=j;TAHUN=j.tahun;USER=j.user;simpanSesi();kira();
+    $("selTahun").innerHTML=j.tahunList.map(function(t){return"<option"+(t===TAHUN?" selected":"")+">"+t+"</option>"}).join("")+(adm()?'<option value="__baru">+ Tahun baharu…</option>':"");
+  }catch(x){if(x.message!=="auth")$("main").innerHTML='<div class="load">Gagal memuatkan data ('+esc(x.message)+'). <button class="btn2" onclick="location.reload()">Cuba lagi</button></div>'}
+}
+$("selTahun").onchange=async function(){var v=this.value;if(v==="__baru"){this.value=TAHUN;salinTahunDlg();return}TAHUN=v;D=null;simpanSesi();await muat(true);go(PAGE)};
+var N={},SM={},JM={},LBL={};
+function kira(){
+  N={};D.pemberat.forEach(function(p){N[p.jawatan]=p.nilai});
+  SM={};D.staf.forEach(function(s){s.bil=0;s.merit=0;s.k={};s.jk=[];SM[s.id]=s});
+  JM={};D.jk.forEach(function(j){j.ahli=[];j.merit=0;j.kosong=0;JM[j.kod]=j});
+  var exo=D.tetapan.ASING_EXOFFICIO==="YA";
+  D.lantikan.forEach(function(l){var j=JM[l.kod];var w=N[l.kat]||0;l.w=w;
+    if(j){j.ahli.push(l);if(!l.idStaf)j.kosong++;else j.merit+=w}
+    var s=SM[l.idStaf];if(s){s.bil++;s.merit+=w;s.k[l.kat]=(s.k[l.kat]||0)+1;s.jk.push(l)}});
+  var ji={};D.jk.forEach(function(j,i){ji[j.kod]=i});
+  D.staf.forEach(function(s){s.jk.sort(function(a,b){return ji[a.kod]-ji[b.kod]});s.exo=exo&&(s.jawatan==="PENGETUA"||s.jawatan==="TIMBALAN PENGETUA")});
+  D.jk.forEach(function(j){
+    var p=j.ahli.filter(function(a){return a.idStaf&&/^(PENGERUSI|PENAUNG|PENYELARAS|PRESIDEN|KETUA|YANG DIPERTUA)/.test(String(a.asal).toUpperCase())||a.idStaf&&(a.kat==="PENYELARAS"||a.kat==="GURU PENASIHAT")});
+    j.pemimpin=j.ahli.filter(function(a){return/^(PENAUNG|PENGERUSI|TIMB|PENYELARAS)/.test(String(a.asal).toUpperCase())}).slice(0,3);
+    j.adaKetua=p.length>0;j.lengkap=j.adaKetua&&j.kosong===0;
+  });
+}
+function nmS(s){return(s.gelaran?s.gelaran+" ":"")+s.nama}
+function aktifStaf(){return D.staf.filter(function(s){return s.status==="AKTIF"})}
+function jabatanList(){var a=[];aktifStaf().forEach(function(s){var j=s.jabatan||"(Tiada jabatan)";if(a.indexOf(j)<0)a.push(j)});return a}
+function indukList(){var a=[];D.jk.forEach(function(j){if(a.indexOf(j.induk)<0)a.push(j.induk)});return a}
+function opt(list,sel,first){return(first?'<option value="">'+first+"</option>":"")+list.map(function(x){var v=Array.isArray(x)?x[0]:x,t=Array.isArray(x)?x[1]:x;return'<option value="'+esc(v)+'"'+(String(v)===String(sel)?" selected":"")+">"+esc(t)+"</option>"}).join("")}
+function ambang(pur){return{hi:pur*Number(D.tetapan.AMBANG_TINGGI||1.5),lo:pur*Number(D.tetapan.AMBANG_RENDAH||0.5)}}
+function tahap(m,a){return m>a.hi?'<span class="tag t-hi">Tinggi</span>':m<a.lo?'<span class="tag t-lo">Rendah</span>':'<span class="tag t-md">Sederhana</span>'}
+function median(a){if(!a.length)return 0;var s=a.slice().sort(function(x,y){return x-y}),m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2}
+
+/* ===== carta ===== */
+function hbars(items,opt){opt=opt||{};var mx=Math.max.apply(null,items.map(function(x){return x.v}).concat([1]));
+  return items.map(function(x){return'<div class="hb" title="'+esc(x.t||x.l)+'"><div class="l">'+esc(x.l)+'</div><div class="b"><div style="width:'+(x.v/mx*100).toFixed(1)+"%;background:"+(x.c||opt.c||"#1f4e79")+'"></div></div><div class="v">'+fmt(x.v)+"</div></div>"}).join("")||'<p class="small">Tiada data.</p>'}
+function vbars(items,c){var mx=Math.max.apply(null,items.map(function(x){return x.v}).concat([1]));
+  return'<div class="vb">'+items.map(function(x){return'<div class="c" title="'+esc(x.l)+": "+x.v+'"><span class="v">'+(Math.round(x.v*10)/10)+'</span><div class="bar" style="height:'+(x.v/mx*88).toFixed(1)+"%;"+(c?"background:"+c:"")+'"></div></div>'}).join("")+'</div><div class="vbx">'+items.map(function(x){return"<div title=\""+esc(x.l)+"\">"+esc(x.l)+"</div>"}).join("")+"</div>"}
+function donut(parts){var tot=parts.reduce(function(t,p){return t+p.v},0)||1,r=60,c=2*Math.PI*r,off=0;
+  var segs=parts.map(function(p){var len=p.v/tot*c,s='<circle r="'+r+'" cx="80" cy="80" fill="none" stroke="'+p.c+'" stroke-width="30" stroke-dasharray="'+len+" "+(c-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 80 80)"/>';off+=len;return s}).join("");
+  return'<div class="donut"><svg width="160" height="160" viewBox="0 0 160 160" role="img">'+segs+'<text x="80" y="86" text-anchor="middle" font-size="20" font-weight="700" fill="#1b2a21">'+Math.round(parts[0].v/tot*100)+'%</text></svg><div>'+parts.map(function(p){return'<div class="lg"><i style="background:'+p.c+'"></i>'+esc(p.l)+": <b>"+p.v+"</b></div>"}).join("")+"</div></div>"}
+
+/* ===== PAPAN PEMUKA ===== */
+ST.dash={induk:"",jab:"",kat:"",q:"",jq:""};
+PAGES.dash=function(){
+  var f=ST.dash;
+  $("main").innerHTML='<div class="ttl"><div><h1>Papan Pemuka '+esc(TAHUN)+'</h1><p class="small">Ringkasan agihan jawatankuasa dan beban kerja berdasarkan pemberat jawatan.</p></div><button class="btn2 noprint" onclick="window.print()">🖨️ Cetak</button></div>'+
+  '<div class="card noprint"><div class="tools" style="margin:0"><span class="lb">Bahagian JK</span><select id="fInduk">'+opt(indukList(),f.induk,"Semua")+'</select><span class="lb">Jabatan</span><select id="fJab">'+opt(jabatanList(),f.jab,"Semua")+'</select><span class="lb">Jawatan</span><select id="fKat">'+opt(D.pemberat.map(function(p){return p.jawatan}),f.kat,"Semua jawatan")+'</select><input id="fQ" placeholder="Cari staf..." value="'+esc(f.q)+'"><button class="btn2" id="fReset">Set semula</button></div></div><div id="dashBody"></div>';
+  ["fInduk","fJab","fKat"].forEach(function(id,i){$(id).onchange=function(){f[["induk","jab","kat"][i]]=this.value;dashBody()}});
+  $("fQ").oninput=function(){f.q=this.value;dashBody()};
+  $("fReset").onclick=function(){ST.dash={induk:"",jab:"",kat:"",q:"",jq:""};PAGES.dash()};
+  dashBody();
+};
+function dashBody(){
+  var f=ST.dash,q=f.q.trim().toUpperCase(),a0=aktifStaf();
+  var jkSet=D.jk.filter(function(j){return!f.induk||j.induk===f.induk});var jkOk={};jkSet.forEach(function(j){jkOk[j.kod]=1});
+  var L=D.lantikan.filter(function(l){return jkOk[l.kod]&&(!f.kat||l.kat===f.kat)});
+  var per={};L.forEach(function(l){if(!l.idStaf)return;var o=per[l.idStaf]||(per[l.idStaf]={b:0,m:0});o.b++;o.m+=l.w});
+  var exo=a0.filter(function(s){return s.exo}).length;
+  var S=a0.filter(function(s){return!s.exo&&(!f.jab||(s.jabatan||"(Tiada jabatan)")===f.jab)&&(!q||s.nama.indexOf(q)>=0)}).map(function(s){var o=per[s.id]||{b:0,m:0};return{s:s,b:o.b,m:o.m}});
+  var ms=S.map(function(x){return x.m}),tot=ms.reduce(function(t,v){return t+v},0),pur=S.length?tot/S.length:0,a=ambang(pur);
+  var sorted=S.slice().sort(function(x,y){return y.m-x.m||x.s.nama.localeCompare(y.s.nama)});
+  var hi=sorted[0],lo=sorted[sorted.length-1];
+  var tiada=S.filter(function(x){return x.b===0}).length,bt=S.filter(function(x){return x.m>a.hi}).length,br=S.filter(function(x){return x.m<a.lo&&x.b>0}).length;
+  var tl=jkSet.filter(function(j){return!j.lengkap});
+  var aktifL=L.filter(function(l){return l.idStaf}).length;
+  var card=function(v,t,i,c){return'<div class="stat '+(c||"")+'"><b>'+v+"</b><span>"+t+"</span>"+(i?"<i>"+i+"</i>":"")+"</div>"};
+  var h='<div class="stats">'+card(fmt(jkSet.length),"Jumlah jawatankuasa")+card(S.length,"Staf dianalisis",exo?exo+" diasingkan (Pengetua/TP)":"")+card(fmt(aktifL),"Tugasan aktif")+card(fmt(tot),"Jumlah merit terkumpul")+card(pur.toFixed(1),"Purata merit / staf","Median "+median(ms).toFixed(1))+card(hi?hi.m:0,"Merit tertinggi",hi?esc(hi.s.nama):"")+card(lo?lo.m:0,"Merit terendah",lo?esc(lo.s.nama):"")+'</div><div class="stats">'+card(tiada,"Tiada tugasan","Staf tanpa jawatankuasa",tiada?"w":"")+card(bt,"Beban tinggi","Melebihi "+a.hi.toFixed(0)+" merit",bt?"r":"")+card(br,"Beban rendah","Di bawah "+a.lo.toFixed(0)+" merit",br?"w":"")+card(tl.length,"JK tidak lengkap","Tiada ketua / ada slot kosong",tl.length?"w":"")+"</div>";
+  // carta
+  var top=sorted.slice(0,20).map(function(x){return{l:x.s.nama,v:x.m,c:x.m>a.hi?"#b3261e":"#1f4e79",t:x.s.nama+": "+x.m+" merit, "+x.b+" tugasan"}});
+  var bins={},bw=10,mxm=Math.max.apply(null,ms.concat([0]));for(var b=0;b<=Math.floor(mxm/bw);b++)bins[b]=0;ms.forEach(function(m){bins[Math.floor(m/bw)]++});
+  var hist=Object.keys(bins).map(function(k){return{l:(k*bw)+"–"+(k*bw+bw-1),v:bins[k]}});
+  var comp=jkSet.slice().sort(function(x,y){return y.ahli.length-x.ahli.length}).slice(0,25).map(function(j){return{l:j.kod+" "+j.nama,v:j.ahli.length,c:"#5b8fd6"}});
+  var kc={};L.forEach(function(l){kc[l.kat]=(kc[l.kat]||0)+1});
+  var kat=Object.keys(kc).sort(function(x,y){return kc[y]-kc[x]}).map(function(k){return{l:k+" ("+(N[k]||0)+" mata)",v:kc[k],c:"#e3a312"}});
+  var jb={};S.forEach(function(x){var k=x.s.jabatan||"(Tiada jabatan)";(jb[k]=jb[k]||[]).push(x.m)});
+  var jbl=Object.keys(jb).map(function(k){return{l:k+" ("+jb[k].length+")",v:jb[k].reduce(function(t,v){return t+v},0)/jb[k].length}});
+  var lk=jkSet.filter(function(j){return j.lengkap}).length;
+  var by=Object.keys(D.banding).sort();
+  h+='<div class="grid g3"><div class="card"><h2>Kedudukan Merit Staf (20 teratas)</h2>'+hbars(top)+'</div><div class="card"><h2>Taburan Merit Dalam Kalangan Staf</h2>'+vbars(hist)+'<div class="small" style="text-align:center;margin-top:4px">Julat merit · bilangan staf</div></div><div class="card"><h2>Komposisi Jawatankuasa (ahli, 25 teratas)</h2>'+hbars(comp)+"</div>"+
+     '<div class="card"><h2>Taburan Jawatan &amp; Merit</h2>'+hbars(kat)+'</div><div class="card"><h2>Purata Merit mengikut Jabatan</h2>'+vbars(jbl,"#2563a8")+'</div><div class="card"><h2>Liputan Pelantikan Jawatankuasa</h2>'+donut([{l:"Lengkap",v:lk,c:"#1f4e79"},{l:"Tidak lengkap",v:jkSet.length-lk,c:"#f0b429"}])+'<p class="small">Lengkap = ada ketua/penyelaras dan tiada slot KOSONG.</p></div></div>'+
+     '<div class="grid g2"><div class="card"><h2>Perbandingan Tahun ke Tahun</h2>'+(by.length>1?'<div class="wrap"><table class="t"><thead><tr><th>Tahun</th><th class="n">JK</th><th class="n">Lantikan</th><th class="n">Staf terlibat</th><th class="n">Jumlah merit</th></tr></thead><tbody>'+by.map(function(t){var o=D.banding[t];return"<tr"+(t===TAHUN?' style="font-weight:700"':"")+"><td>"+t+'</td><td class="n">'+o.jk+'</td><td class="n">'+fmt(o.lantikan)+'</td><td class="n">'+o.staf+'</td><td class="n">'+fmt(o.merit)+"</td></tr>"}).join("")+"</tbody></table></div>":'<p class="small">Hanya data tahun '+esc(TAHUN)+' tersedia. Perbandingan akan muncul selepas data tahun baharu dibina (pilih "+ Tahun baharu…" pada pilihan Tahun).</p>')+
+     '</div><div class="card"><h2>Jawatankuasa Belum Lengkap ('+tl.length+')</h2><input id="jlq" placeholder="Cari..." value="'+esc(f.jq)+'" style="margin-bottom:8px"><div class="wrap" style="max-height:420px;overflow:auto"><table class="t"><thead><tr><th>Kod</th><th>Jawatankuasa</th><th>Perlu diisi</th></tr></thead><tbody id="jlb"></tbody></table></div></div></div>';
+  $("dashBody").innerHTML=h;
+  var lb=function(){var qq=$("jlq").value.toUpperCase();f.jq=$("jlq").value;$("jlb").innerHTML=tl.filter(function(j){return!qq||(j.kod+" "+j.nama).toUpperCase().indexOf(qq)>=0}).map(function(j){
+    var p=[];if(!j.adaKetua)p.push("Ketua / Pengerusi / Penyelaras");if(j.kosong)p.push(j.kosong+" slot KOSONG");
+    return'<tr class="clk" data-k="'+esc(j.kod)+'"><td>'+esc(j.kod)+"</td><td>"+esc(j.nama)+"</td><td>"+esc(p.join("; "))+"</td></tr>"}).join("")||'<tr><td colspan="3" class="small">Semua JK lengkap.</td></tr>';
+    $("jlb").querySelectorAll("tr[data-k]").forEach(function(r){r.onclick=function(){bukaJk(r.dataset.k)}})};
+  $("jlq").oninput=lb;lb();
+}
+
+/* ===== JAWATANKUASA ===== */
+ST.jk={q:"",induk:"",st:"",sort:"kod",dir:1,open:""};
+PAGES.jk=function(){
+  if(ST.jk.open&&JM[ST.jk.open])return detailJk(ST.jk.open);
+  var f=ST.jk;
+  $("main").innerHTML='<div class="ttl"><div><h1>Direktori Jawatankuasa '+esc(TAHUN)+'</h1><p class="small" id="jkCount"></p></div>'+(adm()?'<button class="btn noprint" id="bJkNew">+ Jawatankuasa Baharu</button>':"")+'</div><div class="card"><div class="tools noprint"><input id="jq" placeholder="Cari kod, nama atau pemimpin..." value="'+esc(f.q)+'"><select id="ji">'+opt(indukList(),f.induk,"Semua bahagian")+'</select><select id="js">'+opt([["lengkap","Lengkap"],["tidak","Tidak lengkap"],["kosong","Ada slot KOSONG"],["TIDAK AKTIF","Tidak aktif"]],f.st,"Semua status")+'</select><button class="btn2" onclick="window.print()">🖨️ Cetak</button><button class="btn2" id="jcsv">⬇ CSV</button></div><div class="wrap"><table class="t"><thead><tr><th class="sort" data-s="kod">Kod</th><th class="sort" data-s="nama">Jawatankuasa</th><th>Bahagian</th><th>Pemimpin utama</th><th class="n sort" data-s="ahli">Ahli</th><th class="n sort" data-s="merit">Merit JK</th><th>Status</th></tr></thead><tbody id="jb"></tbody></table></div></div>';
+  $("jq").oninput=function(){f.q=this.value;jkRows()};$("ji").onchange=function(){f.induk=this.value;jkRows()};$("js").onchange=function(){f.st=this.value;jkRows()};
+  document.querySelectorAll("th.sort").forEach(function(th){th.onclick=function(){if(f.sort===th.dataset.s)f.dir*=-1;else{f.sort=th.dataset.s;f.dir=th.dataset.s==="kod"||th.dataset.s==="nama"?1:-1}jkRows()}});
+  $("jcsv").onclick=function(){csv("Direktori_JK_"+TAHUN,[["KOD","JAWATANKUASA","BAHAGIAN","PEMIMPIN","AHLI","SLOT KOSONG","MERIT JK","STATUS"]].concat(jkFiltered().map(function(j){return[j.kod,j.nama,j.induk,pemimpinTxt(j),j.ahli.length,j.kosong,j.merit,j.status!=="AKTIF"?"TIDAK AKTIF":j.lengkap?"LENGKAP":"TIDAK LENGKAP"]})))};
+  if($("bJkNew"))$("bJkNew").onclick=function(){jkDlg(null)};
+  jkRows();
+};
+function pemimpinTxt(j){return j.pemimpin.map(function(a){var s=SM[a.idStaf];return titleCase(a.asal)+": "+(s?s.nama:a.nama)}).join("; ")}
+function titleCase(s){return String(s||"").toLowerCase().replace(/(^|[\s(/.-])([a-z])/g,function(m,a,b){return a+b.toUpperCase()})}
+function jkFiltered(){var f=ST.jk,q=f.q.trim().toUpperCase();
+  var L=D.jk.filter(function(j){if(f.induk&&j.induk!==f.induk)return false;
+    if(f.st==="lengkap"&&!(j.lengkap&&j.status==="AKTIF"))return false;if(f.st==="tidak"&&j.lengkap)return false;if(f.st==="kosong"&&!j.kosong)return false;if(f.st==="TIDAK AKTIF"&&j.status!=="TIDAK AKTIF")return false;
+    return!q||(j.kod+" "+j.nama+" "+pemimpinTxt(j)).toUpperCase().indexOf(q)>=0});
+  var k=f.sort,d=f.dir;L.sort(function(a,b){var x=k==="ahli"?a.ahli.length:a[k],y=k==="ahli"?b.ahli.length:b[k];
+    if(k==="kod"){x=a.kod.charAt(0)+("00"+a.kod.slice(1)).slice(-3);y=b.kod.charAt(0)+("00"+b.kod.slice(1)).slice(-3)}
+    return(x<y?-1:x>y?1:0)*d});return L}
+function jkRows(){var L=jkFiltered();$("jkCount").textContent=L.length+" jawatankuasa. Klik baris untuk melihat butiran dan mengurus ahli.";
+  document.querySelectorAll("th.sort").forEach(function(th){th.textContent=th.textContent.replace(/ [▲▼]$/,"")+(th.dataset.s===ST.jk.sort?(ST.jk.dir>0?" ▲":" ▼"):"")});
+  $("jb").innerHTML=L.map(function(j){return'<tr class="clk" data-k="'+esc(j.kod)+'"><td><b>'+esc(j.kod)+"</b></td><td>"+esc(j.nama)+'</td><td class="small">'+esc(titleCase(j.induk))+'</td><td class="small">'+esc(pemimpinTxt(j)||"-")+'</td><td class="n">'+j.ahli.length+'</td><td class="n">'+j.merit+"</td><td>"+(j.status!=="AKTIF"?'<span class="tag t-gr">TIDAK AKTIF</span>':j.lengkap?'<span class="tag t-lo">LENGKAP</span>':'<span class="tag t-md">'+(j.kosong?j.kosong+" KOSONG":"TIADA KETUA")+"</span>")+"</td></tr>"}).join("")||'<tr><td colspan="7" class="small">Tiada padanan.</td></tr>';
+  $("jb").querySelectorAll("tr[data-k]").forEach(function(r){r.onclick=function(){bukaJk(r.dataset.k)}})}
+function bukaJk(kod){ST.jk.open=kod;go("jk")}
+function detailJk(kod){
+  var j=JM[kod],ok=boleh(kod);
+  $("main").innerHTML='<div class="tools noprint"><button class="btn2" id="bBack">← Kembali ke direktori</button><span style="flex:1"></span>'+(ok?'<button class="btn2 pri" id="bAdd">+ Tambah Ahli</button>':"")+(adm()?'<button class="btn2" id="bEditJk">Ubah JK</button><button class="btn2 red" id="bDelJk">Padam JK</button>':"")+'<button class="btn2" onclick="window.print()">🖨️ Cetak</button></div>'+
+  '<div class="card"><div class="small">'+esc(j.kod)+" · "+esc(j.induk)+(j.kumpulan?" · "+esc(j.kumpulan):"")+'</div><h1 style="margin:2px 0 4px">'+esc(j.nama)+'</h1><div class="small">'+j.ahli.length+" ahli · merit JK "+j.merit+(j.kosong?' · <span class="tag t-md">'+j.kosong+" slot KOSONG</span>":"")+(j.status!=="AKTIF"?' · <span class="tag t-gr">TIDAK AKTIF</span>':"")+" · Tahun "+esc(TAHUN)+"</div>"+
+  '<div class="wrap" style="margin-top:12px"><table class="t"><thead><tr><th style="width:40px">Bil.</th><th>Jawatan</th><th>Nama</th><th>Jabatan / Jawatan Staf</th><th class="n">Merit</th>'+(ok?'<th class="noprint"></th>':"")+'</tr></thead><tbody>'+
+  j.ahli.map(function(a,i){var s=SM[a.idStaf];return'<tr class="'+(a.idStaf?"":"kos")+'"><td>'+(i+1)+"</td><td>"+esc(a.asal)+'<div class="small">'+esc(a.kat)+'</div></td><td class="nm">'+esc(s?nmS(s):a.nama)+(s&&s.status!=="AKTIF"?' <span class="tag t-gr">tidak aktif</span>':"")+'</td><td class="small">'+(s?esc(s.jabatan||"-")+"<br>"+esc(s.jawatan||""):"Perlu diisi")+'</td><td class="n">'+(a.idStaf?a.w:"-")+"</td>"+(ok?'<td class="noprint" style="white-space:nowrap"><button class="btn2" data-e="'+esc(a.id)+'">'+(a.idStaf?"Ubah":"Isi")+'</button> <button class="btn2 red" data-d="'+esc(a.id)+'">Padam</button></td>':"")+"</tr>"}).join("")+
+  (j.ahli.length?"":'<tr><td colspan="6" class="small">Belum ada ahli.</td></tr>')+"</tbody></table></div></div>";
+  $("bBack").onclick=function(){ST.jk.open="";go("jk")};
+  if(ok){$("bAdd").onclick=function(){ahliDlg(kod,null)};
+    document.querySelectorAll("[data-e]").forEach(function(b){b.onclick=function(){ahliDlg(kod,b.dataset.e)}});
+    document.querySelectorAll("[data-d]").forEach(function(b){b.onclick=async function(){var a=j.ahli.filter(function(x){return x.id===b.dataset.d})[0];if(!confirm("Padam lantikan "+a.asal+" ("+a.nama+") daripada "+kod+"?"))return;b.disabled=true;await tulis({action:"dellant",id:a.id},"Lantikan dipadam.");go("jk")}})}
+  if(adm()){$("bEditJk").onclick=function(){jkDlg(j)};$("bDelJk").onclick=async function(){if(!confirm("Padam "+kod+" "+j.nama+" bersama "+j.ahli.length+" lantikan untuk tahun "+TAHUN+"? Tindakan ini tidak boleh dibatalkan."))return;await tulis({action:"deljk",kod:kod},"JK dipadam.");ST.jk.open="";go("jk")}}
+}
+var JAWLBL=[["PENAUNG","PENGERUSI/ TIMB. PENGERUSI"],["PENGERUSI","PENGERUSI/ TIMB. PENGERUSI"],["TIMB. PENGERUSI 1","PENGERUSI/ TIMB. PENGERUSI"],["TIMB. PENGERUSI 2","PENGERUSI/ TIMB. PENGERUSI"],["TIMB. PENGERUSI 3","PENGERUSI/ TIMB. PENGERUSI"],["PENASIHAT","PENGERUSI/ TIMB. PENGERUSI"],["PENYELARAS","PENYELARAS"],["PEN. PENYELARAS","PEN. PENYELARAS"],["SETIAUSAHA","SETIAUSAHA"],["PEN. SETIAUSAHA","PEN. SETIAUSAHA"],["BENDAHARI","BENDAHARI"],["PEN. BENDAHARI","PEN. BENDAHARI"],["KETUA JURU AUDIT","KETUA JURU AUDIT"],["JURU AUDIT","JURU AUDIT"],["GURU KANAN","GURU KANAN"],["WARDEN ASRAMA","WARDEN ASRAMA"],["GURU PENASIHAT","GURU PENASIHAT"],["URUSETIA","URUSETIA"],["KETUA JABATAN","AJK/ JK/ JAWATANKUASA"],["AJK","AJK/ JK/ JAWATANKUASA"],["AHLI","AJK/ JK/ JAWATANKUASA"]];
+function stafOpts(sel){var L=aktifStaf().slice().sort(function(a,b){return a.susunan-b.susunan});var g="",h="";L.forEach(function(s){var k=s.jabatan||"LAIN-LAIN";if(k!==g){if(g)h+="</optgroup>";g=k;h+='<optgroup label="'+esc(k)+'">'}h+='<option value="'+esc(s.id)+'"'+(s.id===sel?" selected":"")+">"+esc(s.nama)+" ("+s.merit+")</option>"});return h+(g?"</optgroup>":"")}
+function ahliDlg(kod,id){
+  var j=JM[kod],a=id?j.ahli.filter(function(x){return x.id===id})[0]:null;
+  var lbls=JAWLBL.map(function(x){return x[0]}),cur=a?a.asal:"AJK",lain=lbls.indexOf(cur)<0;
+  modal('<h2><span>'+(a?(a.idStaf?"Ubah":"Isi")+" Lantikan":"Tambah Ahli")+' · '+esc(kod)+'</span><button class="x">×</button></h2><div class="small">'+esc(j.nama)+'</div>'+
+   '<label>Cari staf</label><input id="aq" placeholder="Taip nama untuk tapis...">'+
+   '<label for="aS">Staf</label><select id="aS" size="7"><option value="">— Biar KOSONG (tunggu pengganti) —</option>'+stafOpts(a?a.idStaf:"")+'</select><div class="small">Nombor dalam kurungan ialah merit semasa staf.</div>'+
+   '<div class="row2"><div><label for="aJ">Jawatan</label><select id="aJ">'+opt(lbls,lain?"__lain":cur)+'<option value="__lain"'+(lain?" selected":"")+'>Lain-lain…</option></select></div><div><label for="aK">Kategori pemberat</label><select id="aK">'+opt(D.pemberat.map(function(p){return[p.jawatan,p.jawatan+" ("+p.nilai+")"]}),a?a.kat:"AJK/ JK/ JAWATANKUASA")+'</select></div></div>'+
+   '<div id="aLainBox" class="'+(lain?"":"hide")+'"><label for="aL">Nama jawatan (lain-lain)</label><input id="aL" value="'+esc(lain?cur:"")+'" placeholder="cth: AJK HADIAH & CENDERAMATA"></div>'+
+   '<div id="aKosBox" class="hide"><label for="aKos">Catatan slot kosong</label><input id="aKos" value="'+esc(a&&!a.idStaf?a.nama:"KOSONG")+'"></div>'+
+   '<div class="msg" id="aMsg"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="aSave">Simpan</button></div>');
+  var sel=$("aS");
+  $("aq").oninput=function(){var q=this.value.toUpperCase();Array.prototype.forEach.call(sel.options,function(o){if(o.value)o.hidden=q&&o.textContent.toUpperCase().indexOf(q)<0})};
+  var kos=function(){$("aKosBox").classList.toggle("hide",!!sel.value)};sel.onchange=kos;kos();
+  $("aJ").onchange=function(){var v=this.value;$("aLainBox").classList.toggle("hide",v!=="__lain");var m=JAWLBL.filter(function(x){return x[0]===v})[0];if(m)$("aK").value=m[1]};
+  document.querySelector(".x2").onclick=tutupModal;
+  $("aSave").onclick=async function(){var jv=$("aJ").value,asal=jv==="__lain"?$("aL").value.trim():jv;if(!asal){$("aMsg").textContent="Isi nama jawatan.";return}
+    this.disabled=true;var r=await tulis({action:"savelant",data:{id:a?a.id:"",kod:kod,idStaf:sel.value,asal:asal,kat:$("aK").value,namaKosong:$("aKos").value}},"Lantikan disimpan.");
+    if(r.ok){tutupModal();go("jk")}else{this.disabled=false;$("aMsg").textContent=r.error||"Gagal"}};
+}
+function jkDlg(j){
+  modal('<h2><span>'+(j?"Ubah Jawatankuasa":"Jawatankuasa Baharu")+'</span><button class="x">×</button></h2>'+
+  '<div class="row2"><div><label for="kK">Kod JK</label><input id="kK" value="'+esc(j?j.kod:"")+'"'+(j?" disabled":"")+' placeholder="cth: A39"></div><div><label for="kS">Status</label><select id="kS">'+opt(["AKTIF","TIDAK AKTIF"],j?j.status:"AKTIF")+'</select></div></div>'+
+  '<label for="kN">Nama jawatankuasa</label><input id="kN" value="'+esc(j?j.nama:"")+'">'+
+  '<label for="kI">Bahagian</label><select id="kI">'+opt(indukList(),j?j.induk:"")+'</select>'+
+  '<label for="kG">Kumpulan (pilihan)</label><input id="kG" value="'+esc(j?j.kumpulan:"")+'">'+
+  '<div class="msg" id="kMsg"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="kSave">Simpan</button></div>');
+  document.querySelector(".x2").onclick=tutupModal;
+  if(!j)$("kK").oninput=function(){var c=this.value.trim().toUpperCase().charAt(0),m=D.jk.filter(function(x){return x.kod.charAt(0)===c})[0];if(m)$("kI").value=m.induk};
+  $("kSave").onclick=async function(){this.disabled=true;var kod=$("kK").value.trim().toUpperCase();
+    var r=await tulis({action:"savejk",baru:!j,data:{kod:kod,nama:$("kN").value,induk:$("kI").value,kumpulan:$("kG").value,status:$("kS").value}},"Jawatankuasa disimpan.");
+    if(r.ok){tutupModal();ST.jk.open=kod;go("jk")}else{this.disabled=false;$("kMsg").textContent=r.error||"Gagal"}};
+}
+
+/* ===== STAF & GURU ===== */
+ST.staf={q:"",jab:"",st:"AKTIF"};
+PAGES.staf=function(){var f=ST.staf;
+  $("main").innerHTML='<div class="ttl"><div><h1>Staf &amp; Guru</h1><p class="small" id="sCount"></p></div>'+(adm()?'<button class="btn noprint" id="bSNew">+ Staf Baharu</button>':"")+'</div><div class="card"><div class="tools noprint"><input id="sq" placeholder="Cari nama atau no. gaji..." value="'+esc(f.q)+'"><select id="sj">'+opt(jabatanList(),f.jab,"Semua jabatan")+'</select><select id="ss">'+opt([["AKTIF","Aktif"],["TIDAK AKTIF","Tidak aktif"]],f.st,"Semua status")+'</select><button class="btn2" onclick="window.print()">🖨️ Cetak</button><button class="btn2" id="scsv">⬇ CSV</button></div><div class="wrap"><table class="t"><thead><tr><th>Bil.</th><th>Nama</th><th>No. Gaji</th><th>Jabatan</th><th>Jawatan</th><th>Gred</th><th class="n">Bil. JK</th><th class="n">Merit</th><th>Status</th></tr></thead><tbody id="sb"></tbody></table></div></div>';
+  $("sq").oninput=function(){f.q=this.value;sRows()};$("sj").onchange=function(){f.jab=this.value;sRows()};$("ss").onchange=function(){f.st=this.value;sRows()};
+  $("scsv").onclick=function(){csv("Staf_"+TAHUN,[["ID","NO GAJI","GELARAN","NAMA","JABATAN","SUBJEK","JAWATAN","GRED","EMEL","TELEFON","STATUS","BIL JK","MERIT"]].concat(sFil().map(function(s){return[s.id,s.noGaji,s.gelaran,s.nama,s.jabatan,s.subjek,s.jawatan,s.gred,s.emel,s.telefon,s.status,s.bil,s.merit]})))};
+  if($("bSNew"))$("bSNew").onclick=function(){stafDlg(null)};sRows()};
+function sFil(){var f=ST.staf,q=f.q.trim().toUpperCase();return D.staf.filter(function(s){return(!f.st||s.status===f.st)&&(!f.jab||(s.jabatan||"(Tiada jabatan)")===f.jab)&&(!q||(s.nama+" "+s.noGaji).toUpperCase().indexOf(q)>=0)}).sort(function(a,b){return a.susunan-b.susunan})}
+function sRows(){var L=sFil();$("sCount").textContent=L.length+" orang. Klik nama untuk lihat jawatankuasa dan butiran.";
+  $("sb").innerHTML=L.map(function(s,i){return'<tr class="clk" data-s="'+esc(s.id)+'"><td>'+(i+1)+"</td><td>"+esc(nmS(s))+'</td><td class="small">'+esc(s.noGaji)+'</td><td class="small">'+esc(s.jabatan)+'</td><td class="small">'+esc(s.jawatan)+'</td><td class="small">'+esc(s.gred)+'</td><td class="n">'+s.bil+'</td><td class="n"><b>'+s.merit+"</b></td><td>"+(s.status==="AKTIF"?'<span class="tag t-lo">AKTIF</span>':'<span class="tag t-gr">TIDAK AKTIF</span>')+"</td></tr>"}).join("")||'<tr><td colspan="9" class="small">Tiada padanan.</td></tr>';
+  $("sb").querySelectorAll("tr[data-s]").forEach(function(r){r.onclick=function(){stafInfo(r.dataset.s)}})}
+function stafInfo(id){var s=SM[id];
+  modal('<h2><span>'+esc(nmS(s))+'</span><button class="x">×</button></h2><div class="small">'+esc([s.jawatan,s.jabatan,s.subjek,s.gred].filter(Boolean).join(" · "))+'</div><div class="small">No. gaji: '+esc(s.noGaji||"-")+" · "+esc(s.emel||"tiada emel")+" · "+esc(s.telefon||"")+'</div>'+(s.catatan?'<div class="note" style="margin-top:8px">'+esc(s.catatan)+"</div>":"")+
+  '<h2 style="margin-top:14px">Jawatankuasa '+esc(TAHUN)+" ("+s.bil+" jawatan · merit "+s.merit+')</h2><div class="wrap" style="max-height:340px;overflow:auto"><table class="t"><tbody>'+(s.jk.map(function(l){return'<tr class="clk" data-k="'+esc(l.kod)+'"><td>'+esc(l.kod)+"</td><td>"+esc(JM[l.kod]?JM[l.kod].nama:"")+'</td><td class="small">'+esc(l.asal)+'</td><td class="n">'+l.w+"</td></tr>"}).join("")||'<tr><td class="small">Tiada jawatan.</td></tr>')+"</tbody></table></div>"+
+  '<div class="act">'+(adm()?'<button class="btn2" id="bSEdit">Ubah maklumat staf</button>':"")+'<button class="btn2 x2">Tutup</button></div>');
+  document.querySelector(".x2").onclick=tutupModal;
+  document.querySelectorAll("#dlgBox tr[data-k]").forEach(function(r){r.onclick=function(){tutupModal();bukaJk(r.dataset.k)}});
+  if($("bSEdit"))$("bSEdit").onclick=function(){stafDlg(s)}}
+function stafDlg(s){var F=function(id,l,v,ph){return'<div><label for="'+id+'">'+l+'</label><input id="'+id+'" value="'+esc(v||"")+'" placeholder="'+(ph||"")+'"></div>'};
+  modal('<h2><span>'+(s?"Ubah Staf":"Staf Baharu")+'</span><button class="x">×</button></h2>'+
+  '<div class="row2">'+F("fG","Gelaran",s&&s.gelaran,"EN. / PN. / UST.")+F("fNo","No. gaji",s&&s.noGaji)+'</div>'+F("fN","Nama penuh",s&&s.nama)+
+  '<div class="row2"><div><label for="fJb">Jabatan</label><input id="fJb" list="dlJab" value="'+esc(s?s.jabatan:"")+'"><datalist id="dlJab">'+jabatanList().map(function(x){return'<option value="'+esc(x)+'">'}).join("")+'</datalist></div>'+F("fSb","Subjek / Unit",s&&s.subjek)+'</div>'+
+  '<div class="row2">'+F("fJw","Jawatan",s&&s.jawatan,"GURU / KETUA JABATAN ...")+F("fGr","Gred",s&&s.gred)+'</div><div class="row2">'+F("fEm","Emel",s&&s.emel)+F("fTl","Telefon",s&&s.telefon)+'</div>'+
+  '<div class="row2"><div><label for="fJn">Jantina</label><select id="fJn">'+opt([["L","Lelaki"],["P","Perempuan"]],s?s.jantina:"")+'</select></div>'+F("fSu","Susunan (nombor)",s?s.susunan:"")+'</div>'+
+  (s?'<div class="row2"><div><label for="fSt">Status</label><select id="fSt">'+opt(["AKTIF","TIDAK AKTIF"],s.status)+'</select></div>'+F("fCt","Catatan",s.catatan)+'</div><label style="display:flex;gap:8px;align-items:center;color:var(--tx)" id="fKosL" class="hide"><input type="checkbox" id="fKos" checked style="width:auto"> Kosongkan semua jawatan JK staf ini untuk tahun '+esc(TAHUN)+" (slot kekal untuk pengganti)</label>":"")+
+  '<div class="msg" id="fMsg"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="fSave">Simpan</button></div>');
+  document.querySelector(".x2").onclick=tutupModal;
+  if(s)$("fSt").onchange=function(){$("fKosL").classList.toggle("hide",!(this.value==="TIDAK AKTIF"&&s.status==="AKTIF"))};
+  $("fSave").onclick=async function(){this.disabled=true;var v=function(i){return $(i)?$(i).value.trim():""};
+    var r=await tulis({action:"savestaf",baru:!s,data:{id:s?s.id:"",gelaran:v("fG"),noGaji:v("fNo"),nama:v("fN"),jabatan:v("fJb"),subjek:v("fSb"),jawatan:v("fJw"),gred:v("fGr"),emel:v("fEm"),telefon:v("fTl"),jantina:v("fJn"),susunan:v("fSu"),status:s?v("fSt"):"AKTIF",catatan:v("fCt"),kosongkan:s&&$("fKos")&&$("fKos").checked}},"Maklumat staf disimpan.");
+    if(r.ok){tutupModal();if(r.kosong)toast(r.kosong+" jawatan JK dijadikan KOSONG.");go(PAGE)}else{this.disabled=false;$("fMsg").textContent=r.error||"Gagal"}}}
+
+/* ===== ANALISIS BEBAN ===== */
+ST.beban={jab:"",sort:"hi",exo:true};
+PAGES.beban=function(){var f=ST.beban;
+  $("main").innerHTML='<div class="ttl"><div><h1>Analisis Beban Tugas '+esc(TAHUN)+'</h1><p class="small" id="bInfo"></p></div><div class="noprint" style="display:flex;gap:8px"><button class="btn2" onclick="window.print()">🖨️ Cetak</button><button class="btn2" id="bcsv">⬇ CSV</button></div></div><div class="card noprint"><div class="tools" style="margin:0"><select id="bj">'+opt(jabatanList(),f.jab,"Semua jabatan")+'</select><select id="bs">'+opt([["hi","Merit tertinggi"],["lo","Merit terendah"],["jab","Ikut jabatan"],["az","Nama A-Z"]],f.sort)+'</select><label style="display:flex;gap:6px;align-items:center;margin:0;color:var(--tx);font-size:13px"><input type="checkbox" id="bx" style="width:auto"'+(f.exo?" checked":"")+'> Asingkan Pengetua &amp; TP</label></div></div><div id="bBody"></div>';
+  $("bj").onchange=function(){f.jab=this.value;bBody()};$("bs").onchange=function(){f.sort=this.value;bBody()};$("bx").onchange=function(){f.exo=this.checked;bBody()};
+  $("bcsv").onclick=function(){var x=bData();csv("Analisis_Beban_"+TAHUN,[["BIL","NAMA","JABATAN","JAWATAN","BIL JAWATAN","MERIT","TAHAP"]].concat(x.L.map(function(s,i){return[i+1,s.nama,s.jabatan,s.jawatan,s.bil,s.merit,s.merit>x.a.hi?"TINGGI":s.merit<x.a.lo?"RENDAH":"SEDERHANA"]})))};
+  bBody()};
+function bData(){var f=ST.beban,L=aktifStaf().filter(function(s){return(!f.exo||!(s.jawatan==="PENGETUA"||s.jawatan==="TIMBALAN PENGETUA"))&&(!f.jab||(s.jabatan||"(Tiada jabatan)")===f.jab)});
+  var pur=L.length?L.reduce(function(t,s){return t+s.merit},0)/L.length:0,a=ambang(pur);
+  L.sort(f.sort==="lo"?function(x,y){return x.merit-y.merit}:f.sort==="jab"?function(x,y){return x.susunan-y.susunan}:f.sort==="az"?function(x,y){return x.nama.localeCompare(y.nama)}:function(x,y){return y.merit-x.merit});
+  return{L:L,pur:pur,a:a}}
+function bBody(){var x=bData(),L=x.L,a=x.a;
+  $("bInfo").textContent=L.length+" staf · purata "+x.pur.toFixed(1)+" · ambang tinggi > "+a.hi.toFixed(0)+" ("+D.tetapan.AMBANG_TINGGI+"× purata), rendah < "+a.lo.toFixed(0)+" ("+D.tetapan.AMBANG_RENDAH+"× purata)";
+  var jb={};L.forEach(function(s){var k=s.jabatan||"(Tiada jabatan)";(jb[k]=jb[k]||[]).push(s.merit)});
+  $("bBody").innerHTML='<div class="card"><h2>Ringkasan ikut Jabatan</h2><div class="wrap"><table class="t"><thead><tr><th>Jabatan</th><th class="n">Bil. staf</th><th class="n">Purata</th><th class="n">Minimum</th><th class="n">Maksimum</th><th class="n">Beban tinggi</th><th class="n">Beban rendah</th></tr></thead><tbody>'+
+  Object.keys(jb).map(function(k){var m=jb[k];return"<tr><td>"+esc(k)+'</td><td class="n">'+m.length+'</td><td class="n">'+(m.reduce(function(t,v){return t+v},0)/m.length).toFixed(1)+'</td><td class="n">'+Math.min.apply(null,m)+'</td><td class="n">'+Math.max.apply(null,m)+'</td><td class="n">'+m.filter(function(v){return v>a.hi}).length+'</td><td class="n">'+m.filter(function(v){return v<a.lo}).length+"</td></tr>"}).join("")+
+  '</tbody></table></div></div><div class="card"><h2>Senarai Beban Staf</h2><div class="wrap"><table class="t"><thead><tr><th>#</th><th>Nama</th><th>Jabatan</th><th>Jawatan</th><th class="n">Bil. jawatan</th><th class="n">Merit</th><th>Tahap</th><th style="width:22%">Graf</th></tr></thead><tbody>'+
+  L.map(function(s,i){var mx=Math.max(a.hi*1.3,L.reduce(function(m,x){return Math.max(m,x.merit)},1));return'<tr class="clk" data-s="'+esc(s.id)+'"><td>'+(i+1)+"</td><td>"+esc(s.nama)+'</td><td class="small">'+esc(s.jabatan)+'</td><td class="small">'+esc(s.jawatan)+'</td><td class="n">'+s.bil+'</td><td class="n"><b>'+s.merit+"</b></td><td>"+tahap(s.merit,a)+'</td><td><div class="hb" style="grid-template-columns:1fr;padding:0"><div class="b"><div style="width:'+Math.min(100,s.merit/mx*100).toFixed(1)+"%;background:"+(s.merit>a.hi?"#b3261e":s.merit<a.lo?"#3a9d6a":"#1f4e79")+'"></div></div></div></td></tr>'}).join("")+"</tbody></table></div></div>";
+  $("bBody").querySelectorAll("tr[data-s]").forEach(function(r){r.onclick=function(){stafInfo(r.dataset.s)}})}
+
+/* ===== TAKWIM ===== */
+var BULAN=["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
+function tkh(s){if(!s)return"";var p=s.split("-");return Number(p[2])+" "+BULAN[Number(p[1])-1].slice(0,3)+" "+p[0]}
+ST.takwim={b:""};
+PAGES.takwim=function(){var f=ST.takwim,boleh2=adm()||USER.kodJk.length;
+  var E=D.takwim.slice().sort(function(a,b){return a.mula<b.mula?-1:1});
+  $("main").innerHTML='<div class="ttl"><div><h1>Takwim Sekolah '+esc(TAHUN)+'</h1><p class="small">Program dan mesyuarat jawatankuasa sepanjang tahun.</p></div><div class="noprint" style="display:flex;gap:8px">'+(boleh2?'<button class="btn" id="bTNew">+ Acara</button>':"")+'<button class="btn2" onclick="window.print()">🖨️ Cetak</button></div></div><div class="tools noprint"><select id="tb">'+opt(BULAN.map(function(b,i){return[String(i+1),b]}),f.b,"Semua bulan")+'</select></div><div id="tBody"></div>';
+  $("tb").onchange=function(){f.b=this.value;PAGES.takwim()};if($("bTNew"))$("bTNew").onclick=function(){takwimDlg(null)};
+  var g={};E.forEach(function(e){var m=Number(e.mula.split("-")[1]);if(f.b&&String(m)!==f.b)return;(g[m]=g[m]||[]).push(e)});
+  $("tBody").innerHTML=Object.keys(g).sort(function(a,b){return a-b}).map(function(m){return'<div class="card"><h2>'+BULAN[m-1]+" "+esc(TAHUN)+'</h2><div class="wrap"><table class="t"><tbody>'+g[m].map(function(e){var ok=e.kod?boleh(e.kod):adm();return"<tr><td style=\"width:150px\"><b>"+tkh(e.mula)+"</b>"+(e.tamat&&e.tamat!==e.mula?'<div class="small">hingga '+tkh(e.tamat)+"</div>":"")+"</td><td>"+esc(e.acara)+(e.lokasi?'<div class="small">📍 '+esc(e.lokasi)+"</div>":"")+(e.catatan?'<div class="small">'+esc(e.catatan)+"</div>":"")+"</td><td>"+(e.kod&&JM[e.kod]?'<span class="tag t-bl">'+esc(e.kod)+"</span> <span class=\"small\">"+esc(JM[e.kod].nama)+"</span>":"")+'</td><td class="noprint" style="white-space:nowrap;text-align:right">'+(ok?'<button class="btn2" data-te="'+esc(e.id)+'">Ubah</button> <button class="btn2 red" data-td="'+esc(e.id)+'">Padam</button>':"")+"</td></tr>"}).join("")+"</tbody></table></div></div>"}).join("")||'<div class="card load">Belum ada acara dalam takwim'+(f.b?" untuk bulan ini":"")+".</div>";
+  document.querySelectorAll("[data-te]").forEach(function(b){b.onclick=function(){takwimDlg(D.takwim.filter(function(e){return e.id===b.dataset.te})[0])}});
+  document.querySelectorAll("[data-td]").forEach(function(b){b.onclick=async function(){if(!confirm("Padam acara ini?"))return;await tulis({action:"deltakwim",id:b.dataset.td},"Acara dipadam.");PAGES.takwim()}})};
+function takwimDlg(e){var jkl=D.jk.filter(function(j){return boleh(j.kod)}).map(function(j){return[j.kod,j.kod+" "+j.nama]});
+  modal('<h2><span>'+(e?"Ubah Acara":"Acara Baharu")+'</span><button class="x">×</button></h2><label for="eA">Acara / Program</label><input id="eA" value="'+esc(e?e.acara:"")+'">'+
+  '<div class="row2"><div><label for="eM">Tarikh mula</label><input id="eM" type="date" value="'+esc(e?e.mula:"")+'"></div><div><label for="eT">Tarikh tamat (pilihan)</label><input id="eT" type="date" value="'+esc(e?e.tamat:"")+'"></div></div>'+
+  '<label for="eK">Jawatankuasa berkaitan</label><select id="eK">'+opt(jkl,e?e.kod:"",adm()?"— Umum (tiada JK) —":null)+'</select><label for="eL">Lokasi</label><input id="eL" value="'+esc(e?e.lokasi:"")+'"><label for="eC">Catatan</label><input id="eC" value="'+esc(e?e.catatan:"")+'">'+
+  '<div class="msg" id="eMsg"></div><div class="act"><button class="btn2 x2">Batal</button><button class="btn" id="eSave">Simpan</button></div>');
+  document.querySelector(".x2").onclick=tutupModal;
+  $("eSave").onclick=async function(){this.disabled=true;var r=await tulis({action:"savetakwim",data:{id:e?e.id:"",acara:$("eA").value.trim(),mula:$("eM").value,tamat:$("eT").value,kod:$("eK").value,lokasi:$("eL").value.trim(),catatan:$("eC").value.trim()}},"Takwim disimpan.");
+    if(r.ok){tutupModal();PAGES.takwim()}else{this.disabled=false;$("eMsg").textContent=r.error||"Gagal"}}}
+
+/* ===== LAPORAN ===== */
+ST.lap={r:"induk",induk:"",staf:""};
 var KATS=["PENYELARAS","PEN. PENYELARAS","SETIAUSAHA","PEN. SETIAUSAHA","BENDAHARI","PEN. BENDAHARI","AJK/ JK/ JAWATANKUASA","GURU KANAN","WARDEN ASRAMA","KETUA JURU AUDIT","JURU AUDIT","ELEMEN 1/2/3/","GURU PENASIHAT","URUSETIA","PENGERUSI/ TIMB. PENGERUSI"];
-var KLBL=["PENYELARAS","PEN. PENYELARAS","SETIAUSAHA","PEN. SETIAUSAHA","BENDAHARI","PEN. BENDAHARI","AJK / JK","GURU KANAN","WARDEN ASRAMA","KETUA JURU AUDIT","JURU AUDIT","ELEMEN 1/2/3","GURU PENASIHAT","URUSETIA","PENGERUSI / TIMB."];
-function bukaLap(){if(RPT)lukisLap()}
-$("bLapRefresh").onclick=function(){LAP=null;if(RPT)lukisLap()};
-document.querySelectorAll(".lapbtn[data-r]").forEach(function(b){b.onclick=function(){RPT=b.dataset.r;document.querySelectorAll(".lapbtn").forEach(function(x){x.classList.toggle("on",x===b)});lukisLap()}});
-$("lapInduk").onchange=function(){lukisLap()};$("lapStaf").onchange=function(){lukisLap()};
-$("bLapPrint").onclick=function(){window.print()};
-async function dataLap(){
-  if(LAP)return LAP;
-  var j=await api({action:"laporan",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");
-  var S={};j.staf.forEach(function(s){s.bil=0;s.pemberat=0;s.k={};s.jk=[];S[s.id]=s});
-  var J={};j.jk.forEach(function(x){x.ahli=[];J[x.kod]=x});
-  j.lantikan.forEach(function(l){var x=J[l.kod];if(x)x.ahli.push(l);var s=S[l.id];if(s){s.bil++;s.pemberat+=j.nilai[l.kategori]||0;s.k[l.kategori]=(s.k[l.kategori]||0)+1;s.jk.push(l)}});
-  var JI={};j.jk.forEach(function(x,i){JI[x.kod]=i});j.staf.forEach(function(s){s.jk.sort(function(a,b){return JI[a.kod]-JI[b.kod]})});j.S=S;j.J=J;LAP=j;
-  var ind=[];j.jk.forEach(function(x){if(ind.indexOf(x.induk)<0)ind.push(x.induk)});
-  $("lapInduk").innerHTML='<option value="">Semua bahagian</option>'+ind.map(function(i){return"<option>"+esc(i)+"</option>"}).join("");
-  $("lapStaf").innerHTML='<option value="">Semua staf</option>'+j.staf.slice().sort(function(a,b){return a.susunan-b.susunan}).map(function(s){return'<option value="'+esc(s.id)+'">'+esc(s.nama)+"</option>"}).join("");
-  return j;
-}
-function nmStaf(s){return(s.gelaran?s.gelaran+" ":"")+s.nama+(s.jawatan?" ( "+s.jawatan+" )":"")}
-async function lukisLap(){
-  var r=$("rpt");$("lapTools").style.display="flex";
-  $("lapInduk").style.display=RPT==="induk"?"":"none";$("lapStaf").style.display=RPT==="kerja"?"":"none";
-  if(!LAP){$("rptLoad").classList.remove("hide");r.classList.add("hide")}
-  try{var d=await dataLap()}catch(x){$("rptLoad").textContent=x.message==="auth"?"":"Gagal memuatkan data ("+x.message+").";return}
-  $("rptLoad").classList.add("hide");r.classList.remove("hide");
-  var thn=d.tahun,html="";
-  if(RPT==="induk"){
-    var ind=$("lapInduk").value,cur="";
-    html='<h2 class="rt">JAWATANKUASA KERJA MRSM ARAU, PERLIS '+esc(thn)+"</h2>";
-    d.jk.forEach(function(x){if(ind&&x.induk!==ind)return;
-      if(x.induk!==cur){cur=x.induk;html+='<h3 class="ri">'+esc(cur)+"</h3>"}
-      html+='<div class="jb"><div class="jh">'+esc(x.kod)+" : "+esc(x.nama)+"</div><table>"+x.ahli.map(function(a,i){var s=d.S[a.id];
-        return'<tr><td class="b">'+(i+1)+"</td><td"+(s?"":' class="kos"')+">"+esc(s?nmStaf(s):a.nama)+'</td><td class="j">'+esc(a.jawatan)+"</td></tr>"}).join("")+(x.ahli.length?"":'<tr><td colspan="3" style="padding:4px 8px">Belum ada ahli.</td></tr>')+"</table></div>"});
-  }else if(RPT==="wajaran"||RPT==="wnama"){
-    var L=d.staf.slice(),byJ=RPT==="wajaran";
-    L.sort(byJ?function(a,b){return a.susunan-b.susunan}:function(a,b){return a.nama.localeCompare(b.nama)});
-    var tot=new Array(KATS.length).fill(0),tp=0,tb=0,cur=null,n=0;
-    html='<h2 class="rt">RINGKASAN WAJARAN JAWATANKUASA '+esc(thn)+'</h2><div class="rs">MRSM Arau, Perlis · '+(byJ?"Disusun ikut jabatan":"Disusun ikut nama")+"</div>";
-    html+='<table class="rg"><thead><tr class="rv"><th style="writing-mode:horizontal-tb;transform:none;height:auto">Bil.</th><th class="l" style="writing-mode:horizontal-tb;transform:none;height:auto">Nama Guru / Staf</th>'+KLBL.map(function(k){return"<th>"+k+"</th>"}).join("")+'<th>BIL. JAWATAN</th><th>PEMBERAT</th></tr><tr><th></th><th class="l">Nilai pemberat</th>'+KATS.map(function(k){return"<th>"+(d.nilai[k]||0)+"</th>"}).join("")+"<th></th><th></th></tr></thead><tbody>";
-    L.forEach(function(s){
-      if(byJ){var g=s.jawatan==="PENGETUA"||s.jawatan==="TIMBALAN PENGETUA"?"PENGURUSAN":(s.jabatan==="PENGURUSAN"?"PENGURUSAN":s.jabatan||"LAIN-LAIN");if(g!==cur){cur=g;html+='<tr class="gh"><td colspan="'+(KATS.length+4)+'">'+esc(g)+"</td></tr>"}}
-      n++;tp+=s.pemberat;tb+=s.bil;
-      html+="<tr><td>"+n+'</td><td class="l">'+esc(s.nama)+"</td>"+KATS.map(function(k,i){var c=s.k[k]||0;tot[i]+=c;return"<td>"+(c||"")+"</td>"}).join("")+"<td>"+s.bil+"</td><td><b>"+s.pemberat+"</b></td></tr>"});
-    html+='<tr class="gh"><td></td><td class="l">JUMLAH</td>'+tot.map(function(t){return'<td style="text-align:center">'+t+"</td>"}).join("")+'<td style="text-align:center">'+tb+'</td><td style="text-align:center">'+tp+"</td></tr></tbody></table>";
-    html+='<div class="rs" style="text-align:left;margin-top:6px">Pemberat = bilangan jawatan × nilai pemberat jawatan. Jawatan KOSONG tidak dikira.</div>';
-  }else if(RPT==="kerja"){
-    var only=$("lapStaf").value,L=d.staf.slice().sort(function(a,b){return a.susunan-b.susunan});
-    html='<h2 class="rt">RINGKASAN JAWATANKUASA KERJA GURU '+esc(thn)+'</h2><div class="rs">MRSM Arau, Perlis</div>';
-    L.forEach(function(s){if(only&&s.id!==only)return;
-      html+='<div class="sb"><div class="sh"><span>'+esc(nmStaf(s))+"</span><span>"+s.bil+" jawatan · pemberat "+s.pemberat+"</span></div><table>"+(s.jk.length?s.jk.map(function(l,i){var x=d.J[l.kod];return"<tr><td style=\"width:26px;text-align:right\">"+(i+1)+'</td><td style="width:44px">'+esc(l.kod)+"</td><td>"+esc(x?x.nama:"")+'</td><td style="width:32%">'+esc(l.jawatan)+"</td></tr>"}).join(""):'<tr><td style="padding:4px 8px">Tiada jawatan.</td></tr>')+"</table></div>"});
-  }
-  r.innerHTML=html;
-}
+PAGES.lap=function(){var f=ST.lap;
+  $("main").innerHTML='<div class="noprint"><div class="ttl"><div><h1>Laporan</h1><p class="small">Pilih laporan. Tekan Cetak untuk cetak atau simpan sebagai PDF.</p></div><button class="btn2" onclick="window.print()">🖨️ Cetak</button></div><div class="tools"><select id="lr">'+opt([["induk","Jawatankuasa Induk Guru (buku JK)"],["wajaran","Ringkasan Wajaran Guru (ikut jabatan)"],["wnama","Ringkasan Wajaran Mengikut Nama"],["kerja","Ringkasan Jawatankuasa Kerja Guru"]],f.r)+'</select><select id="li">'+opt(indukList(),f.induk,"Semua bahagian")+'</select><select id="ls">'+opt(aktifStaf().slice().sort(function(a,b){return a.susunan-b.susunan}).map(function(s){return[s.id,s.nama]}),f.staf,"Semua staf")+'</select></div></div><div class="doc" id="rpt"></div>';
+  $("lr").onchange=function(){f.r=this.value;PAGES.lap()};$("li").onchange=function(){f.induk=this.value;lapBody()};$("ls").onchange=function(){f.staf=this.value;lapBody()};
+  $("li").style.display=f.r==="induk"?"":"none";$("ls").style.display=f.r==="kerja"?"":"none";lapBody()};
+function nmJ(s){return nmS(s)+(s.jawatan?" ( "+s.jawatan+" )":"")}
+function lapBody(){var f=ST.lap,h="",thn=esc(TAHUN);
+  if(f.r==="induk"){var cur="";h='<h2 class="rt">JAWATANKUASA KERJA MRSM ARAU, PERLIS '+thn+"</h2>";
+    D.jk.forEach(function(x){if(f.induk&&x.induk!==f.induk||x.status!=="AKTIF")return;if(x.induk!==cur){cur=x.induk;h+='<h3 class="ri">'+esc(cur)+"</h3>"}
+      h+='<div class="jb"><div class="jh">'+esc(x.kod)+" : "+esc(x.nama)+"</div><table>"+x.ahli.map(function(a,i){var s=SM[a.idStaf];return'<tr><td class="b">'+(i+1)+"</td><td"+(s?"":' class="kos"')+">"+esc(s?nmJ(s):a.nama)+'</td><td class="j">'+esc(a.asal)+"</td></tr>"}).join("")+(x.ahli.length?"":'<tr><td style="padding:4px 8px">Belum ada ahli.</td></tr>')+"</table></div>"})}
+  else if(f.r==="wajaran"||f.r==="wnama"){var byJ=f.r==="wajaran",L=aktifStaf().slice().sort(byJ?function(a,b){return a.susunan-b.susunan}:function(a,b){return a.nama.localeCompare(b.nama)});
+    var tot=KATS.map(function(){return 0}),tp=0,tb=0,cur=null,n=0;
+    h='<h2 class="rt">RINGKASAN WAJARAN JAWATANKUASA '+thn+'</h2><div class="rs">MRSM Arau, Perlis · '+(byJ?"Disusun ikut jabatan":"Disusun ikut nama")+'</div><table class="rg"><thead><tr class="rv"><th style="writing-mode:horizontal-tb;transform:none;height:auto">Bil.</th><th class="l" style="writing-mode:horizontal-tb;transform:none;height:auto">Nama Guru / Staf</th>'+KATS.map(function(k){return"<th>"+esc(k.replace("AJK/ JK/ JAWATANKUASA","AJK / JK").replace("PENGERUSI/ TIMB. PENGERUSI","PENGERUSI / TIMB."))+"</th>"}).join("")+'<th>BIL. JAWATAN</th><th>PEMBERAT</th></tr><tr><th></th><th class="l">Nilai pemberat</th>'+KATS.map(function(k){return"<th>"+(N[k]||0)+"</th>"}).join("")+"<th></th><th></th></tr></thead><tbody>";
+    L.forEach(function(s){if(byJ){var g=s.jawatan==="PENGETUA"||s.jawatan==="TIMBALAN PENGETUA"||s.jabatan==="PENGURUSAN"?"PENGURUSAN":s.jabatan||"LAIN-LAIN";if(g!==cur){cur=g;h+='<tr class="gh"><td colspan="'+(KATS.length+4)+'">'+esc(g)+"</td></tr>"}}
+      n++;tp+=s.merit;tb+=s.bil;h+="<tr><td>"+n+'</td><td class="l">'+esc(s.nama)+"</td>"+KATS.map(function(k,i){var c=s.k[k]||0;tot[i]+=c;return"<td>"+(c||"")+"</td>"}).join("")+"<td>"+s.bil+"</td><td><b>"+s.merit+"</b></td></tr>"});
+    h+='<tr class="gh"><td></td><td class="l">JUMLAH</td>'+tot.map(function(t){return'<td style="text-align:center">'+t+"</td>"}).join("")+'<td style="text-align:center">'+tb+'</td><td style="text-align:center">'+tp+"</td></tr></tbody></table>"}
+  else{var L2=aktifStaf().slice().sort(function(a,b){return a.susunan-b.susunan});h='<h2 class="rt">RINGKASAN JAWATANKUASA KERJA GURU '+thn+'</h2><div class="rs">MRSM Arau, Perlis</div>';
+    L2.forEach(function(s){if(f.staf&&s.id!==f.staf)return;h+='<div class="sb"><div class="sh"><span>'+esc(nmJ(s))+"</span><span>"+s.bil+" jawatan · merit "+s.merit+"</span></div><table>"+(s.jk.map(function(l,i){return'<tr><td style="width:26px;text-align:right">'+(i+1)+'</td><td style="width:44px">'+esc(l.kod)+"</td><td>"+esc(JM[l.kod]?JM[l.kod].nama:"")+'</td><td style="width:32%">'+esc(l.asal)+"</td></tr>"}).join("")||'<tr><td style="padding:4px 8px">Tiada jawatan.</td></tr>')+"</table></div>"})}
+  $("rpt").innerHTML=h}
 
-/* ===== Pengguna ===== */
-async function muatUsers(){
-  $("tUsers").innerHTML='<tr><td colspan="4" class="small">Memuatkan...</td></tr>';
-  try{var j=await api({action:"users",token:TOKEN});if(!j||!j.ok)throw new Error(j&&j.error||"ralat");UDATA=j;
-    $("fStaf").innerHTML='<option value="">- pilih staf -</option>'+j.staf.map(function(s){return'<option value="'+esc(s.id)+'">'+esc(s.nama)+"</option>"}).join("");
-    lukisUsers();
-  }catch(x){if(x.message!=="auth")$("tUsers").innerHTML='<tr><td colspan="4" class="msg">Gagal memuatkan ('+esc(x.message)+').</td></tr>'}
-}
-function lukisUsers(){
-  $("tUsers").innerHTML=UDATA.users.map(function(u){return"<tr><td><b>"+esc(u.id)+"</b>"+(u.status!=="AKTIF"?'<br><span class="tag t-hi">Tidak aktif</span>':"")+"</td><td>"+esc(u.nama)+'<br><span class="small">'+esc(ROLE[u.peranan]||u.peranan)+'</span></td><td><div class="chips">'+(u.kodJk.length?u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join(""):'<span class="small">Semua</span>')+'</div></td><td style="white-space:nowrap"><button class="btn2" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2" data-rs="'+esc(u.id)+'">Reset</button></td></tr>'}).join("")||'<tr><td colspan="4" class="small">Tiada pengguna.</td></tr>';
-  $("tUsers").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){ubahUser(b.dataset.ed)}});
-  $("tUsers").querySelectorAll("[data-rs]").forEach(function(b){b.onclick=function(){resetUser(b.dataset.rs)}});
-}
-function namaJk(){if(!UDATA)return;var m={};UDATA.jk.forEach(function(j){m[j.kod]=j.nama});
-  var ks=$("fJk").value.toUpperCase().split(/[,\s]+/).filter(Boolean);
-  $("fJkName").innerHTML=ks.map(function(k){return m[k]?esc(k)+": "+esc(m[k]):'<span style="color:var(--red)">'+esc(k)+": kod tidak wujud</span>"}).join("<br>")}
-$("fJk").oninput=namaJk;
-function borangReset(){editId=null;$("fId").value="";$("fId").disabled=false;$("fRole").value="PENYELARAS";$("fStaf").value="";$("fJk").value="";$("fStatus").value="AKTIF";$("fPw").value="";$("fPwBox").classList.remove("hide");$("bSave").textContent="Tambah Pengguna";$("uHead").textContent="Tambah Pengguna";$("bCancel").classList.add("hide");$("fJkName").textContent=""}
-$("bCancel").onclick=function(){borangReset();$("umsg").textContent=""};
-function ubahUser(id){var u=UDATA.users.filter(function(x){return x.id===id})[0];if(!u)return;editId=id;
-  $("fId").value=u.id;$("fId").disabled=true;$("fRole").value=u.peranan;$("fStaf").value=u.idStaf||"";$("fJk").value=u.kodJk.join(", ");$("fStatus").value=u.status||"AKTIF";
-  $("fPwBox").classList.add("hide");$("bSave").textContent="Simpan Perubahan";$("uHead").textContent="Ubah Pengguna: "+id;$("bCancel").classList.remove("hide");$("umsg").textContent="";namaJk();window.scrollTo(0,0)}
-$("bSave").onclick=async function(){
-  var m=$("umsg"),b=this;m.className="msg";m.textContent="";
-  var id=$("fId").value.trim().toLowerCase(),role=$("fRole").value,sid=$("fStaf").value,sel=$("fStaf").options[$("fStaf").selectedIndex];
-  var nama=sid?sel.textContent:"";
-  if(!/^[a-z0-9._-]{1,30}$/.test(id)){m.textContent="ID hanya huruf kecil, nombor, titik, _ atau - (tiada jarak).";return}
-  if(!sid){m.textContent="Sila pilih staf.";return}
-  if(role!=="PENTADBIR"&&!$("fJk").value.trim()){m.textContent="Sila isi sekurang-kurangnya satu kod JK untuk Penyelaras/Pembantu.";return}
-  var data={id:id,nama:nama,idStaf:sid,peranan:role,kodJk:$("fJk").value,status:$("fStatus").value};
-  if(!editId){var pw=$("fPw").value;if(pw.length<8){m.textContent="Kata laluan sementara sekurang-kurangnya 8 aksara.";return}data.h=await hashPw(id,pw)}
-  b.disabled=true;
-  try{var j=await api({action:"saveuser",token:TOKEN,baru:!editId,data:data});
-    if(j&&j.ok){m.className="msg ok";m.textContent=editId?"Perubahan disimpan.":"Pengguna "+id+" ditambah. Beri ID dan kata laluan sementara kepada pengguna; mereka wajib tukar semasa log masuk pertama.";borangReset();DASH=null;muatUsers()}
-    else m.textContent=(j&&j.error)||"Gagal menyimpan.";
-  }catch(x){if(x.message!=="auth")m.textContent="Tidak dapat menghubungi pelayan."}
-  b.disabled=false;
+/* ===== SURAT (format memograf MARA) ===== */
+function tarikhPanjang(s){if(!s)return"";var p=s.split("-");return Number(p[2])+" "+BULAN[Number(p[1])-1]+" "+p[0]}
+function hariIni(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+function isninPertama(t){var d=new Date(Number(t),0,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);return t+"-01-"+("0"+d.getDate()).slice(-2)}
+var HB=["Muharram","Safar","Rabiulawal","Rabiulakhir","Jamadil Awal","Jamadil Akhir","Rejab","Syaaban","Ramadan","Syawal","Zulkaedah","Zulhijjah"];
+function hijrah(s){if(!s)return"";try{var p=s.split("-"),d=new Date(Date.UTC(+p[0],+p[1]-1,+p[2],12));var f=new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn",{day:"numeric",month:"numeric",year:"numeric",timeZone:"UTC"}).formatToParts(d),o={};f.forEach(function(x){o[x.type]=x.value});return Number(o.day)+" "+HB[Number(o.month)-1]+" "+String(o.year).replace(/\D/g,"")+"H"}catch(e){return""}}
+function slogan(){return(D.tetapan.SLOGAN||"").split(/\n/).filter(Boolean).map(function(x){return"<b>"+esc(x)+"</b>"}).join("<br>")}
+function memo(kepada,f,tajuk,isi){var t=D.tetapan;return'<div class="hd"><b>mara</b><span>memograf</span></div><table class="kd"><tr><td class="k">Kepada :</td><td><b>'+esc(kepada)+'</b></td></tr><tr><td class="k">Daripada :</td><td><b>'+esc(f.dari)+'</b></td></tr><tr><td colspan="2">Salinan Kepada :</td></tr></table><table class="rj"><tr><td style="width:31%">Rujuk Kami<br><b>'+esc(f.ruj||"")+'</b></td><td style="width:30%">Tarikh<br><b>'+tarikhPanjang(f.tarikh)+"<br>"+esc(f.hijrah||hijrah(f.tarikh))+'</b></td><td style="width:22%">Rujuk Tuan</td><td>Tarikh</td></tr></table><p>Tuan / Puan,</p><div class="tj">'+esc(tajuk)+"</div>"+isi+'<p>Sekian,</p><p style="margin-top:18px">'+slogan()+"<br><b>Saya yang menjalankan amanah,</b></p><br><br><br><p><b>"+esc(f.ttNama)+"</b><br>"+esc(f.ttJaw)+"<br>"+esc(t.NAMA_RINGKAS)+"<br>"+esc(t.BANDAR)+"</p>"}
+function slBorang(f,extra){return'<div class="card noprint"><div class="grid g3" style="gap:10px">'+extra+'<div><label>Tarikh surat</label><input type="date" id="sT" value="'+esc(f.tarikh)+'"></div><div><label>Tarikh Hijrah (pilihan)</label><input id="sH" value="'+esc(f.hijrah)+'" placeholder="Auto: '+esc(hijrah(f.tarikh))+'"><div class="small">Dikira automatik (Umm al-Qura). Isi hanya jika kalendar rasmi berbeza satu hari.</div></div><div><label>Rujuk Kami (pilihan)</label><input id="sR" value="'+esc(f.ruj)+'" placeholder="Kosongkan untuk tulis manual"></div><div><label>Daripada</label><input id="sD" value="'+esc(f.dari)+'"></div><div><label>Nama penandatangan</label><input id="sN" value="'+esc(f.ttNama)+'"></div><div><label>Jawatan penandatangan</label><input id="sJ" value="'+esc(f.ttJaw)+'"></div></div><button class="btn" style="margin-top:12px" onclick="window.print()">🖨️ Cetak / Simpan PDF</button></div>'}
+function slIkat(f,draw){[["sT","tarikh"],["sH","hijrah"],["sR","ruj"],["sD","dari"],["sN","ttNama"],["sJ","ttJaw"]].forEach(function(x){$(x[0]).oninput=$(x[0]).onchange=function(){f[x[1]]=this.value;if(x[0]==="sT")$("sH").placeholder="Auto: "+hijrah(this.value);draw()}})}
+function slInit(f){var t=D.tetapan;if(f.thn!==TAHUN){f.thn=TAHUN;f.tarikh=f.isMesy?hariIni():isninPertama(TAHUN);f.hijrah=""}if(f.dari==null)f.dari="Pengetua "+t.NAMA_RINGKAS;if(f.ttNama==null)f.ttNama=t.PENANDATANGAN_NAMA;if(f.ttJaw==null)f.ttJaw=t.PENANDATANGAN_JAWATAN;if(f.ruj==null)f.ruj=""}
+ST.sl={who:"",jab:"",tajuk:""};
+PAGES.slantik=function(){var f=ST.sl,t=D.tetapan;slInit(f);if(!f.tajuk||f.tajukThn!==TAHUN){f.tajuk="PERLANTIKAN SEBAGAI AHLI JAWATANKUASA KERJA "+t.NAMA_RINGKAS+" TAHUN "+TAHUN;f.tajukThn=TAHUN}
+  $("main").innerHTML='<div class="noprint"><div class="ttl"><div><h1>Surat Perlantikan '+esc(TAHUN)+'</h1><p class="small">Satu surat bagi setiap staf. Senarai jawatankuasa dan jawatan dipaparkan pada lampiran. Tarikh lalai ialah Isnin pertama bulan Januari.</p></div></div></div>'+
+  slBorang(f,'<div><label>Penerima</label><select id="sW">'+opt(aktifStaf().filter(function(s){return s.bil}).sort(function(a,b){return a.susunan-b.susunan}).map(function(s){return[s.id,s.nama]}),f.who,"Semua staf (cetak kelompok)")+'</select></div><div><label>Jabatan</label><select id="sJb">'+opt(jabatanList(),f.jab,"Semua jabatan")+'</select></div><div><label>Tajuk surat</label><input id="sTj" value="'+esc(f.tajuk)+'"></div>')+'<p class="small noprint" id="slN"></p><div id="slBody"></div>';
+  $("sW").onchange=function(){f.who=this.value;slBody()};$("sJb").onchange=function(){f.jab=this.value;slBody()};$("sTj").oninput=function(){f.tajuk=this.value;slBody()};slIkat(f,slBody);slBody()};
+function slBody(){var f=ST.sl,t=D.tetapan,L=aktifStaf().filter(function(s){return s.bil&&(!f.who||s.id===f.who)&&(!f.jab||(s.jabatan||"(Tiada jabatan)")===f.jab)}).sort(function(a,b){return a.susunan-b.susunan});
+  $("slN").textContent=L.length+" surat ("+(L.length*2)+" halaman termasuk lampiran).";
+  var isi='<p>Dengan segala hormatnya mohon di rujuk perkara di atas.</p><p><span class="pn">2.</span>Sukacita dimaklumkan bahawa tuan/puan telah dilantik untuk menyandang jawatan dalam jawatankuasa bagi tahun '+esc(TAHUN)+' seperti senarai di lampiran.</p><p><span class="pn">3.</span>Tuan/puan adalah dipohon melaksanakan tugas dan tanggungjawab yang diamanahkan dengan penuh dedikasi.</p><p>Kerjasama daripada tuan/puan amatlah dihargai dan didahului dengan ucapan terima kasih.</p>';
+  $("slBody").innerHTML=L.map(function(s){return'<div class="mg pgb">'+memo(nmS(s),f,f.tajuk,isi)+'</div><div class="mg pgb"><div class="lp">'+esc(t.NAMA_RINGKAS)+"<br>SENARAI JAWATANKUASA DAN JAWATAN TAHUN "+esc(TAHUN)+'</div><p style="text-align:left">Nama : <b>'+esc(nmS(s))+'</b></p><table class="ls"><thead><tr><th style="width:36px;text-align:center">BIL</th><th>JAWATANKUASA</th><th style="width:34%">JAWATAN</th></tr></thead><tbody>'+s.jk.map(function(l,k){return'<tr><td style="text-align:center">'+(k+1)+"</td><td>"+esc(l.kod)+" "+esc(JM[l.kod]?JM[l.kod].nama:"")+"</td><td>"+esc(l.asal)+"</td></tr>"}).join("")+"</tbody></table></div>"}).join("")||'<div class="card load">Tiada staf sepadan.</div>'}
+
+ST.sm={kod:"",tarikhM:"",masa:"2.30 petang",tempat:"",agenda:"",isMesy:true,tajuk:""};
+PAGES.smesy=function(){var f=ST.sm;slInit(f);
+  $("main").innerHTML='<div class="noprint"><div class="ttl"><div><h1>Surat Panggilan Mesyuarat</h1><p class="small">Senarai ahli pada lampiran diambil daripada jawatankuasa yang dipilih (tahun '+esc(TAHUN)+').</p></div></div></div>'+
+  slBorang(f,'<div><label>Jawatankuasa</label><select id="mK">'+opt(D.jk.map(function(j){return[j.kod,j.kod+" — "+j.nama]}),f.kod,"— Pilih JK —")+'</select></div><div><label>Tajuk mesyuarat</label><input id="mTj" value="'+esc(f.tajuk)+'"></div><div><label>Tarikh mesyuarat</label><input type="date" id="mT" value="'+esc(f.tarikhM)+'"></div><div><label>Masa</label><input id="mM" value="'+esc(f.masa)+'"></div><div><label>Tempat</label><input id="mP" value="'+esc(f.tempat)+'" placeholder="cth. Bilik Mesyuarat Utama"></div><div><label>Agenda (pilihan, satu item setiap baris)</label><textarea id="mA" placeholder="Ucapan Pengerusi&#10;Pengesahan Minit Mesyuarat&#10;Perkara Berbangkit&#10;Hal-hal lain">'+esc(f.agenda)+"</textarea></div>")+'<div id="smBody"></div>';
+  $("mK").onchange=function(){f.kod=this.value;f.tajuk=JM[f.kod]?"MESYUARAT "+JM[f.kod].nama:"";$("mTj").value=f.tajuk;smBody()};
+  [["mTj","tajuk"],["mT","tarikhM"],["mM","masa"],["mP","tempat"],["mA","agenda"]].forEach(function(x){$(x[0]).oninput=$(x[0]).onchange=function(){f[x[1]]=this.value;smBody()}});slIkat(f,smBody);smBody()};
+function smBody(){var f=ST.sm,t=D.tetapan,j=JM[f.kod];if(!j){$("smBody").innerHTML='<div class="card load noprint">Pilih jawatankuasa untuk jana surat.</div>';return}
+  var ag=f.agenda.split(/\n/).map(function(x){return x.trim()}).filter(Boolean);
+  var isi='<p>Dengan segala hormatnya mohon di rujuk perkara di atas.</p><p><span class="pn">2.</span>Sukacita dimaklumkan tuan/puan diminta untuk menghadiri mesyuarat tersebut seperti butiran berikut :</p><div class="bt"><span>Tarikh</span><span>:</span><span>'+(f.tarikhM?tarikhPanjang(f.tarikhM)+" ("+["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"][new Date(f.tarikhM+"T12:00").getDay()]+")":"")+'</span><span>Masa</span><span>:</span><span>'+esc(f.masa)+'</span><span>Tempat</span><span>:</span><span>'+esc(f.tempat)+"</span></div>"+(ag.length?'<p><span class="pn">3.</span>Agenda mesyuarat adalah seperti berikut :</p><ol style="margin:0 0 0 60px">'+ag.map(function(a){return"<li>"+esc(a)+"</li>"}).join("")+"</ol>":"")+"<p>Kerjasama daripada tuan/puan amatlah dihargai dan didahului dengan ucapan terima kasih.</p>";
+  var prev="",rows=j.ahli.map(function(a){var s=SM[a.idStaf],lb=titleCase(a.asal).replace(/ 1$/," I").replace(/ 2$/," II").replace(/ 3$/," III");var show=lb===prev?"":lb;prev=lb;return"<tr><td style=\"width:34%\">"+esc(show)+'</td><td style="width:14px">:</td><td>'+esc(s?(s.jawatan&&/PENGETUA|KETUA|PEGAWAI|PENOLONG/.test(s.jawatan)?s.nama+" ("+s.jawatan+")":s.nama):a.nama)+"</td></tr>"}).join("");
+  $("smBody").innerHTML='<div class="mg pgb">'+memo("Seperti di lampiran",f,f.tajuk||("MESYUARAT "+j.nama),isi)+'</div><div class="mg"><div class="lp">'+esc(t.NAMA_RINGKAS)+"<br>"+esc(j.nama)+'</div><table class="ah">'+rows+"</table></div>"}
+
+/* ===== JAWATAN & MERIT ===== */
+PAGES.merit=function(){var cnt={};D.lantikan.forEach(function(l){cnt[l.kat]=(cnt[l.kat]||0)+1});var P=D.pemberat.map(function(p){return{jawatan:p.jawatan,nilai:p.nilai}});
+  var draw=function(){$("mb").innerHTML=P.map(function(p,i){return'<tr><td><input data-i="'+i+'" data-f="jawatan" value="'+esc(p.jawatan)+'"'+(cnt[p.jawatan]?" disabled":"")+'></td><td style="width:110px"><input type="number" min="0" step="0.5" data-i="'+i+'" data-f="nilai" value="'+p.nilai+'"></td><td class="n">'+(cnt[p.jawatan]||0)+'</td><td class="small">'+esc(JAWLBL.filter(function(x){return x[1]===p.jawatan}).map(function(x){return x[0]}).join(", "))+"</td><td>"+(cnt[p.jawatan]?"":'<button class="btn2 red" data-x="'+i+'">Buang</button>')+"</td></tr>"}).join("");
+    $("mb").querySelectorAll("input").forEach(function(inp){inp.oninput=function(){P[inp.dataset.i][inp.dataset.f]=inp.dataset.f==="nilai"?Number(inp.value):inp.value}});
+    $("mb").querySelectorAll("[data-x]").forEach(function(b){b.onclick=function(){P.splice(Number(b.dataset.x),1);draw()}})};
+  $("main").innerHTML='<div class="ttl"><div><h1>Jawatan &amp; Merit</h1><p class="small">Nilai pemberat (merit) bagi setiap kategori jawatan. Perubahan terus mengubah kiraan beban semua staf.</p></div></div><div class="card"><div class="wrap"><table class="t"><thead><tr><th>Kategori jawatan</th><th>Nilai</th><th class="n">Digunakan</th><th>Label jawatan dalam kategori ini</th><th></th></tr></thead><tbody id="mb"></tbody></table></div><div class="act" style="justify-content:space-between"><button class="btn2" id="mAdd">+ Kategori baharu</button><button class="btn" id="mSave">Simpan</button></div><div class="msg" id="mMsg"></div></div>';
+  draw();$("mAdd").onclick=function(){P.push({jawatan:"",nilai:1});draw()};
+  $("mSave").onclick=async function(){this.disabled=true;var r=await tulis({action:"savepemberat",list:P},"Nilai merit disimpan.");this.disabled=false;if(r.ok)PAGES.merit();else $("mMsg").textContent=r.error||"Gagal"}};
+
+/* ===== IMPORT / EKSPORT ===== */
+PAGES.impeks=function(){
+  $("main").innerHTML='<div class="ttl"><div><h1>Import / Eksport</h1><p class="small">Muat turun data sebagai CSV (boleh dibuka dalam Excel), import lantikan secara pukal, atau bina data tahun baharu.</p></div></div><div class="grid g2"><div class="card"><h2>Eksport (CSV)</h2><div class="tools"><button class="btn2" id="x1">Staf</button><button class="btn2" id="x2">Jawatankuasa '+esc(TAHUN)+'</button><button class="btn2" id="x3">Lantikan '+esc(TAHUN)+'</button><button class="btn2" id="x4">Beban staf '+esc(TAHUN)+'</button><button class="btn2" id="x5">Takwim '+esc(TAHUN)+'</button></div></div>'+
+  '<div class="card"><h2>Bina Data Tahun Baharu</h2><p class="small">Salin semua JK dan lantikan daripada satu tahun ke tahun baharu. Selepas itu, lantikan tahun baharu boleh diubah tanpa menjejaskan tahun asal.</p><div class="row2"><div><label>Dari tahun</label><select id="cyA">'+opt(D.tahunList,TAHUN)+'</select></div><div><label>Ke tahun</label><input id="cyB" value="'+(Number(TAHUN)+1)+'"></div></div><label style="display:flex;gap:8px;align-items:center;color:var(--tx)"><input type="checkbox" id="cyK" checked style="width:auto"> Jadikan KOSONG jawatan staf yang tidak aktif</label><button class="btn" id="cyGo" style="margin-top:10px">Salin data</button><div class="msg" id="cyMsg"></div></div></div>'+
+  '<div class="card"><h2>Import Lantikan (tahun '+esc(TAHUN)+')</h2><p class="small">Tampal data CSV, satu baris setiap lantikan, dengan lajur: <b>KOD_JK, NO_GAJI atau ID_STAF, KATEGORI, JAWATAN</b>. Contoh: <code>B02,205229,AJK/ JK/ JAWATANKUASA,AHLI</code></p><textarea id="imT" style="min-height:160px" placeholder="KOD_JK,NO_GAJI,KATEGORI,JAWATAN"></textarea><div class="tools" style="margin-top:8px"><button class="btn" id="imGo">Semak &amp; import</button></div><div class="msg" id="imMsg"></div></div>';
+  var ka=function(s){return s.k};
+  $("x1").onclick=function(){csv("Staf",[["ID_STAF","NO_GAJI","GELARAN","NAMA","JANTINA","JABATAN","SUBJEK","JAWATAN","STATUS","GRED","EMEL","TELEFON"]].concat(D.staf.map(function(s){return[s.id,s.noGaji,s.gelaran,s.nama,s.jantina,s.jabatan,s.subjek,s.jawatan,s.status,s.gred,s.emel,s.telefon]})))};
+  $("x2").onclick=function(){csv("JK_"+TAHUN,[["KOD_JK","NAMA_JK","BAHAGIAN","KUMPULAN","STATUS","AHLI","KOSONG","MERIT"]].concat(D.jk.map(function(j){return[j.kod,j.nama,j.induk,j.kumpulan,j.status,j.ahli.length,j.kosong,j.merit]})))};
+  $("x3").onclick=function(){csv("Lantikan_"+TAHUN,[["ID","KOD_JK","NAMA_JK","ID_STAF","NO_GAJI","NAMA","JAWATAN","KATEGORI","MERIT"]].concat(D.lantikan.map(function(l){var s=SM[l.idStaf];return[l.id,l.kod,JM[l.kod]?JM[l.kod].nama:"",l.idStaf,s?s.noGaji:"",s?s.nama:l.nama,l.asal,l.kat,l.idStaf?l.w:0]})))};
+  $("x4").onclick=function(){csv("Beban_"+TAHUN,[["NAMA","JABATAN","JAWATAN","BIL JAWATAN","MERIT"]].concat(aktifStaf().sort(function(a,b){return a.susunan-b.susunan}).map(function(s){return[s.nama,s.jabatan,s.jawatan,s.bil,s.merit]})))};
+  $("x5").onclick=function(){csv("Takwim_"+TAHUN,[["TARIKH MULA","TARIKH TAMAT","ACARA","KOD JK","LOKASI","CATATAN"]].concat(D.takwim.map(function(e){return[e.mula,e.tamat,e.acara,e.kod,e.lokasi,e.catatan]})))};
+  $("cyGo").onclick=async function(){var a=$("cyA").value,b=$("cyB").value.trim();if(!/^\d{4}$/.test(b)){$("cyMsg").textContent="Tahun tidak sah.";return}if(!confirm("Salin semua JK dan lantikan "+a+" ke "+b+"?"))return;this.disabled=true;
+    var j=await api({action:"salintahun",token:TOKEN,dari:a,ke:b,kosongTidakAktif:$("cyK").checked});this.disabled=false;
+    if(j&&j.ok){toast("Data "+b+" dibina: "+j.jk+" JK, "+j.lantikan+" lantikan.");TAHUN=b;D=null;simpanSesi();await muat(true);go("dash")}else $("cyMsg").textContent=(j&&j.error)||"Gagal"};
+  $("imGo").onclick=async function(){var rows=$("imT").value.split(/\r?\n/).map(function(x){return x.split(",").map(function(c){return c.trim().replace(/^"|"$/g,"")})}).filter(function(r){return r[0]&&!/^KOD/i.test(r[0])}).map(function(r){return{kod:r[0],staf:r[1],kat:r[2],asal:r.slice(3).join(",")}});
+    if(!rows.length){$("imMsg").textContent="Tiada baris.";return}if(rows.length>150){$("imMsg").textContent="Maksimum 150 baris sekali import. Pecahkan kepada beberapa kali.";return}
+    this.disabled=true;var j=await api({action:"import",token:TOKEN,tahun:TAHUN,jenis:"lantikan",rows:rows});
+    if(j&&!j.ok&&j.ralat){if(confirm(j.error+":\n\n"+j.ralat.slice(0,12).join("\n")+"\n\nImport "+j.sah+" baris yang sah sahaja?"))j=await api({action:"import",token:TOKEN,tahun:TAHUN,jenis:"lantikan",rows:rows,paksa:true});else{this.disabled=false;return}}
+    this.disabled=false;if(j&&j.ok){$("imMsg").className="msg ok";$("imMsg").textContent=j.masuk+" lantikan diimport.";$("imT").value="";await muat(true)}else $("imMsg").textContent=(j&&j.error)||"Gagal"};
 };
-async function resetUser(id){
-  var pw=prompt("Kata laluan sementara baharu untuk "+id+" (sekurang-kurangnya 8 aksara):");if(pw===null)return;
-  if(pw.length<8){toast("Kata laluan terlalu pendek.");return}
-  try{var j=await api({action:"resetpw",token:TOKEN,id:id,h:await hashPw(id,pw)});toast(j&&j.ok?"Kata laluan "+id+" direset. Pengguna wajib tukar semasa log masuk.":"Gagal reset.")}catch(x){}
-}
+function salinTahunDlg(){go("impeks");setTimeout(function(){var b=$("cyB");if(b){b.focus();b.scrollIntoView({block:"center"})}},50)}
 
-/* ===== Mula ===== */
-if(TOKEN&&USER){masuk();api({action:"me",token:TOKEN}).then(function(j){if(j&&j.ok){USER=j.user;simpanSesi()}}).catch(function(){})}
-else show("vLogin");
+/* ===== PENGGUNA ===== */
+var UD=null,editU=null;
+PAGES.users=function(){
+  $("main").innerHTML='<div class="ttl"><div><h1>Pengguna Sistem</h1><p class="small">Pentadbir urus akaun Penyelaras dan Pembantu. Penyelaras hanya boleh mengurus JK yang ditetapkan.</p></div></div><div class="grid g2"><div class="card"><h2 id="uHead">Tambah Pengguna</h2><div class="row2"><div><label>ID Pengguna</label><input id="fId" autocapitalize="off" placeholder="cth: hakimi"></div><div><label>Peranan</label><select id="fRole"><option value="PENYELARAS">Penyelaras</option><option value="PEMBANTU">Pembantu Penyelaras</option><option value="PENTADBIR">Pentadbir</option></select></div></div><label>Staf</label><select id="fStaf"><option value="">- pilih staf -</option>'+stafOpts("")+'</select><label>Jawatankuasa dijaga (kod dipisah koma)</label><input id="fJk" placeholder="cth: B02, C11" autocapitalize="characters"><div class="small" id="fJkName" style="margin-top:4px"></div><div class="row2"><div><label>Status</label><select id="fStatus"><option>AKTIF</option><option>TIDAK AKTIF</option></select></div><div id="fPwBox"><label>Kata laluan sementara</label><input id="fPw" autocomplete="off"></div></div><button class="btn full" id="bSave">Tambah Pengguna</button><button class="btn2 hide" id="bCancel" style="width:100%;margin-top:8px">Batal</button><div class="msg" id="umsg"></div></div><div class="card"><h2>Senarai Pengguna</h2><div class="wrap"><table class="t"><thead><tr><th>ID</th><th>Nama / Peranan</th><th>JK</th><th></th></tr></thead><tbody id="tUsers"><tr><td colspan="4" class="small">Memuatkan...</td></tr></tbody></table></div></div></div>';
+  $("fJk").oninput=function(){var ks=this.value.toUpperCase().split(/[,\s]+/).filter(Boolean);$("fJkName").innerHTML=ks.map(function(k){return JM[k]?esc(k)+": "+esc(JM[k].nama):'<span style="color:var(--red)">'+esc(k)+": kod tidak wujud</span>"}).join("<br>")};
+  $("bCancel").onclick=uReset;$("bSave").onclick=uSave;muatUsers()};
+async function muatUsers(){try{var j=await api({action:"users",token:TOKEN});if(!j.ok)throw new Error(j.error);UD=j;
+  $("tUsers").innerHTML=j.users.map(function(u){return"<tr><td><b>"+esc(u.id)+"</b>"+(u.status!=="AKTIF"?'<br><span class="tag t-hi">Tidak aktif</span>':"")+"</td><td>"+esc(u.nama)+'<br><span class="small">'+esc(ROLE[u.peranan]||u.peranan)+(u.akhir?" · log masuk "+new Date(u.akhir).toLocaleDateString("ms-MY"):"")+'</span></td><td><div class="chips">'+(u.kodJk.length?u.kodJk.map(function(k){return'<span class="chip">'+esc(k)+"</span>"}).join(""):'<span class="small">Semua</span>')+'</div></td><td style="white-space:nowrap"><button class="btn2" data-ed="'+esc(u.id)+'">Ubah</button> <button class="btn2" data-rs="'+esc(u.id)+'">Reset</button></td></tr>'}).join("");
+  $("tUsers").querySelectorAll("[data-ed]").forEach(function(b){b.onclick=function(){uEdit(b.dataset.ed)}});
+  $("tUsers").querySelectorAll("[data-rs]").forEach(function(b){b.onclick=function(){uReset2(b.dataset.rs)}})}
+  catch(x){if(x.message!=="auth")$("tUsers").innerHTML='<tr><td colspan="4" class="msg">Gagal memuatkan.</td></tr>'}}
+function uReset(){editU=null;$("fId").value="";$("fId").disabled=false;$("fRole").value="PENYELARAS";$("fStaf").value="";$("fJk").value="";$("fStatus").value="AKTIF";$("fPw").value="";$("fPwBox").classList.remove("hide");$("bSave").textContent="Tambah Pengguna";$("uHead").textContent="Tambah Pengguna";$("bCancel").classList.add("hide");$("fJkName").textContent="";$("umsg").textContent=""}
+function uEdit(id){var u=UD.users.filter(function(x){return x.id===id})[0];editU=id;$("fId").value=u.id;$("fId").disabled=true;$("fRole").value=u.peranan;$("fStaf").value=u.idStaf||"";$("fJk").value=u.kodJk.join(", ");$("fStatus").value=u.status||"AKTIF";$("fPwBox").classList.add("hide");$("bSave").textContent="Simpan Perubahan";$("uHead").textContent="Ubah Pengguna: "+id;$("bCancel").classList.remove("hide");$("fJk").oninput();window.scrollTo(0,0)}
+async function uSave(){var m=$("umsg");m.className="msg";m.textContent="";var id=$("fId").value.trim().toLowerCase(),sid=$("fStaf").value;
+  if(!/^[a-z0-9._-]{1,30}$/.test(id)){m.textContent="ID hanya huruf kecil, nombor, titik, _ atau -.";return}if(!sid){m.textContent="Sila pilih staf.";return}
+  var data={id:id,nama:SM[sid]?SM[sid].nama:"",idStaf:sid,peranan:$("fRole").value,kodJk:$("fJk").value,status:$("fStatus").value};
+  if(!editU){var pw=$("fPw").value;if(pw.length<8){m.textContent="Kata laluan sementara sekurang-kurangnya 8 aksara.";return}data.h=await hashPw(id,pw)}
+  $("bSave").disabled=true;try{var j=await api({action:"saveuser",token:TOKEN,baru:!editU,data:data});if(j.ok){var t=editU?"Perubahan disimpan.":"Pengguna "+id+" ditambah. Beri ID dan kata laluan sementara kepada pengguna.";uReset();m.className="msg ok";m.textContent=t;muatUsers()}else m.textContent=j.error||"Gagal"}catch(x){}$("bSave").disabled=false}
+async function uReset2(id){var pw=prompt("Kata laluan sementara baharu untuk "+id+" (sekurang-kurangnya 8 aksara):");if(pw===null)return;if(pw.length<8){toast("Terlalu pendek.");return}
+  var j=await api({action:"resetpw",token:TOKEN,id:id,h:await hashPw(id,pw)});toast(j&&j.ok?"Kata laluan "+id+" direset.":"Gagal reset.")}
+
+/* ===== TETAPAN ===== */
+var TLBL=[["NAMA_MAKTAB","Nama penuh maktab"],["NAMA_RINGKAS","Nama ringkas (dalam surat, cth: MRSM ARAU)"],["BANDAR","Bandar (bawah tandatangan)"],["ALAMAT","Alamat"],["TAHUN_AKTIF","Tahun aktif (dibuka secara lalai)"],["AMBANG_TINGGI","Ambang beban tinggi (× purata)"],["AMBANG_RENDAH","Ambang beban rendah (× purata)"],["ASING_EXOFFICIO","Asingkan Pengetua & TP daripada analisis (YA/TIDAK)"],["RUJUKAN_SURAT","Awalan rujukan surat"],["PENANDATANGAN_NAMA","Penandatangan surat lantikan (nama)"],["PENANDATANGAN_JAWATAN","Jawatan penandatangan"],["SLOGAN","Slogan surat (satu baris setiap slogan)"]];
+PAGES.tetapan=function(){
+  $("main").innerHTML='<div class="ttl"><div><h1>Tetapan</h1><p class="small">Tetapan umum sistem, ambang beban dan teks surat.</p></div></div><div class="card">'+TLBL.map(function(x){var v=D.tetapan[x[0]]||"",big=x[0]==="SLOGAN";return"<label>"+esc(x[1])+"</label>"+(big?'<textarea data-k="'+x[0]+'">'+esc(v)+"</textarea>":x[0]==="ASING_EXOFFICIO"?'<select data-k="'+x[0]+'">'+opt(["YA","TIDAK"],v)+"</select>":'<input data-k="'+x[0]+'" value="'+esc(v)+'">')}).join("")+'<div class="act"><button class="btn" id="tSave">Simpan Tetapan</button></div><div class="msg" id="tMsg"></div></div>';
+  $("tSave").onclick=async function(){var d={};document.querySelectorAll("[data-k]").forEach(function(i){d[i.dataset.k]=i.value});this.disabled=true;var r=await tulis({action:"savetetapan",data:d},"Tetapan disimpan.");this.disabled=false;if(!r.ok)$("tMsg").textContent=r.error||"Gagal";else PAGES.tetapan()}};
+
+/* ===== LOG AUDIT ===== */
+PAGES.log=function(){
+  $("main").innerHTML='<div class="ttl"><div><h1>Log Audit</h1><p class="small">Rekod 500 tindakan terkini dalam sistem.</p></div><button class="btn2" id="lgcsv">⬇ CSV</button></div><div class="card"><div class="tools"><input id="lgq" placeholder="Cari pengguna, tindakan atau butiran..."></div><div class="wrap"><table class="t"><thead><tr><th>Masa</th><th>Pengguna</th><th>Tindakan</th><th>Butiran</th></tr></thead><tbody id="lgb"><tr><td colspan="4" class="small">Memuatkan...</td></tr></tbody></table></div></div>';
+  api({action:"log",token:TOKEN,limit:500}).then(function(j){var L=j.log||[];
+    var draw=function(){var q=$("lgq").value.toUpperCase();$("lgb").innerHTML=L.filter(function(x){return!q||(x.id+" "+x.nama+" "+x.tindakan+" "+x.butiran).toUpperCase().indexOf(q)>=0}).map(function(x){return'<tr><td class="small" style="white-space:nowrap">'+esc(new Date(x.masa).toLocaleString("ms-MY"))+"</td><td>"+esc(x.id)+'<div class="small">'+esc(x.nama)+'</div></td><td><span class="tag t-bl">'+esc(x.tindakan)+'</span></td><td class="small">'+esc(x.butiran)+"</td></tr>"}).join("")||'<tr><td colspan="4" class="small">Tiada rekod.</td></tr>'};
+    $("lgq").oninput=draw;draw();$("lgcsv").onclick=function(){csv("Log_Audit",[["MASA","PENGGUNA","NAMA","TINDAKAN","BUTIRAN"]].concat(L.map(function(x){return[x.masa,x.id,x.nama,x.tindakan,x.butiran]})))}}).catch(function(){})};
+
+/* ===== mula ===== */
+if(TOKEN&&USER)masuk();else show("vLogin");
 </script>
 </body>
 </html>
